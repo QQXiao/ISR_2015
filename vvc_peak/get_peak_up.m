@@ -44,7 +44,7 @@ for s=subs;
 
 		if k<=kmax & j<=jmax & i<=imax
  			%define small cubic for memory data
-			data_balls=data(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
+			data_balls=vvc(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
         		a=size(data_balls);
         	    b=a(1)*a(2)*a(3)*a(4);
 			    p=sum(find(data_ball)>=0.01)/b

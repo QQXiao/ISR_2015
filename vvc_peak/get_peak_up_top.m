@@ -24,14 +24,14 @@ for s=subs;
         data_all=load_nii_zip(data_file);
         data=data_all.img;
 
-	vvcfile=sprintf('%s/sub%02d.nii.gz',vvcdir,s);
-	vvc_all=load_nii_zip(vvcfile);
-	vvc=vvc_all.img;
-	ss=size(vvc);
-	flag=1;
-	runtime=0;
-	tvvc=vvc;
-	t=1;
+	    vvcfile=sprintf('%s/sub%02d.nii.gz',vvcdir,s);
+	    vvc_all=load_nii_zip(vvcfile);
+	    vvc=vvc_all.img;
+	    ss=size(vvc);
+	    flag=1;
+	    runtime=0;
+	    tvvc=vvc;
+	    t=1;
 	while flag
 		max_vvc=max(tvvc(:));
 		lmax=find(vvc==max_vvc);
@@ -39,24 +39,24 @@ for s=subs;
 		[k,j,i]=ind2sub(ss,lmax);
 		%remove max
 		tvvc(tlmax)=[];
-		if k<=kmax & j<=jmax & i<=imax	
+		if k<=kmax & j<=jmax & i<=imax
  		%define small cubic for memory data
 		data_balls=vcc(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
-        	a=size(data_balls);
-        	b=a(1)*a(2)*a(3)*a(4);
+        a=size(data_balls);
+        b=a(1)*a(2)*a(3)*a(4);
 		p=sum(find(data_ball)>=0.01)/b
-		
-                	if p>=0.9
+
+            if p>=0.9
 			data_ball=data(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
-        		d=a(1)*a(2)*a(3);
+        	d=a(1)*a(2)*a(3);
 			tcoords(s,t,:)=[k,j,i];
 			t=t+1
 			else
 			runtime = runtime + 1
 			end %if
-	         else
-	         runtime = runtime + 1
-	         end %if	
+	    else
+        runtime = runtime + 1
+        end %if
 		if t==nt | runtime >= 100000
             	flag = 0;
             	break;

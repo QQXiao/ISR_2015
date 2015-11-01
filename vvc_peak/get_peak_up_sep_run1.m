@@ -1,4 +1,4 @@
-function get_peak_up(c)
+function get_peak_up_sep_run2(c)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -41,45 +41,46 @@ for s=subs;
 		tcoords(s,:)=[k,j,i];
 		%remove max
 		tvvc(tlmax)=[];
-		
-		if k<=kmax & j<=jmax & i<=imax	
+
+		if k<=kmax & j<=jmax & i<=imax
  			%define small cubic for memory data
-			data_ball=data(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
-        		a=size(data_ball);
-        		b=a(1)*a(2)*a(3)*a(4);
-        		d=a(1)*a(2)*a(3);
+			data_balls=vvc(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
+        	a=size(data_balls);
+        	b=a(1)*a(2)*a(3)*a(4);
 			p=sum(find(data_ball)>=0.01)/b
-		
-        	        if p>=0.9
+
+        	if p>=0.9
+			data_ball=data(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
+        	d=a(1)*a(2)*a(3);
 			v_data = reshape(data_ball,d,TN);
 			xx=v_data';
-       		 	tcc=1-pdist(xx(:,:),'correlation');
-       		 	cc=0.5*(log(1+tcc)-log(1-tcc));
+       		tcc=1-pdist(xx(:,:),'correlation');
+       		cc=0.5*(log(1+tcc)-log(1-tcc));
 			ERS_z(s,1)=mean(cc(idx_ERS_I));
-        		ERS_z(s,2)=mean(cc(idx_ERS_IB_wc));
-        		ERS_z(s,3)=mean(cc(idx_ERS_IB_all));
-        		ERS_z(s,4)=mean(cc(idx_ERS_D));
-	        	ERS_z(s,5)=mean(cc(idx_ERS_DB_wc));
-       		 	ERS_z(s,6)=mean(cc(idx_ERS_DB_all));
+        	ERS_z(s,2)=mean(cc(idx_ERS_IB_wc));
+        	ERS_z(s,3)=mean(cc(idx_ERS_IB_all));
+        	ERS_z(s,4)=mean(cc(idx_ERS_D));
+	        ERS_z(s,5)=mean(cc(idx_ERS_DB_wc));
+       		ERS_z(s,6)=mean(cc(idx_ERS_DB_all));
 
-        		mem_z(s,1)=mean(cc(idx_mem_D));
-        		mem_z(s,2)=mean(cc(idx_mem_DB_wc));
-        		mem_z(s,3)=mean(cc(idx_mem_DB_all));
-	
-       		 	ln_z(s,1)=mean(cc(idx_ln_D));
-      	 	 	ln_z(s,2)=mean(cc(idx_ln_DB_wc));
-	       	 	ln_z(s,3)=mean(cc(idx_ln_DB_all));
+        	mem_z(s,1)=mean(cc(idx_mem_D));
+        	mem_z(s,2)=mean(cc(idx_mem_DB_wc));
+        	mem_z(s,3)=mean(cc(idx_mem_DB_all));
+
+       		ln_z(s,1)=mean(cc(idx_ln_D));
+      	 	ln_z(s,2)=mean(cc(idx_ln_DB_wc));
+	       	ln_z(s,3)=mean(cc(idx_ln_DB_all));
 			flag=0;
 			else
 			runtime = runtime + 1
 			end %if
-               	else
-                runtime = runtime + 1
-                end %if	
+        else
+        runtime = runtime + 1
+        end %if
 		if runtime >= 100000
-            	flag = 0;
-            	break;
-        	end
+            flag = 0;
+            break;
+        end
 	end %while
 end%sub
 	ERS=[subs' ERS_z(subs,:)];mem=[subs' mem_z(subs,:)];ln=[subs' ln_z(subs,:)];coords=[subs' tcoords(subs',:)];
