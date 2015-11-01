@@ -1,4 +1,4 @@
-function get_peak_up(c)
+function get_peak_up_top_sep_run1(c)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -10,8 +10,8 @@ radius=3;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-vvcdir=sprintf('%s/peak/VVC/data/vvc_data/%s',basedir,condname{c});
-resultdir=sprintf('%s/peak/VVC/data/top/coordinate',basedir);
+vvcdir=sprintf('%s/peak/VVC/data/vvc_data/sep_run/run1/%s',basedir,condname{c});
+resultdir=sprintf('%s/peak/VVC/data/top/coordinate/sep_run_run1',basedir);
 mkdir(resultdir);
 ERS=[];mem=[];ln=[];
 ERS_z=[];mem_z=[];ln_z=[];
@@ -47,8 +47,6 @@ for s=subs;
 		p=sum(find(data_balls)>=0.01)/b
 
             if p>=0.9
-			data_ball=data(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
-        	d=a(1)*a(2)*a(3);
 			tcoords(s,t,:)=[k,j,i];
 			t=t+1
 			else

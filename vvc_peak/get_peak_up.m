@@ -47,7 +47,7 @@ for s=subs;
 			data_balls=vvc(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
         		a=size(data_balls);
         	    b=a(1)*a(2)*a(3)*a(4);
-			    p=sum(find(data_ball)>=0.01)/b
+			    p=sum(find(data_balls)>=0.01)/b
 
         	        if p>=0.9
 			        data_ball=data(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
