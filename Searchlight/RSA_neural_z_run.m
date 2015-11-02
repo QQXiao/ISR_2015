@@ -1,4 +1,4 @@
-function RSA_neural(subs)
+function RSA_neural_z_run(subs)
 Mtrial=1; % trial number
 MpID=2;  % material id_pic
 MwID=3;  % material id_word
@@ -70,11 +70,11 @@ ln_r=zeros(xlength,ylength,zlength,3);
         all_run2=[all_run2 all_label(k:TN,Mrun)'];
         all_set1=[all_set1 all_label(k-1,Mset)*ones(1,TN-k+1)];
         all_set2=[all_set2 all_label(k:TN,Mset)'];
-        
-	%1=same run;0=diff run 
+
+	%1=same run;0=diff run
         check_run=[check_run (all_label(k:TN,Mrun)==all_label(k-1,Mrun))'];
 
-        %1=same set;0=diff set 
+        %1=same set;0=diff set
         check_set=[check_set (all_label(k:TN,Mset)==all_label(k-1,Mset))'];
         %1=same category;0=diff categories
         check_cate=[check_cate (all_label(k:TN,Mcat2)==all_label(k-1,Mcat2))'];
@@ -82,22 +82,21 @@ ln_r=zeros(xlength,ylength,zlength,3);
         %% get indexes
         % ERS
 	for r=1:2
-	for s=1:2
-        idx_ERS_I{r,s}=find(all_run1==r & all_set1==s & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1==all_pID2 & all_wID1==all_wID2);%identity pair: p+c+
-	idx_ERS_IB_all{r,s}=find(all_run1==r & all_set1==s & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==1);
-	idx_ERS_IB_wc{r,s}=find(all_run1==r & all_set1==s & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==1 & check_cate==1);
-        idx_ERS_D{r,s}=find(all_run1==r & all_set1==s & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
-        idx_ERS_DB_all{r,s}=find(all_run1==r & all_set1==s & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
-        idx_ERS_DB_wc{r,s}=find(all_run1==r & all_set1==s & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
+        idx_ERS_I{r}=find(all_run1==r & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1==all_pID2 & all_wID1==all_wID2);%identity pair: p+c+
+	    idx_ERS_IB_all{r}=find(all_run1==r & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==1);
+	    idx_ERS_IB_wc{r}=find(all_run1==r & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==1 & check_cate==1);
+        idx_ERS_D{r}=find(all_run1==r & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
+        idx_ERS_DB_all{r}=find(all_run1==r & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
+        idx_ERS_DB_wc{r}=find(all_run1==r & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
         %mem
-        idx_mem_D{r,s}=find(all_run1==r & all_set1==s & all_phase1==2 & all_phase2==2 & all_mem1 ==1 & all_mem1==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
-        idx_mem_DB_all{r,s}=find(all_run1==r & all_set1==s & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
-        idx_mem_DB_wc{r,s}=find(all_run1==r & all_set1==s & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
+        idx_mem_D{r}=find(all_run1==r & all_phase1==2 & all_phase2==2 & all_mem1 ==1 & all_mem1==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
+        idx_mem_DB_all{r}=find(all_run1==r & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
+        idx_mem_DB_wc{r}=find(all_run1==r & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
         %ln
-        idx_ln_D{r,s}=find(all_run1==r & all_set1==s & all_phase1==1 & all_phase2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
-	idx_ln_DB_all{r,s}=find(all_run1==r & all_set1==s & all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
-	idx_ln_DB_wc{r,s}=find(all_run1==r & all_set1==s & all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
-        
+        idx_ln_D{r}=find(all_run1==r & all_phase1==1 & all_phase2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
+	    idx_ln_DB_all{r}=find(all_run1==r & all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
+	    idx_ln_DB_wc{r}=find(all_run1==r & all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
+
 	%get fMRI data
         data_file=sprintf('%s/sub%02d.nii.gz',datadir,sub);
         data_all=load_nii_zip(data_file);
@@ -119,20 +118,20 @@ ln_r=zeros(xlength,ylength,zlength,3);
                     else
                     xx=v_data';
                     cc=1-pdist(xx(:,:),'correlation');
-                    ERS_r(k,j,i,1)=mean(cc(idx_ERS_I{r,s}));
-                    ERS_r(k,j,i,2)=mean(cc(idx_ERS_IB_wc{r,s}));
-                    ERS_r(k,j,i,3)=mean(cc(idx_ERS_IB_all{r,s}));
-                    ERS_r(k,j,i,4)=mean(cc(idx_ERS_D{r,s}));
-                    ERS_r(k,j,i,5)=mean(cc(idx_ERS_DB_wc{r,s}));
-                    ERS_r(k,j,i,6)=mean(cc(idx_ERS_DB_all{r,s}));
+                    ERS_r(k,j,i,1)=mean(cc(idx_ERS_I{r}));
+                    ERS_r(k,j,i,2)=mean(cc(idx_ERS_IB_wc{r}));
+                    ERS_r(k,j,i,3)=mean(cc(idx_ERS_IB_all{r}));
+                    ERS_r(k,j,i,4)=mean(cc(idx_ERS_D{r}));
+                    ERS_r(k,j,i,5)=mean(cc(idx_ERS_DB_wc{r}));
+                    ERS_r(k,j,i,6)=mean(cc(idx_ERS_DB_all{r}));
 
-                    mem_r(k,j,i,1)=mean(cc(idx_mem_D{r,s}));
-                    mem_r(k,j,i,2)=mean(cc(idx_mem_DB_wc{r,s}));
-                    mem_r(k,j,i,3)=mean(cc(idx_mem_DB_all{r,s}));
+                    mem_r(k,j,i,1)=mean(cc(idx_mem_D{r}));
+                    mem_r(k,j,i,2)=mean(cc(idx_mem_DB_wc{r}));
+                    mem_r(k,j,i,3)=mean(cc(idx_mem_DB_all{r}));
 
-                    ln_r(k,j,i,1)=mean(cc(idx_ln_D{r,s}));
-                    ln_r(k,j,i,2)=mean(cc(idx_ln_DB_wc{r,s}));
-                    ln_r(k,j,i,3)=mean(cc(idx_ln_DB_all{r,s}));
+                    ln_r(k,j,i,1)=mean(cc(idx_ln_D{r}));
+                    ln_r(k,j,i,2)=mean(cc(idx_ln_DB_wc{r}));
+                    ln_r(k,j,i,3)=mean(cc(idx_ln_DB_all{r}));
                     end %end if
                 end %end i
             end %end j
@@ -141,24 +140,23 @@ ln_r=zeros(xlength,ylength,zlength,3);
 
 
 cd (rdir)
-       filename=sprintf('ERS_sub%02d_run%s_set%s.nii',sub,r,s);
+       filename=sprintf('ERS_sub%02d_run%s.nii',sub,r);
        data_all.img=squeeze(ERS_r(:,:,:,:));
        data_all.hdr.dime.dim(5)=6; % dimension chagne to 6
        save_untouch_nii(data_all, filename);
        system(sprintf('gzip -f %s',filename));
 
-        filename=sprintf('mem_sub%02d_run%s_set%s.nii',sub,r,s);
+        filename=sprintf('mem_sub%02d_run%s.nii',sub,r);
         data_all.img=squeeze(mem_r(:,:,:,:));
         data_all.hdr.dime.dim(5)=3; % dimension chagne to 3
         save_untouch_nii(data_all, filename);
         system(sprintf('gzip -f %s',filename));
 
-        filename=sprintf('ln_sub%02d_run%s_set%s.nii',sub,r,s);
+        filename=sprintf('ln_sub%02d_run%s.nii',sub,r);
         data_all.img=squeeze(ln_r(:,:,:,:));
         data_all.hdr.dime.dim(5)=3; % dimension chagne to 3
         save_untouch_nii(data_all, filename);
         system(sprintf('gzip -f %s',filename));
-end %set
 end %run
 end %end sub
 end %end func
