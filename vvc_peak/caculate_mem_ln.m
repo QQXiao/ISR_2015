@@ -27,7 +27,7 @@ ln_r=zeros(xlength,ylength,zlength,1);
         data_all=load_nii_zip(data_file);
         data=data_all.img;
         %get encoding materail similarity matrix
-        ln_file=sprintf('%s/all_%d.mat', lndir,nt);
+        ln_file=sprintf('%s/all_%d_sub%02d.mat', lndir,nt,s);
         ln=load(ln_file);
     %%analysis
     for k=radius+1:step:xlength-radius

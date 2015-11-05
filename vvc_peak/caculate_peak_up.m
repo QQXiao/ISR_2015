@@ -20,6 +20,7 @@ kmax=112-radius;jmax=112-radius;imax=64-radius
 nt=50;
 for s=subs;
 tdata=[];
+cc=[];
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc] = get_idx(s);
 
         %get fMRI data
@@ -53,6 +54,9 @@ tdata=[];
        	ln_z(s,1)=mean(cc(idx_ln_D));
       	ln_z(s,2)=mean(cc(idx_ln_DB_wc));
 	    ln_z(s,3)=mean(cc(idx_ln_DB_all));
+
+        file_name=sprintf('%s/all_%d_sub%02d', resultdir,nt,s);
+        eval(sprintf('save %s cc',file_name));
 end%sub
 	    ERS=[subs' ERS_z(subs,:)];mem=[subs' mem_z(subs,:)];ln=[subs' ln_z(subs,:)];
 	    file_name=sprintf('%s/ERS_%d.txt', resultdir,nt);
@@ -61,7 +65,5 @@ end%sub
         eval(sprintf('save %s mem -ascii',file_name));
         file_name=sprintf('%s/ln_%d.txt', resultdir,nt);
         eval(sprintf('save %s ln -ascii',file_name));
-        file_name=sprintf('%s/all_%d.txt', resultdir,nt);
-        eval(sprintf('save %s cc -ascii',file_name));
 %end %end c
 end %function
