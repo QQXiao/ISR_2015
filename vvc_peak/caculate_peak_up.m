@@ -10,7 +10,6 @@ radius=3;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-vvcdir=sprintf('%s/peak/VVC/data/vvc_data/%s',basedir,condname{c});
 resultdir=sprintf('%s/peak/VVC/data/top/ps/%s',basedir,condname{c});
 mkdir(resultdir);
 coorddir=sprintf('%s/peak/VVC/data/top/coordinate',basedir);
