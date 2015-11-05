@@ -49,6 +49,7 @@ for s=subs;
             if p>=0.9
 			tcoords(s,t,:)=[k,j,i];
 			t=t+1
+            runtime = runtime + 1
 			else
 			runtime = runtime + 1
 			end %if

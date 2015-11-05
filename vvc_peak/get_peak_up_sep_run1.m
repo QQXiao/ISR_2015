@@ -46,13 +46,12 @@ for s=subs;
  		%define small cubic for memory data
 		data_balls=vvc(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
         a=size(data_balls);
-        b=a(1)*a(2)*a(3)*a(4);
+        b=a(1)*a(2)*a(3);
 		p=sum(find(data_balls)>=0.01)/b
 
             if p>=0.9
 		    data_ball=data(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
-            d=a(1)*a(2)*a(3);
-		    v_data = reshape(data_ball,d,TN);
+		    v_data = reshape(data_ball,b,TN);
 		    xx=v_data';
        	    tcc=1-pdist(xx(:,:),'correlation');
        	    cc=0.5*(log(1+tcc)-log(1-tcc));
@@ -87,6 +86,7 @@ for s=subs;
 	        ln_z2(s,3)=mean(cc(idx_ln_DB_all2));
 
 		    flag=0;
+            runtime = runtime + 1
 		    else
 		    runtime = runtime + 1
 		    end %if
