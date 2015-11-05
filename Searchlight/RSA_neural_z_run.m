@@ -30,7 +30,7 @@ TN=96*2
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behav/label'];
-datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
+datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged2',basedir);
 rdir=sprintf('%s/Searchlight_RSM/ref_space/zscore_sep_run/r',basedir);
 addpath /seastor/helenhelen/scripts/NIFTI
 %%%%%%%%%
