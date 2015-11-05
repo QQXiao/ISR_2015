@@ -15,9 +15,9 @@ resultdir=sprintf('%s/peak/VVC/data/top/coordinate/sep_run_run1',basedir);
 mkdir(resultdir);
 ERS=[];mem=[];ln=[];
 ERS_z=[];mem_z=[];ln_z=[];
-coords=[];tcoords=[];
 kmax=112-radius;jmax=112-radius;imax=64-radius
 nt=50; %100; 200; 500; 1000
+coords=zeros(21:nt,4);
 for s=subs;
         %get fMRI data
         data_file=sprintf('%s/sub%02d.nii.gz',datadir,s);
@@ -31,7 +31,7 @@ for s=subs;
 	    flag=1;
 	    runtime=0;
 	    tvvc=vvc;
-	    t=1;
+	    t=0;
 	while flag
 		max_vvc=max(tvvc(:));
 		lmax=find(vvc==max_vvc);
@@ -47,9 +47,10 @@ for s=subs;
 		p=sum(find(data_balls)>=0.01)/b
 
             if p>=0.9
-			tcoords(s,t,:)=[k,j,i];
 			t=t+1
             runtime = runtime + 1
+			coords(s,t,1:3)=[k,j,i];
+			coords(s,t,4)=runtime;
 			else
 			runtime = runtime + 1
 			end %if
@@ -63,6 +64,6 @@ for s=subs;
 	end %while
 end%sub
         file_name=sprintf('%s/%s_%d.mat', resultdir,condname{c},nt);
-        eval(sprintf('save %s tcoords',file_name));
+        eval(sprintf('save %s coords',file_name));
 %end %end c
 end %function
