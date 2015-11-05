@@ -140,19 +140,19 @@ ln_r=zeros(xlength,ylength,zlength,3);
 
 
 cd (rdir)
-       filename=sprintf('ERS_sub%02d_run%s.nii',sub,r);
+       filename=sprintf('ERS_sub%02d_run%d.nii',sub,r);
        data_all.img=squeeze(ERS_r(:,:,:,:));
        data_all.hdr.dime.dim(5)=6; % dimension chagne to 6
        save_untouch_nii(data_all, filename);
        system(sprintf('gzip -f %s',filename));
 
-        filename=sprintf('mem_sub%02d_run%s.nii',sub,r);
+        filename=sprintf('mem_sub%02d_run%d.nii',sub,r);
         data_all.img=squeeze(mem_r(:,:,:,:));
         data_all.hdr.dime.dim(5)=3; % dimension chagne to 3
         save_untouch_nii(data_all, filename);
         system(sprintf('gzip -f %s',filename));
 
-        filename=sprintf('ln_sub%02d_run%s.nii',sub,r);
+        filename=sprintf('ln_sub%02d_run%d.nii',sub,r);
         data_all.img=squeeze(ln_r(:,:,:,:));
         data_all.hdr.dime.dim(5)=3; % dimension chagne to 3
         save_untouch_nii(data_all, filename);

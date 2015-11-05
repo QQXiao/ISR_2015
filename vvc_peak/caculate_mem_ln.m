@@ -13,7 +13,7 @@ radius=3;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-resultdir=sprintf('%s/peak/VVC/data/top/mem_ln/r/%s',basedir,condname{c});
+resultdir=sprintf('%s/peak/VVC/data/top/ps/mem_ln/r/%s',basedir,condname{c});
 lndir=sprintf('%s/peak/VVC/data/top/ps/ln_DBwc',basedir);
 mkdir(resultdir);
 nt=50;
