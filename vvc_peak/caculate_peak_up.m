@@ -19,6 +19,7 @@ coords=[];tcoords=[];
 kmax=112-radius;jmax=112-radius;imax=64-radius
 nt=50;
 for s=subs;
+tdata=[];]
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc] = get_idx(s);
 
         %get fMRI data
@@ -30,8 +31,12 @@ for s=subs;
         load(coord_file);
  		%get material similarity matrix for encoding phase
 		co=squeeze(coords(s,:,[1:3]));
-        tdata=data(co(:,1),co(:,2),co(:,3),:);
-		xx=tdata;
+        for t=1:nt;
+            tmp=[];
+            tmp=squeeze(data(co(t,1),co(t,2),co(t,3),:));
+            tdata=[tdata tmp];
+        end
+		xx=tdata';
        	tcc=1-pdist(xx(:,:),'correlation');
        	cc=0.5*(log(1+tcc)-log(1-tcc));
 		ERS_z(s,1)=mean(cc(idx_ERS_I));
