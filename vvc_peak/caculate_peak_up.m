@@ -29,7 +29,7 @@ for s=subs;
         coord_file=sprintf('%s/%s_%d.mat', coorddir,condname{c},nt);
         coords=load(coord_file);
  		%get material similarity matrix for encoding phase
-		tdata=data(coords,:);
+		tdata=data(squeeze(coords(s,:,[1:3])),:);
 		xx=tdata;
        	tcc=1-pdist(xx(:,:),'correlation');
        	cc=0.5*(log(1+tcc)-log(1-tcc));
