@@ -36,7 +36,7 @@ tdata=[];
             tmp=squeeze(data(co(t,1),co(t,2),co(t,3),:));
             tdata=[tdata tmp];
         end
-		xx=tdata';
+		xx=tdata;
        	tcc=1-pdist(xx(:,:),'correlation');
        	cc=0.5*(log(1+tcc)-log(1-tcc));
 		ERS_z(s,1)=mean(cc(idx_ERS_I));
