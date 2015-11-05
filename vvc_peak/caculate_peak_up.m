@@ -19,7 +19,7 @@ coords=[];tcoords=[];
 kmax=112-radius;jmax=112-radius;imax=64-radius
 nt=50;
 for s=subs;
-tdata=[];]
+tdata=[];
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc] = get_idx(s);
 
         %get fMRI data
