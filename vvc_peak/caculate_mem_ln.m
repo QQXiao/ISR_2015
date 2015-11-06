@@ -60,13 +60,13 @@ ln_r=zeros(xlength,ylength,zlength,1);
             end %i
         end %j
     end %k
-        file_name=sprintf('%s/mem_sub%02d_%d.nii', resultdir,s,nt);
+        filename=sprintf('%s/mem_sub%02d_%d.nii', resultdir,s,nt);
         data_all.img=squeeze(mem_r(:,:,:,:));
         data_all.hdr.dime.dim(5)=1; % dimension chagne to 1
         save_untouch_nii(data_all, filename);
         system(sprintf('gzip -f %s',filename));
 
-        file_name=sprintf('%s/ln_sub%02d_%d.nii', resultdir,s,nt);
+        filename=sprintf('%s/ln_sub%02d_%d.nii', resultdir,s,nt);
         data_all.img=squeeze(ln_r(:,:,:,:));
         data_all.hdr.dime.dim(5)=1; % dimension chagne to 1
         save_untouch_nii(data_all, filename);
