@@ -54,9 +54,22 @@ cc=[];
        	ln_z(s,1)=mean(cc(idx_ln_D));
       	ln_z(s,2)=mean(cc(idx_ln_DB_wc));
 	    ln_z(s,3)=mean(cc(idx_ln_DB_all));
+	
+	yy=tdata(1:96,:);
+        ln_tcc=1-pdist(yy(:,:),'correlation');
+        ln_cc=0.5*(log(1+ln_tcc)-log(1-ln_tcc));
+        file_name=sprintf('%s/Mzln_%d_sub%02d', resultdir,nt,s);
+        eval(sprintf('save %s ln_cc',file_name));
+        file_name=sprintf('%s/Mrln_%d_sub%02d', resultdir,nt,s);
+        eval(sprintf('save %s ln_tcc',file_name));
 
-        file_name=sprintf('%s/all_%d_sub%02d', resultdir,nt,s);
-        eval(sprintf('save %s cc',file_name));
+        zz=tdata(97:end,:);
+        mem_tcc=1-pdist(zz(:,:),'correlation');
+        mem_cc=0.5*(log(1+mem_tcc)-log(1-mem_tcc));
+        file_name=sprintf('%s/Mzmem_%d_sub%02d', resultdir,nt,s);
+        eval(sprintf('save %s mem_cc',file_name));
+        file_name=sprintf('%s/Mrmem_%d_sub%02d', resultdir,nt,s);                                                                
+        eval(sprintf('save %s mem_tcc',file_name)); 
 end%sub
 	    ERS=[subs' ERS_z(subs,:)];mem=[subs' mem_z(subs,:)];ln=[subs' ln_z(subs,:)];
 	    file_name=sprintf('%s/ERS_%d.txt', resultdir,nt);

@@ -10,10 +10,12 @@ xlength =  112;
 ylength =  112;
 zlength =  64;
 radius=3;
+step=1;     % compute accuracy map for every STEP voxels in each dimension                                                                                          eps
+epsilon=1e-6;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-resultdir=sprintf('%s/peak/VVC/data/top/ps/mem_ln/r/%s',basedir,condname{c});
+resultdir=sprintf('%s/peak/VVC/data/top/ps/mem_ln/r',basedir);
 lndir=sprintf('%s/peak/VVC/data/top/ps/ln_DBwc',basedir);
 mkdir(resultdir);
 nt=50;
@@ -27,8 +29,8 @@ ln_r=zeros(xlength,ylength,zlength,1);
         data_all=load_nii_zip(data_file);
         data=data_all.img;
         %get encoding materail similarity matrix
-        ln_file=sprintf('%s/all_%d_sub%02d.mat', lndir,nt,s);
-        ln=load(ln_file);
+        ln_file=sprintf('%s/Mrln_%d_sub%02d.mat', lndir,nt,s);
+        load(ln_file); ln=ln_tcc;
     %%analysis
     for k=radius+1:step:xlength-radius
         for j=radius+1:step:ylength-radius
@@ -45,15 +47,15 @@ ln_r=zeros(xlength,ylength,zlength,1);
                     data_ln=xx(1:96,:);
                     data_mem=xx(97:end,:);
                     tcc_ln=1-pdist(data_ln(:,:),'correlation');
-                    cc_ln=0.5*(log(1+tcc_ln)-log(1-tcc_ln));
+                    %cc_ln=0.5*(log(1+tcc_ln)-log(1-tcc_ln));
                     tcc_mem=1-pdist(data_mem(:,:),'correlation');
-                    cc_mem=0.5*(log(1+tcc_mem)-log(1-tcc_mem));
+                    %cc_mem=0.5*(log(1+tcc_mem)-log(1-tcc_mem));
 
-                    cc_encoding_ln=1-pdist([ln' cc_ln'],'correlation');
-                    cc_encoding_mem=1-pdist([ln' cc_mem'],'correlation');
+                    cc_encoding_ln=1-pdist([ln;tcc_ln],'correlation');
+                    cc_encoding_mem=1-pdist([ln;tcc_mem],'correlation');
 
                     ln_r(k,j,i)=mean(cc_encoding_ln);
-                    mem_r(k,j,i)=mean(cc_encoding_mem));
+                    mem_r(k,j,i)=mean(cc_encoding_mem);
                 end
             end %i
         end %j
