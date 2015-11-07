@@ -20,11 +20,11 @@ lndir=sprintf('%s/peak/VVC/data/top/ps/ln_DBwc',basedir);
 mkdir(resultdir);
 nt=50;
 
-roi_name={'LIFG','RIFG','LIPL','RIPL','LFUS','RFUS','LITG','RITG',...        
-            'LdLOC','RdLOC','LvLOC','RvLOC','LMTG','RMTG','LHIP','RHIP',...  
-            'LAMG','RAMG','LPHG','RPHG','LaPHG','RaPHG','LpPHG','RpPHG',...  
-            'LaSMG','RaSMG','LpSMG','RpSMG','LANG','RANG','LSPL','RSPL',...  
-            'LFFA','RFFA',...                                 
+roi_name={'LIFG','RIFG','LIPL','RIPL','LFUS','RFUS','LITG','RITG',...
+            'LdLOC','RdLOC','LvLOC','RvLOC','LMTG','RMTG','LHIP','RHIP',...
+            'LAMG','RAMG','LPHG','RPHG','LaPHG','RaPHG','LpPHG','RpPHG',...
+            'LaSMG','RaSMG','LpSMG','RpSMG','LANG','RANG','LSPL','RSPL',...
+            'LFFA','RFFA',...
             'PCC','Precuneous','LFOC','LPreCG','RFOC','RPreCG'}; %38 rois in total
 mem_r=[];
 ln_r=[];
@@ -36,10 +36,10 @@ sln_r=[];smem_r=[];
         load(ln_file); ln=ln_tcc;
         %get fMRI data
 	for roi=1:length(roi_name);
-	tln_r=[];tmem_r=[];
+	tln_r=zeros(40,3);tmem_r=zeros(40,3);
         	xx=[];tmp_xx=[];
         	tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
-        	xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates    
+        	xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
 		%%analysis
         	data_ln=xx(1:96,:);
          	data_mem=xx(97:end,:);
@@ -50,7 +50,7 @@ sln_r=[];smem_r=[];
 
                 cc_encoding_ln=1-pdist([ln;tcc_ln],'correlation');
                 cc_encoding_mem=1-pdist([ln;tcc_mem],'correlation');
-		
+
 		tln_r(:,1)=s;tln_r(:,2)=roi;tln_r(:,3)=mean(cc_encoding_ln);
 		tmem_r(:,1)=s;tmem_r(:,2)=roi;tmem_r(:,3)=mean(cc_encoding_mem);
 	sln_r=[sln_r;tln_r];
