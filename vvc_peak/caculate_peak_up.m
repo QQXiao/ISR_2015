@@ -1,7 +1,7 @@
 function caculate_peak_up_top(c)
 %%%%%%%%%
-basedir='/seastor/helenhelen/ISR_2015';
-addpath /seastor/helenhelen/scripts/NIFTI
+basedir='/Users/xiaoqian/Documents/experiment/ISR_2015_results';
+addpath /Users/xiaoqian/Documents/scripts/NIFTI
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
 
 condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc'}
@@ -55,28 +55,31 @@ cc=[];
       	ln_z(s,2)=mean(cc(idx_ln_DB_wc));
 	    ln_z(s,3)=mean(cc(idx_ln_DB_all));
 	
-	yy=tdata(1:96,:);
-        ln_tcc=1-pdist(yy(:,:),'correlation');
-        ln_cc=0.5*(log(1+ln_tcc)-log(1-ln_tcc));
-        file_name=sprintf('%s/Mzln_%d_sub%02d', resultdir,nt,s);
-        eval(sprintf('save %s ln_cc',file_name));
-        file_name=sprintf('%s/Mrln_%d_sub%02d', resultdir,nt,s);
-        eval(sprintf('save %s ln_tcc',file_name));
+        yy=tdata(1:96,:);
+
+        yy1=yy([1:24 49:72],:);
+        ln_tcc1=1-pdist(yy1(:,:),'correlation');
+        ln_cc1=0.5*(log(1+ln_tcc1)-log(1-ln_tcc1));
+        yy2=yy([25:48 73:96],:);
+        ln_tcc2=1-pdist(yy2(:,:),'correlation');
+        ln_cc2=0.5*(log(1+ln_tcc2)-log(1-ln_tcc2));
+        file_name=sprintf('%s/Mrln_%d_sub%02d_set1', resultdir,nt,s);
+        eval(sprintf('save %s ln_tcc1',file_name));
+        file_name=sprintf('%s/Mrln_%d_sub%02d_set2', resultdir,nt,s);
+        eval(sprintf('save %s ln_tcc2',file_name));
 
         zz=tdata(97:end,:);
-        mem_tcc=1-pdist(zz(:,:),'correlation');
-        mem_cc=0.5*(log(1+mem_tcc)-log(1-mem_tcc));
-        file_name=sprintf('%s/Mzmem_%d_sub%02d', resultdir,nt,s);
-        eval(sprintf('save %s mem_cc',file_name));
-        file_name=sprintf('%s/Mrmem_%d_sub%02d', resultdir,nt,s);                                                                
-        eval(sprintf('save %s mem_tcc',file_name)); 
+
+        zz1=zz([1:24 49:72],:);
+        mem_tcc1=1-pdist(zz1(:,:),'correlation');
+        mem_cc1=0.5*(log(1+mem_tcc1)-log(1-mem_tcc1));
+        zz2=zz([25:48 73:96],:);
+        mem_tcc2=1-pdist(zz2(:,:),'correlation');
+        mem_cc2=0.5*(log(1+mem_tcc2)-log(1-mem_tcc2));
+        file_name=sprintf('%s/Mrmem_%d_sub%02d_set1', resultdir,nt,s);
+        eval(sprintf('save %s mem_tcc1',file_name));
+        file_name=sprintf('%s/Mrmem_%d_sub%02d_set2', resultdir,nt,s);
+        eval(sprintf('save %s mem_tcc2',file_name));
 end%sub
-	    ERS=[subs' ERS_z(subs,:)];mem=[subs' mem_z(subs,:)];ln=[subs' ln_z(subs,:)];
-	    file_name=sprintf('%s/ERS_%d.txt', resultdir,nt);
-	    eval(sprintf('save %s ERS -ascii',file_name));
-        file_name=sprintf('%s/mem_%d.txt', resultdir,nt);
-        eval(sprintf('save %s mem -ascii',file_name));
-        file_name=sprintf('%s/ln_%d.txt', resultdir,nt);
-        eval(sprintf('save %s ln -ascii',file_name));
 %end %end c
 end %function
