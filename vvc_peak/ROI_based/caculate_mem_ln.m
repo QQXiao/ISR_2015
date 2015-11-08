@@ -53,11 +53,16 @@ for s=subs;
 		tmem_r(s,roi,1)=s;tmem_r(s,roi,2)=roi;tmem_r(s,roi,3)=mean(cc_encoding_mem);
         end %roi
 end %end sub
-ln_r=[tln_r(:,:,1)' tln_r(:,:,2)' tln_r(:,:,3)'];
-mem_r=[tmem_r(:,:,1)' tmem_r(:,:,2)' tmem_r(:,:,3)'];
+ln_sub=tln_r(:,:,1);ln_roi=tln_r(:,:,2);ln_rsa=tln_r(:,:,3);
+ln_r=[ln_sub(:) ln_roi(:) ln_rsa(:)];
+mem_sub=tmem_r(:,:,1);mem_roi=tmem_r(:,:,2);mem_rsa=tmem_r(:,:,3);
+mem_r=[mem_sub(:) mem_roi(:) mem_rsa(:)];
+ln_r(ln_r(:,1)==0,:)=[];mem_r(mem_r(:,1)==0,:)=[];
 mem_z=[];ln_z=[];
-    mem_z=0.5*(log(1+mem_r)-log(1-mem_r));
-    ln_z=0.5*(log(1+ln_r)-log(1-ln_r));
-    eval(sprintf('save %s/mem.txt mem_z -ascii', resultdir));
-    eval(sprintf('save %s/ln.txt ln_z -ascii', resultdir));
+    tmem_z=0.5*(log(1+mem_r(:,3))-log(1-mem_r(:,3)));
+    tln_z=0.5*(log(1+ln_r(:,3))-log(1-ln_r(:,3)));
+mem_z=[mem_r(:,1:2) tmem_z];
+ln_z=[ln_r(:,1:2) tln_z];
+    eval(sprintf('save %s/mem.txt mem_z -ascii -tabs', resultdir));
+    eval(sprintf('save %s/ln.txt ln_z -ascii -tabs', resultdir));
 end %function
