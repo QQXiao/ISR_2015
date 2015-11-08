@@ -30,13 +30,11 @@ mem_r=[];
 ln_r=[];
 
 for s=subs;
-sln_r=[];smem_r=[];
         %get encoding materail similarity matrix
         ln_file=sprintf('%s/Mrln_%d_sub%02d.mat', lndir,nt,s);
         load(ln_file); ln=ln_tcc;
         %get fMRI data
 	for roi=1:length(roi_name);
-	tln_r=zeros(40,3);tmem_r=zeros(40,3);
         	xx=[];tmp_xx=[];
         	tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
         	xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
@@ -51,16 +49,13 @@ sln_r=[];smem_r=[];
                 cc_encoding_ln=1-pdist([ln;tcc_ln],'correlation');
                 cc_encoding_mem=1-pdist([ln;tcc_mem],'correlation');
 
-		tln_r(:,1)=s;tln_r(:,2)=roi;tln_r(:,3)=mean(cc_encoding_ln);
-		tmem_r(:,1)=s;tmem_r(:,2)=roi;tmem_r(:,3)=mean(cc_encoding_mem);
-	sln_r=[sln_r;tln_r];
-	smem_r=[smem_r;tmem_r];
+		tln_r(s,roi,1)=s;tln_r(s,roi,2)=roi;tln_r(s,roi,3)=mean(cc_encoding_ln);
+		tmem_r(s,roi,1)=s;tmem_r(s,roi,2)=roi;tmem_r(s,roi,3)=mean(cc_encoding_mem);
         end %roi
-	ln_r=[ln_r;sln_r];
-	mem_r=[mem_r;smem_r];
 end %end sub
-mem_z=[];
-ln_z=[];
+ln_r=[tln_r(:,:,1)' tln_r(:,:,2)' tln_r(:,:,3)'];
+mem_r=[tmem_r(:,:,1)' tmem_r(:,:,2)' tmem_r(:,:,3)'];
+mem_z=[];ln_z=[];
     mem_z=0.5*(log(1+mem_r)-log(1-mem_r));
     ln_z=0.5*(log(1+ln_r)-log(1-ln_r));
     eval(sprintf('save %s/mem.txt mem_z -ascii', resultdir));
