@@ -1,4 +1,4 @@
-function [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc]=get_idx(s)
+function [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]=get_idx(s)
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behav/label'];
 %data structure
@@ -30,10 +30,12 @@ TN=96*2;
         list_subln=subln;
         list_subln(:,Msub)=s;
         list_subln(:,Mphase)=1;
+	m_ln=list_subln(:,MpID);
         load(sprintf('%s/test_sub%02d.mat',labeldir,s));
         list_submem=submem;
         list_submem(:,Msub)=s;
         list_submem(:,Mphase)=2;
+	m_mem=list_submem(:,MpID);
         for nn=1:96
         p=list_subln(nn,MpID);w=list_subln(nn,MwID);
         list_subln(nn,Mmem)=list_submem(list_submem(:,MpID)==p & list_submem(:,MwID)==w,Mmem);

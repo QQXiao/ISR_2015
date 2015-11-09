@@ -2,6 +2,7 @@ function caculate_mem_ln()
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
+addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
 
 condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc'}
@@ -29,6 +30,8 @@ roi_name={'LIFG','RIFG','LIPL','RIPL','LFUS','RFUS','LITG','RITG',...
 mem_r=[];
 ln_r=[];
 for s=subs;
+[idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
+
         %get encoding materail similarity matrix
         ln_file=sprintf('%s/Mrln_%d_sub%02d.mat', lndir,nt,s);
         load(ln_file); ln=ln_tcc;
@@ -38,9 +41,12 @@ for s=subs;
         	tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
         	xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
 		%%analysis
-        	data_ln=xx(1:96,:);
-         	data_mem=xx(97:end,:);
-                tcc_ln=1-pdist(data_ln(:,:),'correlation');
+        	t_ln=xx(1:96,:);
+		tln=[t_ln,m_ln];tln=sortrows(tln,2);data_ln=tln(:,1); 
+         	t_mem=xx(97:end,:);
+		tmem=[t_mem,m_mem];tmem=sortrows(tmem,2);data_mem=tmem(:,1); 
+                
+		tcc_ln=1-pdist(data_ln(:,:),'correlation');
                 %cc_ln=0.5*(log(1+tcc_ln)-log(1-tcc_ln));
                 tcc_mem=1-pdist(data_mem(:,:),'correlation');
                 %cc_mem=0.5*(log(1+tcc_mem)-log(1-tcc_mem));

@@ -2,9 +2,11 @@ function caculate_mem_ln()
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
+addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
+
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
 
-condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc'}
+condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc','ERS_ID'}
 %%%%%%%%%
 xlength =  112;
 ylength =  112;
@@ -21,6 +23,7 @@ mkdir(resultdir);
 nt=50;
 
 for s=subs;
+[idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
 mem_r=zeros(xlength,ylength,zlength,1);
 ln_r=zeros(xlength,ylength,zlength,1);
 
@@ -44,8 +47,11 @@ ln_r=zeros(xlength,ylength,zlength,1);
                     ln_r(k,j,i,:)=10;
                 else
                     xx=v_data';
-                    data_ln=xx(1:96,:);
-                    data_mem=xx(97:end,:);
+                    t_ln=xx(1:96,:);
+                    tln=[t_ln,m_ln];tln=sortrows(tln,2);data_ln=tln(:,1);                                                                              
+                    t_mem=xx(97:end,:);
+                    tmem=[t_mem,m_mem];tmem=sortrows(tmem,2);data_mem=tmem(:,1);                                                                       
+
                     tcc_ln=1-pdist(data_ln(:,:),'correlation');
                     %cc_ln=0.5*(log(1+tcc_ln)-log(1-tcc_ln));
                     tcc_mem=1-pdist(data_mem(:,:),'correlation');

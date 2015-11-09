@@ -4,7 +4,7 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
 
-condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc'}
+condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc','ERS_ID'}
 %%%%%%%%%
 radius=3;
 TN=192;
@@ -41,7 +41,7 @@ for s=subs;
 		%remove max
 		tvvc(tlmax)=[];
 		for tt=1:nmax
-		k=kk[tt];j=jj[tt];i=ii[tt];
+		k=kk(tt);j=jj(tt);i=ii(tt);
 		if k<=kmax & j<=jmax & i<=imax
  		%define small cubic for memory data
 		data_balls=vvc(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
