@@ -4,7 +4,7 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
 
-condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc'}
+condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc','ERS_ID'}
 %%%%%%%%%
 radius=3;
 TN=192;

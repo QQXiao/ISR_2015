@@ -13,7 +13,8 @@ do
     fi
     echo $SUB
 maskdir=$basedir/${SUB}/roi_ref
-	for c in ERS_IBwc ERS_DBwc mem_DBwc ln_DBwc
+	#for c in ERS_IBwc ERS_DBwc mem_DBwc ln_DBwc
+	for c in ERS_ID
 	do
 	resultdir=$basedir/peak/VVC/data/vvc_data/${c}
 	mkdir $resultdir -p

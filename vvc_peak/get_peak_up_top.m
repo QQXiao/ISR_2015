@@ -35,28 +35,32 @@ for s=subs;
 	while flag
 		max_vvc=max(tvvc(:));
 		lmax=find(vvc==max_vvc);
+		nmax=length(lmax);
 		tlmax=find(tvvc==max_vvc);
-		[k,j,i]=ind2sub(ss,lmax);
+		[kk,jj,ii]=ind2sub(ss,lmax);
 		%remove max
 		tvvc(tlmax)=[];
+		for tt=1:nmax
+		k=kk[tt];j=jj[tt];i=ii[tt];
 		if k<=kmax & j<=jmax & i<=imax
  		%define small cubic for memory data
 		data_balls=vvc(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
-        a=size(data_balls);
-        b=a(1)*a(2)*a(3);
+        	a=size(data_balls);
+        	b=a(1)*a(2)*a(3);
 		p=sum(find(data_balls)>=0.01)/b
 
-            if p>=0.9
+            		if p>=0.9
 			t=t+1
-            runtime = runtime + 1
+            		runtime = runtime + 1
 			coords(s,t,[1:3])=[k,j,i];
 			coords(s,t,4)=runtime;
 			else
 			runtime = runtime + 1
 			end %if
-	    else
-        runtime = runtime + 1
-        end %if
+		else
+       		runtime = runtime + 1
+        	end %if
+		end %end for
 		if t==nt | runtime >= 100000
             	flag = 0;
             	break;

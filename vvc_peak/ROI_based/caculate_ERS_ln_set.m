@@ -1,0 +1,89 @@
+function caculate_mem_ln()
+%%%%%%%%%
+basedir='/seastor/helenhelen/ISR_2015';
+addpath /seastor/helenhelen/scripts/NIFTI
+datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
+
+condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc'}
+%%%%%%%%%
+xlength =  112;
+ylength =  112;
+zlength =  64;
+radius=3;
+step=1;     % compute accuracy map for every STEP voxels in each dimension                                                                                          eps
+epsilon=1e-6;
+TN=192;
+subs=setdiff(1:21,2);
+%for c=1:4
+resultdir=sprintf('%s/peak/VVC/data/top/ps/ROI_based/ERS_DBwc_ln',basedir);
+lndir=sprintf('%s/peak/VVC/data/top/ps/ERS_DBwc',basedir);
+%resultdir=sprintf('%s/peak/VVC/data/top/ps/ROI_based/ERS_ID_ln',basedir);
+%lndir=sprintf('%s/peak/VVC/data/top/ps/ERS_ID',basedir);
+mkdir(resultdir);
+nt=50;
+
+roi_name={'LIFG','RIFG','LIPL','RIPL','LFUS','RFUS','LITG','RITG',...
+            'LdLOC','RdLOC','LvLOC','RvLOC','LMTG','RMTG','LHIP','RHIP',...
+            'LAMG','RAMG','LPHG','RPHG','LaPHG','RaPHG','LpPHG','RpPHG',...
+            'LaSMG','RaSMG','LpSMG','RpSMG','LANG','RANG','LSPL','RSPL',...
+            'LFFA','RFFA',...
+            'PCC','Precuneous','LFOC','LPreCG','RFOC','RPreCG'}; %38 rois in total
+mem_r=[];
+ln_r=[];
+
+for s=subs;
+        %get encoding materail similarity matrix
+        ln_file=sprintf('%s/Mrln_%d_sub%02d.mat', lndir,nt,s);
+        ln_file1=sprintf('%s/Mrln_%d_sub%02d_set1.mat', lndir,nt,s);                                                       
+        load(ln_file1); ln_set1=ln_tcc1;                                                                                   
+        ln_file2=sprintf('%s/Mrln_%d_sub%02d_set2.mat', lndir,nt,s);                                                       
+        load(ln_file2); ln_set2=ln_tcc2;        
+	%get fMRI data
+	for roi=1:length(roi_name);
+        	xx=[];tmp_xx=[];
+        	tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
+        	xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
+		%%analysis
+        	data_ln=xx(1:96,:);
+         	data_mem=xx(97:end,:);
+                    data_ln_set1=data_ln([1:24 49:72],:);
+                    data_ln_set2=data_ln([25:48 73:96],:);
+                    tcc_ln_set1=1-pdist(data_ln_set1(:,:),'correlation');
+                    tcc_ln_set2=1-pdist(data_ln_set2(:,:),'correlation');
+                    data_mem_set1=data_mem([1:24 49:72],:);
+                    data_mem_set2=data_mem([25:48 73:96],:);
+                    tcc_mem_set1=1-pdist(data_mem_set1(:,:),'correlation');
+                    tcc_mem_set2=1-pdist(data_mem_set2(:,:),'correlation');
+
+                    for set=1:2; %
+                    cc_encoding_ln_same(s)=eval(sprintf('1-pdist([ln_set%d;tcc_ln_set%d],''correlation'')',s,s));
+                    cc_encoding_mem_same(s)=eval(sprintf('1-pdist([ln_set%d;tcc_mem_set%d],''correlation'')',s,s));
+                    cc_encoding_ln_diff(s)=eval(sprintf('1-pdist([ln_set%d;tcc_ln_set%d],''correlation'')',s,3-s));
+                    cc_encoding_mem_diff(s)=eval(sprintf('1-pdist([ln_set%d;tcc_mem_set%d],''correlation'')',s,3-s));
+                    end
+		tln_r_same(s,roi,1)=s;tln_r_same(s,r i,2)=roi;tln_r_same(s,roi,3)=mean(cc_encoding_ln_same);
+		tln_r_diff(s,roi,1)=s;tln_r_diff(s,r i,2)=roi;tln_r_diff(s,roi,3)=mean(cc_encoding_ln_diff);
+		tmem_r_same(s,roi,1)=s;tmem_r_same(s,roi,2)=roi;tmem_r_same(s,roi,3)=mean(cc_encoding_mem_same);
+		tmem_r_diff(s,roi,1)=s;tmem_r_diff(s,roi,2)=roi;tmem_r_diff(s,roi,3)=mean(cc_encoding_mem_diff);
+        end %roi
+end %end sub
+ln_sub=tln_r_same(:,:,1);ln_roi=tln_r(:,:,2);ln_rsa_same=tln_r_same(:,:,3);ln_rsa_diff=tln_r_diff(:,:,3);
+ln_r_same=[ln_sub(:) ln_roi(:) ln_rsa_same(:)];
+ln_r_diff=[ln_sub(:) ln_roi(:) ln_rsa_diff(:)];
+mem_sub=tmem_r_same(:,:,1);mem_roi=tmem_r(:,:,2);mem_rsa_same=tmem_r_same(:,:,3);mem_rsa_diff=tmem_r_diff(:,:,3);
+mem_r_same=[mem_sub(:) mem_roi(:) mem_rsa_same(:)];
+mem_r_diff=[mem_sub(:) mem_roi(:) mem_rsa_diff(:)];
+
+ln_r_same(ln_r_same(:,1)==0,:)=[];mem_r_same(mem_r_same(:,1)==0,:)=[];
+ln_r_diff(ln_r_diff(:,1)==0,:)=[];mem_r_diff(mem_r_diff(:,1)==0,:)=[];
+    tmem_z_same=0.5*(log(1+mem_r_same(:,3))-log(1-mem_r_same(:,3)));
+    tln_z_same=0.5*(log(1+ln_r_same(:,3))-log(1-ln_r_same(:,3)));
+    tmem_z_diff=0.5*(log(1+mem_r_diff(:,3))-log(1-mem_r_diff(:,3)));
+    tln_z_diff=0.5*(log(1+ln_r_diff(:,3))-log(1-ln_r_diff(:,3)));
+mem_z_same=[mem_r_same(:,1:2) tmem_z_same];mem_z_same=[mem_r_same(:,1:2) tmem_z_same];
+ln_z_diff=[ln_r_diff(:,1:2) tln_z_diff];ln_z_diff=[ln_r_diff(:,1:2) tln_z_diff];
+    eval(sprintf('save %s/mem_same.txt mem_z_same -ascii -tabs', resultdir));
+    eval(sprintf('save %s/ln_same.txt ln_z_same -ascii -tabs', resultdir));
+    eval(sprintf('save %s/mem_diff.txt mem_z_diff -ascii -tabs', resultdir));
+    eval(sprintf('save %s/ln_diff.txt ln_z_diff -ascii -tabs', resultdir));
+end %function

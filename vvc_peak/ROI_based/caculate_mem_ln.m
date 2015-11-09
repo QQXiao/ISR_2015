@@ -28,7 +28,6 @@ roi_name={'LIFG','RIFG','LIPL','RIPL','LFUS','RFUS','LITG','RITG',...
             'PCC','Precuneous','LFOC','LPreCG','RFOC','RPreCG'}; %38 rois in total
 mem_r=[];
 ln_r=[];
-
 for s=subs;
         %get encoding materail similarity matrix
         ln_file=sprintf('%s/Mrln_%d_sub%02d.mat', lndir,nt,s);
