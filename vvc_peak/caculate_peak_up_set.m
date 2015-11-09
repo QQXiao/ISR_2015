@@ -1,8 +1,8 @@
 function caculate_peak_up_top(c)
 %%%%%%%%%
-basedir='/Users/xiaoqian/Documents/experiment/ISR_2015_results';
-addpath /Users/xiaoqian/Documents/scripts/NIFTI
-datadir=sprintf('%s/data/d2015/data_singletrial/ref_space/zscore/beta/merged',basedir);
+basedir='/seastor/helenhelen/ISR_2015';
+addpath /seastor/helenhelen/scripts/NIFTI
+datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
 
 condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc'}
 %%%%%%%%%
@@ -10,7 +10,7 @@ radius=3;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-resultdir=sprintf('%s/peak/VVC/data/top/ps/%s',basedir,condname{c});
+resultdir=sprintf('%s/peak/VVC/data/top/ps/set/%s',basedir,condname{c});
 mkdir(resultdir);
 coorddir=sprintf('%s/peak/VVC/data/top/coordinate',basedir);
 ERS=[];mem=[];ln=[];
