@@ -17,10 +17,10 @@ epsilon=1e-6;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-resultdir=sprintf('%s/peak/VVC/data/top/ps/set/ROI_based/ERS_DBwc_ln',basedir);
-lndir=sprintf('%s/peak/VVC/data/top/ps/set/ERS_DBwc',basedir);
-%resultdir=sprintf('%s/peak/VVC/data/top/ps/set/ROI_based/ERS_ID_ln',basedir);
-%lndir=sprintf('%s/peak/VVC/data/top/ps/set/ERS_ID',basedir);
+%resultdir=sprintf('%s/peak/VVC/data/top/ps/set/ROI_based/ERS_DBwc_ln',basedir);
+%lndir=sprintf('%s/peak/VVC/data/top/ps/set/ERS_DBwc',basedir);
+resultdir=sprintf('%s/peak/VVC/data/top/ps/set/ROI_based/ERS_ID_ln',basedir);
+lndir=sprintf('%s/peak/VVC/data/top/ps/set/ERS_ID',basedir);
 mkdir(resultdir);
 nt=50;
 
@@ -51,22 +51,22 @@ for s=subs;
          	data_mem=xx(97:end,:);
                     yy1=data_ln([1:24 49:72],:);
 		    m_ln_1=m_ln([1:24 49:72],:);                                                                                                 
-        	    tyy1=[yy1,m_ln_1];tyy1=sortrows(tyy1,2);data_ln_set1=tyy1(:,1);
+        	    tyy1=[yy1,m_ln_1];a=size(tyy1);ttyy1=sortrows(tyy1,a(2));data_ln_set1=ttyy1(:,[1:end-1]);
 
                     yy2=data_ln([25:48 73:96],:);
 		    m_ln_2=m_ln([25:48 73:96],:);                                                                                                
-         	    tyy2=[yy2,m_ln_2];tyy2=sortrows(tyy2,2);data_ln_set2=tyy2(:,1);
+        	    tyy2=[yy2,m_ln_2];a=size(tyy2);ttyy2=sortrows(tyy2,a(2));data_ln_set2=ttyy2(:,[1:end-1]);
 
                     tcc_ln_set1=1-pdist(data_ln_set1(:,:),'correlation');
                     tcc_ln_set2=1-pdist(data_ln_set2(:,:),'correlation');
                     
 		    zz1=data_mem([1:24 49:72],:);
 	            m_mem_1=m_mem([1:24 49:72],:);                                                                                               
-	            tzz1=[zz1,m_mem_1];tzz1=sortrows(tzz1,2);data_mem_set1=tzz1(:,1);                                                                      
+        	    tzz1=[zz1,m_mem_1];a=size(tzz1);ttzz1=sortrows(tzz1,a(2));data_mem_set1=ttzz1(:,[1:end-1]);
 
                     zz2=data_mem([25:48 73:96],:);
 		    m_mem_2=m_mem([25:48 73:96],:);                                                                                              
-        	    tzz2=[zz2,m_mem_2];tzz2=sortrows(tzz2,2);data_mem_set2=tzz2(:,1);  
+        	    tzz2=[zz2,m_mem_2];a=size(tzz2);ttzz2=sortrows(tzz2,a(2));data_mem_set2=ttzz2(:,[1:end-1]);
 
                     tcc_mem_set1=1-pdist(data_mem_set1(:,:),'correlation');
                     tcc_mem_set2=1-pdist(data_mem_set2(:,:),'correlation');

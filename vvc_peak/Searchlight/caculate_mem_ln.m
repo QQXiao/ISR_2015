@@ -47,10 +47,12 @@ ln_r=zeros(xlength,ylength,zlength,1);
                     ln_r(k,j,i,:)=10;
                 else
                     xx=v_data';
-                    t_ln=xx(1:96,:);
-                    tln=[t_ln,m_ln];tln=sortrows(tln,2);data_ln=tln(:,1);                                                                              
-                    t_mem=xx(97:end,:);
+                    yy=xx(1:96,:);
+                tyy=[yy,m_ln];a=size(tyy);ttyy=sortrows(tyy,a(2));data_ln=ttyy(:,[1:end-1]);                                                                       
+
+                    zz=xx(97:end,:);
                     tmem=[t_mem,m_mem];tmem=sortrows(tmem,2);data_mem=tmem(:,1);                                                                       
+                tzz=[zz,m_mem];a=size(tzz);ttzz=sortrows(tzz,a(2));data_mem=ttzz(:,[1:end-1]);                                                                     
 
                     tcc_ln=1-pdist(data_ln(:,:),'correlation');
                     %cc_ln=0.5*(log(1+tcc_ln)-log(1-tcc_ln));
