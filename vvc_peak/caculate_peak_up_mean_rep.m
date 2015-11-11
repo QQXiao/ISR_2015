@@ -37,7 +37,7 @@ cc=[];
             tdata=[tdata tmp];
         end
 		%xx=tdata;
-		xx=tdata(:,1:100);
+		xx=tdata(:,1:nt);
        	tcc=1-pdist(xx(:,:),'correlation');
        	cc=0.5*(log(1+tcc)-log(1-tcc));
 

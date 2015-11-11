@@ -3,5 +3,5 @@
 c=$1
 nt=$2
 #do
-   fsl_sub matlab -nodesktop -nosplash -r "caculate_m_set($c,$nt);quit;"
+   fsl_sub matlab2013b -nodesktop -nosplash -r "caculate_m_set($c,$nt);quit;"
 #done

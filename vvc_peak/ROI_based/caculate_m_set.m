@@ -17,7 +17,7 @@ epsilon=1e-6;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-resultdir=sprintf('%s/peak/VVC/data/top/ps/set/ROI_based/%s',basedir,condname{c});
+resultdir=sprintf('%s/peak/VVC/data/top/ps/ROI_based/%s/set',basedir,condname{c});
 lndir=sprintf('%s/peak/VVC/data/top/ps/set/%s',basedir,condname{c});
 mkdir(resultdir);
 %nt=200;
