@@ -2,7 +2,7 @@ function caculate_peak_up_top(c)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
-datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged2',basedir);
+datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
 
 condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc','ERS_ID'}
 %%%%%%%%%
@@ -17,7 +17,7 @@ ERS=[];mem=[];ln=[];
 ERS_z=[];mem_z=[];ln_z=[];
 coords=[];tcoords=[];
 kmax=112-radius;jmax=112-radius;imax=64-radius
-nt=200;
+nt=100;
 for s=subs;
 tdata=[];
 cc=[];
@@ -28,7 +28,7 @@ cc=[];
         data_all=load_nii_zip(data_file);
         data=data_all.img;
         %get coordinate
-        coord_file=sprintf('%s/%s_%d.mat', coorddir,condname{c},nt);
+        coord_file=sprintf('%s/%s_5000.mat', coorddir,condname{c});
         load(coord_file);
  		%get material similarity matrix for encoding phase
 		co=squeeze(coords(s,:,[1:3]));
@@ -37,7 +37,8 @@ cc=[];
             tmp=squeeze(data(co(t,1),co(t,2),co(t,3),:));
             tdata=[tdata tmp];
         end
-		xx=tdata;
+		%xx=tdata;
+		xx=tdata(:,1:100);
        	tcc=1-pdist(xx(:,:),'correlation');
        	cc=0.5*(log(1+tcc)-log(1-tcc));
 

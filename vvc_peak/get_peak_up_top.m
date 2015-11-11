@@ -2,7 +2,7 @@ function get_peak_up_top(c)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
-datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
+datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged2',basedir);
 
 condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc','ERS_ID'}
 %%%%%%%%%
@@ -36,7 +36,7 @@ for s=subs;
 	while flag
 		max_vvc=max(tvvc(:));
 		if isempty(max_vvc);
-		break;
+		flag=0;
 		else
 		lmax=find(vvc==max_vvc);
 		nmax=length(lmax);

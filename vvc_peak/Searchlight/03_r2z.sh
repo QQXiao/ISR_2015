@@ -1,8 +1,8 @@
 basedir='/seastor/helenhelen/ISR_2015'
 #datadir=$basedir/Searchlight_RSM/ref_space/LSS/zscore/r
 #resultdir=$basedir/Searchlight_RSM/ref_space/LSS/zscore/z
-datadir=$basedir/peak/VVC/data/top/ps/mem_ln/r
-resultdir=$basedir/peak/VVC/data/top/ps/mem_ln/z
+datadir=$basedir/peak/VVC/data/top/ps/ln_DBwc/r
+resultdir=$basedir/peak/VVC/data/top/ps/ln_DBwc/z
 mkdir $resultdir -p
 cd $datadir
 for x in *.nii.gz

@@ -19,7 +19,7 @@ subs=setdiff(1:21,2);
 resultdir=sprintf('%s/peak/VVC/data/top/ps/set/Searchlignt/%s/r',basedir,condname{c});
 lndir=sprintf('%s/peak/VVC/data/top/ps/set/%s',basedir,condname{c});
 %mkdir(resultdir);
-nt=200;
+nt=100;
 
 for s=subs;
 mem_r_diff=zeros(xlength,ylength,zlength,1);
@@ -32,10 +32,8 @@ ln_r_same=zeros(xlength,ylength,zlength,1);
         data_all=load_nii_zip(data_file);
         data=data_all.img;
         %get encoding materail similarity matrix
-        ln_file1=sprintf('%s/Mrln_%d_sub%02d_set1.mat', lndir,nt,s);
-        load(ln_file1); ln_set1=ln_tcc1;
-        ln_file2=sprintf('%s/Mrln_%d_sub%02d_set2.mat', lndir,nt,s);
-        load(ln_file2); ln_set2=ln_tcc2;
+        ln_file=sprintf('%s/Mrln_%d_sub%02d_mean.mat', lndir,nt,s);
+        load(ln_file); ln=ln_tcc;
     %%analysis
     for k=radius+1:step:xlength-radius
         for j=radius+1:step:ylength-radius
@@ -59,8 +57,9 @@ ln_r_same=zeros(xlength,ylength,zlength,1);
                     m_ln_2=m_ln([25:48 73:96],:);                                                                                                  
                     tyy2=[yy2,m_ln_2];a=size(tyy2);ttyy2=sortrows(tyy2,a(2));data_ln_set2=ttyy2(:,[1:end-1]);                                                      
 
-                    tcc_ln_set1=1-pdist(data_ln_set1(:,:),'correlation');
-                    tcc_ln_set2=1-pdist(data_ln_set2(:,:),'correlation');
+                    data_ln=(data_ln_set1+data_ln_set2)/2
+		    tcc_ln=1-pdist(data_ln(:,:),'correlation');
+
 		    zz1=data_mem([1:24 49:72],:);
                     m_mem_1=m_mem([1:24 49:72],:);                                                                                                 
                     tzz1=[zz1,m_mem_1];a=size(tzz1);ttzz1=sortrows(tzz1,a(2));data_mem_set1=ttzz1(:,[1:end-1]);                                                    
@@ -69,44 +68,28 @@ ln_r_same=zeros(xlength,ylength,zlength,1);
                     m_mem_2=m_mem([25:48 73:96],:);                                                                                                
                     tzz2=[zz2,m_mem_2];a=size(tzz2);ttzz2=sortrows(tzz2,a(2));data_mem_set2=ttzz2(:,[1:end-1]);                                                    
 
-                    tcc_mem_set1=1-pdist(data_mem_set1(:,:),'correlation');
-                    tcc_mem_set2=1-pdist(data_mem_set2(:,:),'correlation');
-		    for set=1:2; %
-                    cc_encoding_ln_same(s)=eval(sprintf('1-pdist([ln_set%d;tcc_ln_set%d],''correlation'')',set,set));
-                    cc_encoding_mem_same(s)=eval(sprintf('1-pdist([ln_set%d;tcc_mem_set%d],''correlation'')',set,set));
-                    cc_encoding_ln_diff(s)=eval(sprintf('1-pdist([ln_set%d;tcc_ln_set%d],''correlation'')',set,3-set));
-                    cc_encoding_mem_diff(s)=eval(sprintf('1-pdist([ln_set%d;tcc_mem_set%d],''correlation'')',set,3-set));
-		    end
-                    ln_r_same(k,j,i)=mean(cc_encoding_ln_same);
-                    mem_r_same(k,j,i)=mean(cc_encoding_mem_same);
-                    ln_r_diff(k,j,i)=mean(cc_encoding_ln_diff);
-                    mem_r_diff(k,j,i)=mean(cc_encoding_mem_diff);
+                    data_mem=(data_mem_set1+data_mem_set2)/2
+                    tcc_mem=1-pdist(data_mem(:,:),'correlation');
+                    
+		    cc_encoding_ln=1-pdist([ln;tcc_ln],'correlation');
+                    cc_encoding_mem=1-pdist([ln;tcc_mem],'correlation');
+                    
+		    ln_r(k,j,i)=mean(cc_encoding_ln);
+                    mem_r(k,j,i)=mean(cc_encoding_mem);
                 end
             end %i
         end %j
     end %k
-        filename=sprintf('%s/mem_same_sub%02d_%d.nii', resultdir,s,nt);
-        data_all.img=squeeze(mem_r_same(:,:,:,:));
+        filename=sprintf('%s/mem_sub%02d_%d.nii', resultdir,s,nt);
+        data_all.img=squeeze(mem_r(:,:,:,:));
         data_all.hdr.dime.dim(5)=1; % dimension chagne to 1
         save_untouch_nii(data_all, filename);
         system(sprintf('gzip -f %s',filename));
 
-        filename=sprintf('%s/mem_diff_sub%02d_%d.nii', resultdir,s,nt);
-        data_all.img=squeeze(mem_r_diff(:,:,:,:));                                                                         
-        data_all.hdr.dime.dim(5)=1; % dimension chagne to 1                                                                
-        save_untouch_nii(data_all, filename);                                                                              
-        system(sprintf('gzip -f %s',filename));
-
-        filename=sprintf('%s/ln_same_sub%02d_%d.nii', resultdir,s,nt);                                                   
-        data_all.img=squeeze(ln_r_same(:,:,:,:));                                                                        
+        filename=sprintf('%s/ln_sub%02d_%d.nii', resultdir,s,nt);                                                   
+        data_all.img=squeeze(ln_r(:,:,:,:));                                                                        
         data_all.hdr.dime.dim(5)=1; % dimension chagne to 1                                                              
         save_untouch_nii(data_all, filename);                                                                            
         system(sprintf('gzip -f %s',filename)); 
-
-        filename=sprintf('%s/ln_diff_sub%02d_%d.nii', resultdir,s,nt);
-        data_all.img=squeeze(ln_r_diff(:,:,:,:));
-        data_all.hdr.dime.dim(5)=1; % dimension chagne to 1
-        save_untouch_nii(data_all, filename);
-        system(sprintf('gzip -f %s',filename));
 end %end sub
 end %function
