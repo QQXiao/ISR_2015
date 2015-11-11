@@ -16,7 +16,8 @@ mkdir(resultdir);
 ERS=[];mem=[];ln=[];
 ERS_z=[];mem_z=[];ln_z=[];
 kmax=112-radius;jmax=112-radius;imax=64-radius
-nt=50; %100; 200; 500; 1000
+kmin=1+radius;jmin=1+radius;imin=1+radius
+nt=5000; %50; 100; 200; 500; 1000
 coords=zeros(21,nt,4);
 for s=subs;
         %get fMRI data
@@ -34,6 +35,9 @@ for s=subs;
 	    t=0;
 	while flag
 		max_vvc=max(tvvc(:));
+		if isempty(max_vvc);
+		break;
+		else
 		lmax=find(vvc==max_vvc);
 		nmax=length(lmax);
 		tlmax=find(tvvc==max_vvc);
@@ -42,8 +46,8 @@ for s=subs;
 		tvvc(tlmax)=[];
 		for tt=1:nmax
 		k=kk(tt);j=jj(tt);i=ii(tt);
-		if k<=kmax & j<=jmax & i<=imax
- 		%define small cubic for memory data
+		if k<=kmax & j<=jmax & i<=imax & k>=kmin & j>=jmin & i>=imin 		
+		%define small cubic for memory data
 		data_balls=vvc(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:);
         	a=size(data_balls);
         	b=a(1)*a(2)*a(3);
@@ -61,7 +65,8 @@ for s=subs;
        		runtime = runtime + 1
         	end %if
 		end %end for
-		if t==nt | runtime >= 100000
+		end %end if
+		if t==nt | runtime >= 1000000
             	flag = 0;
             	break;
         	end

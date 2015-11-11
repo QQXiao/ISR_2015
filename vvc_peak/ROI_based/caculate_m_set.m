@@ -1,4 +1,4 @@
-function caculate_mem_ln()
+function caculate_mem_ln(c)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -17,19 +17,18 @@ epsilon=1e-6;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-%resultdir=sprintf('%s/peak/VVC/data/top/ps/set/ROI_based/ERS_DBwc_ln',basedir);
-%lndir=sprintf('%s/peak/VVC/data/top/ps/set/ERS_DBwc',basedir);
-resultdir=sprintf('%s/peak/VVC/data/top/ps/set/ROI_based/ERS_ID_ln',basedir);
-lndir=sprintf('%s/peak/VVC/data/top/ps/set/ERS_ID',basedir);
+resultdir=sprintf('%s/peak/VVC/data/top/ps/set/ROI_based/%s',basedir,condname{c});
+lndir=sprintf('%s/peak/VVC/data/top/ps/set/%s',basedir,condname{c});
 mkdir(resultdir);
-nt=50;
+nt=200;
 
-roi_name={'LIFG','RIFG','LIPL','RIPL','LFUS','RFUS','LITG','RITG',...
-            'LdLOC','RdLOC','LvLOC','RvLOC','LMTG','RMTG','LHIP','RHIP',...
-            'LAMG','RAMG','LPHG','RPHG','LaPHG','RaPHG','LpPHG','RpPHG',...
-            'LaSMG','RaSMG','LpSMG','RpSMG','LANG','RANG','LSPL','RSPL',...
-            'LFFA','RFFA',...
-            'PCC','Precuneous','LFOC','LPreCG','RFOC','RPreCG'}; %38 rois in total
+roi_name={'LdLOC','LvLOC','LOF','LTOF','LpTF','LaTF',...
+		'LIFG','LpSMG','LaSMG','LANG',...
+		'LpPHG','LaPHG',...
+		'RdLOC','RvLOC','ROF','RTOF','RpTF','RaTF',...
+                'RIFG','RpSMG','RaSMG','RANG',...
+                'RpPHG','RaPHG'};
+
 mem_r=[];
 ln_r=[];
 

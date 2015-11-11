@@ -16,8 +16,8 @@ epsilon=1e-6;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-resultdir=sprintf('%s/peak/VVC/data/top/ps/set/mem_ln/r',basedir);
-lndir=sprintf('%s/peak/VVC/data/top/ps/set/ln_DBwc',basedir);
+resultdir=sprintf('%s/peak/VVC/data/top/ps/set/Searchlignt/%s/r',basedir,condname{c});
+lndir=sprintf('%s/peak/VVC/data/top/ps/set/%s',basedir,condname{c});
 mkdir(resultdir);
 nt=50;
 
@@ -96,6 +96,12 @@ ln_r_same=zeros(xlength,ylength,zlength,1);
         data_all.hdr.dime.dim(5)=1; % dimension chagne to 1                                                                
         save_untouch_nii(data_all, filename);                                                                              
         system(sprintf('gzip -f %s',filename));
+
+        filename=sprintf('%s/ln_same_sub%02d_%d.nii', resultdir,s,nt);                                                   
+        data_all.img=squeeze(ln_r_same(:,:,:,:));                                                                        
+        data_all.hdr.dime.dim(5)=1; % dimension chagne to 1                                                              
+        save_untouch_nii(data_all, filename);                                                                            
+        system(sprintf('gzip -f %s',filename)); 
 
         filename=sprintf('%s/ln_diff_sub%02d_%d.nii', resultdir,s,nt);
         data_all.img=squeeze(ln_r_diff(:,:,:,:));

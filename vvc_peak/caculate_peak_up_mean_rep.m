@@ -42,38 +42,33 @@ cc=[];
        	cc=0.5*(log(1+tcc)-log(1-tcc));
 
         yy=tdata(1:96,:);
-
         yy1=yy([1:24 49:72],:);
 	m_ln_1=m_ln([1:24 49:72],:);
         tyy1=[yy1,m_ln_1];a=size(tyy1);ttyy1=sortrows(tyy1,a(2));data_ln_set1=ttyy1(:,[1:end-1]);
-	ln_tcc1=1-pdist(data_ln_set1(:,:),'correlation');
-        ln_cc1=0.5*(log(1+ln_tcc1)-log(1-ln_tcc1));
         yy2=yy([25:48 73:96],:);
         m_ln_2=m_ln([25:48 73:96],:);
 	tyy2=[yy2,m_ln_2];a=size(tyy2);ttyy2=sortrows(tyy2,a(2));data_ln_set2=ttyy2(:,[1:end-1]);        
-	ln_tcc2=1-pdist(data_ln_set2(:,:),'correlation');
-        ln_cc2=0.5*(log(1+ln_tcc2)-log(1-ln_tcc2));
-        file_name=sprintf('%s/Mrln_%d_sub%02d_set1', resultdir,nt,s);
-        eval(sprintf('save %s ln_tcc1',file_name));
-        file_name=sprintf('%s/Mrln_%d_sub%02d_set2', resultdir,nt,s);
-        eval(sprintf('save %s ln_tcc2',file_name));
+	
+	data_ln=(data_ln_set1+data_ln_set2)/2;
+	ln_tcc=1-pdist(data_ln(:,:),'correlation');
+        ln_cc=0.5*(log(1+ln_tcc)-log(1-ln_tcc));
+
+        file_name=sprintf('%s/Mrln_%d_sub%02d_mean', resultdir,nt,s);
+        eval(sprintf('save %s ln_tcc',file_name));
 
         zz=tdata(97:end,:);
-
         zz1=zz([1:24 49:72],:);
         m_mem_1=m_mem([1:24 49:72],:);
-	                    tzz1=[zz1,m_mem_1];a=size(tzz1);ttzz1=sortrows(tzz1,a(2));data_mem_set1=ttzz1(:,[1:end-1]);
-	mem_tcc1=1-pdist(data_mem_set1(:,:),'correlation');
-        mem_cc1=0.5*(log(1+mem_tcc1)-log(1-mem_tcc1));
+	tzz1=[zz1,m_mem_1];a=size(tzz1);ttzz1=sortrows(tzz1,a(2));data_mem_set1=ttzz1(:,[1:end-1]);
         zz2=zz([25:48 73:96],:);
         m_mem_2=m_mem([25:48 73:96],:);
-	                    tzz2=[zz2,m_mem_2];a=size(tzz2);ttzz2=sortrows(tzz2,a(2));data_mem_set2=ttzz2(:,[1:end-1]);
-	mem_tcc2=1-pdist(data_mem_set2(:,:),'correlation');
-        mem_cc2=0.5*(log(1+mem_tcc2)-log(1-mem_tcc2));
-        file_name=sprintf('%s/Mrmem_%d_sub%02d_set1', resultdir,nt,s);
-        eval(sprintf('save %s mem_tcc1',file_name));
-        file_name=sprintf('%s/Mrmem_%d_sub%02d_set2', resultdir,nt,s);
-        eval(sprintf('save %s mem_tcc2',file_name));
+	tzz2=[zz2,m_mem_2];a=size(tzz2);ttzz2=sortrows(tzz2,a(2));data_mem_set2=ttzz2(:,[1:end-1]);
+
+	data_mem=(data_mem_set1+data_mem_set2)/2;
+	mem_tcc=1-pdist(data_mem(:,:),'correlation');
+        mem_cc=0.5*(log(1+mem_tcc)-log(1-mem_tcc));
+        file_name=sprintf('%s/Mrmem_%d_sub%02d_mean', resultdir,nt,s);
+        eval(sprintf('save %s mem_tcc',file_name));
 end%sub
 %end %end c
 end %function

@@ -3,5 +3,5 @@
 #for c in 4
 #do
    #fsl_sub matlab -nodesktop -nosplash -r "caculate_mem_ln();quit;"
-   fsl_sub matlab -nodesktop -nosplash -r "caculate_ERS_ln_set();quit;"
+   fsl_sub matlab -nodesktop -nosplash -r "caculate_m_mean_rep();quit;"
 #done
