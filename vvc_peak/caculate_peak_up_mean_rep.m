@@ -1,4 +1,4 @@
-function caculate_peak_up_top(c)
+function caculate_peak_up_top(c,nt)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -17,7 +17,6 @@ ERS=[];mem=[];ln=[];
 ERS_z=[];mem_z=[];ln_z=[];
 coords=[];tcoords=[];
 kmax=112-radius;jmax=112-radius;imax=64-radius
-nt=100;
 for s=subs;
 tdata=[];
 cc=[];

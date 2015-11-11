@@ -1,4 +1,4 @@
-function caculate_mem_ln()
+function caculate_mem_ln(c,nt)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -17,10 +17,10 @@ epsilon=1e-6;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-resultdir=sprintf('%s/peak/VVC/data/top/ps/ROI_based/mean_rep',basedir);
-lndir=sprintf('%s/peak/VVC/data/top/ps/set/ln_DBwc',basedir);
+resultdir=sprintf('%s/peak/VVC/data/top/ps/ROI_based/%s/mean_rep',basedir,condname{c});
+lndir=sprintf('%s/peak/VVC/data/top/ps/set/%s',basedir,condname{c});
 mkdir(resultdir);
-nt=200;
+%nt=200;
 
 roi_name={'LdLOC','LvLOC','LOF','LTOF','LpTF','LaTF',...
                 'LIFG','LpSMG','LaSMG','LANG',...
@@ -77,6 +77,6 @@ mem_z=[];ln_z=[];
     tln_z=0.5*(log(1+ln_r(:,3))-log(1-ln_r(:,3)));
 mem_z=[mem_r(:,1:2) tmem_z];
 ln_z=[ln_r(:,1:2) tln_z];
-    eval(sprintf('save %s/mem.txt mem_z -ascii -tabs', resultdir));
-    eval(sprintf('save %s/ln.txt ln_z -ascii -tabs', resultdir));
+    eval(sprintf('save %s/mem_%d.txt mem_z -ascii -tabs', resultdir,nt));
+    eval(sprintf('save %s/ln_%d.txt ln_z -ascii -tabs', resultdir,nt));
 end %function

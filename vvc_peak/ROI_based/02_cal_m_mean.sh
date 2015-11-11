@@ -1,7 +1,7 @@
 #!sh/bin/
 #for c in 1 2 3 4
-#for c in 4
 #do
-   #fsl_sub matlab -nodesktop -nosplash -r "caculate_mem_ln();quit;"
-   fsl_sub matlab -nodesktop -nosplash -r "caculate_m_mean_rep();quit;"
+c=$1
+nt=$2
+   fsl_sub matlab -nodesktop -nosplash -r "caculate_m_mean_rep($c,$nt);quit;"
 #done

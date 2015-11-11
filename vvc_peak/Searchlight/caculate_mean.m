@@ -1,4 +1,4 @@
-function caculate_set(c)
+function caculate_set(c,nt)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -19,7 +19,7 @@ subs=setdiff(1:21,2);
 resultdir=sprintf('%s/peak/VVC/data/top/ps/set/Searchlignt/%s/r',basedir,condname{c});
 lndir=sprintf('%s/peak/VVC/data/top/ps/set/%s',basedir,condname{c});
 %mkdir(resultdir);
-nt=100;
+%nt=100;
 
 for s=subs;
 mem_r_diff=zeros(xlength,ylength,zlength,1);
@@ -47,24 +47,24 @@ ln_r_same=zeros(xlength,ylength,zlength,1);
                     ln_r(k,j,i,:)=10;
                 else
                     xx=v_data';
-                    data_ln=xx(1:96,:);
-                    data_mem=xx(97:end,:);
-		    yy1=data_ln([1:24 49:72],:);
+                    yy=xx(1:96,:);
+                    zz=xx(97:end,:);
+		    yy1=yy([1:24 49:72],:);
                     m_ln_1=m_ln([1:24 49:72],:);                                                                                                   
                     tyy1=[yy1,m_ln_1];a=size(tyy1);ttyy1=sortrows(tyy1,a(2));data_ln_set1=ttyy1(:,[1:end-1]);                                                      
 
-		    yy2=data_ln([25:48 73:96],:);
+		    yy2=yy([25:48 73:96],:);
                     m_ln_2=m_ln([25:48 73:96],:);                                                                                                  
                     tyy2=[yy2,m_ln_2];a=size(tyy2);ttyy2=sortrows(tyy2,a(2));data_ln_set2=ttyy2(:,[1:end-1]);                                                      
 
                     data_ln=(data_ln_set1+data_ln_set2)/2
 		    tcc_ln=1-pdist(data_ln(:,:),'correlation');
 
-		    zz1=data_mem([1:24 49:72],:);
+		    zz1=zz([1:24 49:72],:);
                     m_mem_1=m_mem([1:24 49:72],:);                                                                                                 
                     tzz1=[zz1,m_mem_1];a=size(tzz1);ttzz1=sortrows(tzz1,a(2));data_mem_set1=ttzz1(:,[1:end-1]);                                                    
 		    
-		    zz2=data_mem([25:48 73:96],:);
+		    zz2=zz([25:48 73:96],:);
                     m_mem_2=m_mem([25:48 73:96],:);                                                                                                
                     tzz2=[zz2,m_mem_2];a=size(tzz2);ttzz2=sortrows(tzz2,a(2));data_mem_set2=ttzz2(:,[1:end-1]);                                                    
 

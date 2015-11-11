@@ -1,4 +1,4 @@
-function caculate_set(c)
+function caculate_set(c,nt)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -19,7 +19,7 @@ subs=setdiff(1:21,2);
 resultdir=sprintf('%s/peak/VVC/data/top/ps/set/Searchlignt/%s/r',basedir,condname{c});
 lndir=sprintf('%s/peak/VVC/data/top/ps/set/%s',basedir,condname{c});
 %mkdir(resultdir);
-nt=200;
+%nt=200;
 
 for s=subs;
 mem_r_diff=zeros(xlength,ylength,zlength,1);

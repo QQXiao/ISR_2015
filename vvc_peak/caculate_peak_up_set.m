@@ -1,4 +1,4 @@
-function caculate_peak_up_top(c)
+function caculate_peak_up_top(c,nt)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -17,7 +17,6 @@ ERS=[];mem=[];ln=[];
 ERS_z=[];mem_z=[];ln_z=[];
 coords=[];tcoords=[];
 kmax=112-radius;jmax=112-radius;imax=64-radius
-nt=200;
 for s=subs;
 tdata=[];
 cc=[];
@@ -28,7 +27,7 @@ cc=[];
         data_all=load_nii_zip(data_file);
         data=data_all.img;
         %get coordinate
-        coord_file=sprintf('%s/%s_%d.mat', coorddir,condname{c},nt);
+        coord_file=sprintf('%s/%s_5000.mat', coorddir,condname{c});
         load(coord_file);
  		%get material similarity matrix for encoding phase
 		co=squeeze(coords(s,:,[1:3]));
@@ -54,9 +53,9 @@ cc=[];
 	tyy2=[yy2,m_ln_2];a=size(tyy2);ttyy2=sortrows(tyy2,a(2));data_ln_set2=ttyy2(:,[1:end-1]);        
 	ln_tcc2=1-pdist(data_ln_set2(:,:),'correlation');
         ln_cc2=0.5*(log(1+ln_tcc2)-log(1-ln_tcc2));
-        file_name=sprintf('%s/Mrln_%d_sub%02d_set1', resultdir,nt-100,s);
+        file_name=sprintf('%s/Mrln_%d_sub%02d_set1', resultdir,nt,s);
         eval(sprintf('save %s ln_tcc1',file_name));
-        file_name=sprintf('%s/Mrln_%d_sub%02d_set2', resultdir,nt-100,s);
+        file_name=sprintf('%s/Mrln_%d_sub%02d_set2', resultdir,nt,s);
         eval(sprintf('save %s ln_tcc2',file_name));
 
         zz=tdata(97:end,:);
@@ -71,9 +70,9 @@ cc=[];
 	tzz2=[zz2,m_mem_2];a=size(tzz2);ttzz2=sortrows(tzz2,a(2));data_mem_set2=ttzz2(:,[1:end-1]);
 	mem_tcc2=1-pdist(data_mem_set2(:,:),'correlation');
         mem_cc2=0.5*(log(1+mem_tcc2)-log(1-mem_tcc2));
-        file_name=sprintf('%s/Mrmem_%d_sub%02d_set1', resultdir,nt-100,s);
+        file_name=sprintf('%s/Mrmem_%d_sub%02d_set1', resultdir,nt,s);
         eval(sprintf('save %s mem_tcc1',file_name));
-        file_name=sprintf('%s/Mrmem_%d_sub%02d_set2', resultdir,nt-100,s);
+        file_name=sprintf('%s/Mrmem_%d_sub%02d_set2', resultdir,nt,s);
         eval(sprintf('save %s mem_tcc2',file_name));
 end%sub
 %end %end c

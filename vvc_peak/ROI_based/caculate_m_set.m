@@ -1,4 +1,4 @@
-function caculate_mem_ln(c)
+function caculate_mem_ln(c,nt)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -20,7 +20,7 @@ subs=setdiff(1:21,2);
 resultdir=sprintf('%s/peak/VVC/data/top/ps/set/ROI_based/%s',basedir,condname{c});
 lndir=sprintf('%s/peak/VVC/data/top/ps/set/%s',basedir,condname{c});
 mkdir(resultdir);
-nt=200;
+%nt=200;
 
 roi_name={'LdLOC','LvLOC','LOF','LTOF','LpTF','LaTF',...
 		'LIFG','LpSMG','LaSMG','LANG',...
@@ -97,8 +97,8 @@ ln_r_diff(ln_r_diff(:,1)==0,:)=[];mem_r_diff(mem_r_diff(:,1)==0,:)=[];
     tln_z_diff=0.5*(log(1+ln_r_diff(:,3))-log(1-ln_r_diff(:,3)));
 mem_z_same=[mem_r_same(:,1:2) tmem_z_same];mem_z_diff=[mem_r_diff(:,1:2) tmem_z_diff];
 ln_z_same=[ln_r_same(:,1:2) tln_z_same];ln_z_diff=[ln_r_diff(:,1:2) tln_z_diff];
-    eval(sprintf('save %s/mem_same.txt mem_z_same -ascii -tabs', resultdir));
-    eval(sprintf('save %s/ln_same.txt ln_z_same -ascii -tabs', resultdir));
-    eval(sprintf('save %s/mem_diff.txt mem_z_diff -ascii -tabs', resultdir));
-    eval(sprintf('save %s/ln_diff.txt ln_z_diff -ascii -tabs', resultdir));
+    eval(sprintf('save %s/mem_same_%d.txt mem_z_same -ascii -tabs', resultdir,nt));
+    eval(sprintf('save %s/ln_same_%d.txt ln_z_same -ascii -tabs', resultdir,nt));
+    eval(sprintf('save %s/mem_diff_%d.txt mem_z_diff -ascii -tabs', resultdir,nt));
+    eval(sprintf('save %s/ln_diff_%d.txt ln_z_diff -ascii -tabs', resultdir,nt));
 end %function
