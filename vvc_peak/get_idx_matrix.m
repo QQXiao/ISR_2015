@@ -1,4 +1,4 @@
-function [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]=get_idx(s)
+function [idx_mem_D,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_wc]=get_idx(s,t)
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behav/label'];
 %data structure
@@ -23,6 +23,7 @@ Mmem=15;
 Msub=16;
 Mphase=17;
 TN=96*2;
+Mp=18;
 %%%%%%%%%
 
 %perpare data
@@ -41,9 +42,9 @@ TN=96*2;
         list_subln(nn,Mmem)=list_submem(list_submem(:,MpID)==p & list_submem(:,MwID)==w,Mmem);
         end
         all_label=[list_subln;list_submem];
-
+	all_label(:,Mp)=1:192;
         all_idx=1:TN*(TN-1)/2; %% all paired correlation idx;
-        all_pID1=[]; all_pID2=[]; all_wID1=[]; all_wID2=[]; all_Rcate=[]; all_mem1=[]; all_mem2=[]; all_phase1=[]; all_phase2=[]; all_cate1=[];  all_cate2=[]; check_run=[]; check_set=[]; check_cate=[];
+        all_pID1=[]; all_pID2=[]; all_wID1=[]; all_wID2=[]; all_Rcate=[]; all_mem1=[]; all_mem2=[]; all_phase1=[]; all_phase2=[]; all_cate1=[];  all_cate2=[]; check_run=[]; check_set=[]; check_cate=[];all_posit1=[];
        for k=2:TN
         all_pID1=[all_pID1 all_label(k-1,MpID)*ones(1,TN-k+1)];
         all_pID2=[all_pID2 all_label(k:TN,MpID)'];
@@ -55,6 +56,7 @@ TN=96*2;
         all_phase2=[all_phase2 all_label(k:TN,Mphase)'];
         all_cate1=[all_cate1 all_label(k-1,Mcat2)*ones(1,TN-k+1)];
         all_cate2=[all_cate2 all_label(k:TN,Mcat2)'];
+        all_posit1=[all_posit1 all_label(k-1,Mp)*ones(1,TN-k+1)];
 
         %1=same run;0=diff run 
         check_run=[check_run (all_label(k:TN,Mrun)==all_label(k-1,Mrun))'];
@@ -66,19 +68,10 @@ TN=96*2;
         check_cate=[check_cate (all_label(k:TN,Mcat2)==all_label(k-1,Mcat2))'];
         end
         %% get indexes
-        % ERS
-        idx_ERS_I=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1==all_pID2 & all_wID1==all_wID2);%identity pair: p+c+
-        idx_ERS_IB_all=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==1);
-        idx_ERS_IB_wc=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==1 & check_cate==1);
-        idx_ERS_D=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-        
-	idx_ERS_DB_all=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
-        idx_ERS_DB_wc=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
         %mem
-        idx_mem_D=find(all_phase1==2 & all_phase2==2 & all_mem1 ==1 & all_mem1==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
-        idx_mem_DB_all=find(all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
-        idx_mem_DB_wc=find(all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
+        idx_mem_D=find(all_posit1==t & all_phase1==2 & all_phase2==2 & all_mem1 ==1 & all_mem1==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
+        idx_mem_DB_wc=find(all_posit1==t & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
         %ln
-        idx_ln_D=find(all_phase1==1 & all_phase2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
-  	idx_ln_DB_all=find(all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
-  	idx_ln_DB_wc=find(all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
+        idx_ln_D=find(all_posit1==t & all_phase1==1 & all_phase2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
+  	idx_ln_DB_wc=find(all_posit1==t & all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
 end %end func

@@ -1,42 +1,60 @@
-function get_top_information(c)
+function get_top_information()
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
 
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
+vvcdir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
 %%%%%%%%%
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-vvcdir=sprintf('%s/peak/VVC/data/vvc_data/%s',basedir,condname{c});
 resultdir=sprintf('%s/peak/VVC/data/top/coordinate',basedir);
 mkdir(resultdir);
 ERS=[];mem=[];ln=[];
 ERS_z=[];mem_z=[];ln_z=[];
-coords=zeros(21,nt,4);
 for s=subs;
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
-        %get fMRI data
-	vvcfile=sprintf('%s/sub%02d.nii.gz',vvcdir,s);
-	vvc_all=load_nii_zip(vvcfile);
-	vvc=vvc_all.img;
-	ss=size(vvc);
-        pa=combntns(ss(4),2);
-	for k=1:ss(1);
-		for j=1:ss(2);
-			for i=1:ss(3);
-			data_voxel=vvc(k,j,i,:);
-			datav=data_voxel(:);
-			coorv=datav(pa(:,1)).*datav(pa(:,2));
-			lcoorv=sortcoorv;
 
-			pln=
-			end
-        	end
+        %get fMRI data
+	vvcfile=sprintf('%s/sub%02d_vvc.txt',vvcdir,s);
+	tmp_vvc=load(vvcfile);	
+	vvc=tmp_vvc(4:end,1:end-1);
+	ss=size(vvc);
+        pa=combntns([1:ss(1)],2);
+	for v=1:ss(2)
+	data_voxel=vvc(:,v);
+	datav=data_voxel(:);
+	coorv=datav(pa(:,1)).*datav(pa(:,2));
+		t_sub_ln=idx_ln_D;
+		for n=1:length(t_sub_ln)
+		t=pa(t_sub_ln(n),1);
+		tpln=[];
+		[tidx_mem_D,tidx_mem_DB_wc,tidx_ln_D,tidx_ln_DB_wc]= get_idx_matrix(s,t);
+		pt=[tidx_ln_D,tidx_ln_DB_wc];
+		t_coorv=coorv(pt);	
+		x=sum(coorv(tidx_ln_D)>t_coorv);
+		tpln(n)=(x)/length(tidx_ln_DB_wc);
+		end
+		pln(s,v)=sum(tpln)/length(t_sub_ln);
+		
+		t_sub_mem=idx_mem_D;
+		for n=1:length(t_sub_mem)
+		t=pa(t_sub_mem(n),1);
+		tpmem=[];
+		[tidx_mem_D,tidx_mem_DB_wc,tidx_ln_D,tidx_ln_DB_wc]= get_idx_matrix(s,t);
+                pt=[tidx_mem_D,tidx_mem_DB_wc];
+                t_coorv=coorv(pt);                       
+		x=sum(coorv(tidx_mem_D)>t_coorv);
+		tpmem(n)=(x)/length(tidx_mem_DB_wc)
+		end
+                pmem(s,v)=sum(tpmem)/length(t_sub_mem);
 	end 
 end%sub
-        file_name=sprintf('%s/%s_%d.mat', resultdir,condname{c},nt);
-        eval(sprintf('save %s coords',file_name));
+        file_name=sprintf('%s/vvc_ln_inform.mat', resultdir);
+        eval(sprintf('save %s pln',file_name));
+        file_name=sprintf('%s/vvc_mem_inform.mat', resultdir);
+        eval(sprintf('save %s pmem',file_name));
 %end %end c
 end %function
