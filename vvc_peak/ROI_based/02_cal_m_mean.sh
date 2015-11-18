@@ -1,8 +1,7 @@
 #!sh/bin/
 #for c in 1 2 3 4
 #do
-c=$1
-nt=$2
-   matlab2013b -nodesktop -nosplash -r "caculate_m_mean_rep_mem($c,$nt);quit;"
-   #matlab2013b -nodesktop -nosplash -r "caculate_m_mean_rep_ln($c,$nt);quit;"
+nt=$1
+   matlab2013b -nodesktop -nosplash -r "caculate_m_mean_rep_mem(3,$nt);quit;"
+   #matlab2013b -nodesktop -nosplash -r "caculate_m_mean_rep_ln(4,$nt);quit;"
 #done

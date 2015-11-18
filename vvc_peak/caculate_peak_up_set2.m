@@ -27,7 +27,7 @@ cc=[];
         data_all=load_nii_zip(data_file);
         data=data_all.img;
         %get coordinate
-        coord_file=sprintf('%s/%s_5000.mat', coorddir,condname{c});
+        coord_file=sprintf('%s/%s_20000.mat', coorddir,condname{c});
         load(coord_file);
  		%get material similarity matrix for encoding phase
 		co=squeeze(coords(s,:,[1:3]));

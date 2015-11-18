@@ -25,11 +25,11 @@ mkdir(resultdir);
 roi_name={'LdLOC','LvLOC',...
 		'LCC','LOF','LTOF','LpTF','LaTF',...
 		'LIFG','LpSMG','LaSMG','LANG',...
-		'LHIP','LpPHG','LaPHG',...
+		'LpPHG','LaPHG',...
 		'RdLOC','RvLOC',...
 		'RCC','ROF','RTOF','RpTF','RaTF',...
                 'RIFG','RpSMG','RaSMG','RANG',...
-                'RHIP','RpPHG','RaPHG'};
+                'RpPHG','RaPHG'};
 
 mem_r=[];
 ln_r=[];
@@ -78,28 +78,18 @@ for s=subs;
                     cc_encoding_ln_diff(s)=eval(sprintf('1-pdist([ln_set%d;tcc_ln_set%d],''correlation'')',set,3-set));
                     cc_encoding_mem_diff(s)=eval(sprintf('1-pdist([ln_set%d;tcc_mem_set%d],''correlation'')',set,3-set));
                     end
-		tln_r_same(s,roi,1)=s;tln_r_same(s,roi,2)=roi;tln_r_same(s,roi,3)=mean(cc_encoding_ln_same);
-		tln_r_diff(s,roi,1)=s;tln_r_diff(s,roi,2)=roi;tln_r_diff(s,roi,3)=mean(cc_encoding_ln_diff);
-		tmem_r_same(s,roi,1)=s;tmem_r_same(s,roi,2)=roi;tmem_r_same(s,roi,3)=mean(cc_encoding_mem_same);
-		tmem_r_diff(s,roi,1)=s;tmem_r_diff(s,roi,2)=roi;tmem_r_diff(s,roi,3)=mean(cc_encoding_mem_diff);
+tln_r_same(s,roi,:)=mean(cc_encoding_ln_same);
+tln_r_diff(s,roi,:)=mean(cc_encoding_ln_diff);
+tmem_r_same(s,roi,:)=mean(cc_encoding_mem_same);
+tmem_r_diff(s,roi,:)=mean(cc_encoding_mem_diff);
         end %roi
 end %end sub
-ln_sub=tln_r_same(:,:,1);ln_roi=tln_r_same(:,:,2);ln_rsa_same=tln_r_same(:,:,3);ln_rsa_diff=tln_r_diff(:,:,3);
-ln_r_same=[ln_sub(:) ln_roi(:) ln_rsa_same(:)];
-ln_r_diff=[ln_sub(:) ln_roi(:) ln_rsa_diff(:)];
-mem_sub=tmem_r_same(:,:,1);mem_roi=tmem_r_same(:,:,2);mem_rsa_same=tmem_r_same(:,:,3);mem_rsa_diff=tmem_r_diff(:,:,3);
-mem_r_same=[mem_sub(:) mem_roi(:) mem_rsa_same(:)];
-mem_r_diff=[mem_sub(:) mem_roi(:) mem_rsa_diff(:)];
+tln_r_same=tln_r_same(subs,:,:);    
+tln_r_diff=tln_r_diff(subs,:,:);    
+tmem_r_same=tmem_r_same(subs,:,:);    
+tmem_r_diff=tmem_r_diff(subs,:,:);    
 
-ln_r_same(ln_r_same(:,1)==0,:)=[];mem_r_same(mem_r_same(:,1)==0,:)=[];
-ln_r_diff(ln_r_diff(:,1)==0,:)=[];mem_r_diff(mem_r_diff(:,1)==0,:)=[];
-    tmem_z_same=0.5*(log(1+mem_r_same(:,3))-log(1-mem_r_same(:,3)));
-    tln_z_same=0.5*(log(1+ln_r_same(:,3))-log(1-ln_r_same(:,3)));
-    tmem_z_diff=0.5*(log(1+mem_r_diff(:,3))-log(1-mem_r_diff(:,3)));
-    tln_z_diff=0.5*(log(1+ln_r_diff(:,3))-log(1-ln_r_diff(:,3)));
-mem_z_same=[mem_r_same(:,1:2) tmem_z_same];mem_z_diff=[mem_r_diff(:,1:2) tmem_z_diff];
-ln_z_same=[ln_r_same(:,1:2) tln_z_same];ln_z_diff=[ln_r_diff(:,1:2) tln_z_diff];
-    eval(sprintf('save %s/mem_same_%d.txt mem_z_same -ascii -tabs', resultdir,nt));
+eval(sprintf('save %s/mem_same_%d.txt mem_z_same -ascii -tabs', resultdir,nt));
     eval(sprintf('save %s/ln_same_%d.txt ln_z_same -ascii -tabs', resultdir,nt));
     eval(sprintf('save %s/mem_diff_%d.txt mem_z_diff -ascii -tabs', resultdir,nt));
     eval(sprintf('save %s/ln_diff_%d.txt ln_z_diff -ascii -tabs', resultdir,nt));
