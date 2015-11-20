@@ -1,4 +1,4 @@
-function [idx_mem_D,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_wc]=get_idx(s,t)
+function [idx_mem_D,idx_mem_DB_wc,idx_mem_DB_all,idx_ln_D,idx_ln_DB_wc,idx_ln_DB_all]=get_idx(s,t)
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behav/label'];
 %data structure
@@ -70,8 +70,10 @@ Mp=18;
         %% get indexes
         %mem
         idx_mem_D=find(all_posit1==t & all_phase1==2 & all_phase2==2 & all_mem1 ==1 & all_mem1==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
-        idx_mem_DB_wc=find(all_posit1==t & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
+        idx_mem_DB_all=find(all_posit1==t & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
+	idx_mem_DB_wc=find(all_posit1==t & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
         %ln
         idx_ln_D=find(all_posit1==t & all_phase1==1 & all_phase2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
+        idx_ln_DB_all=find(all_posit1==t & all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
   	idx_ln_DB_wc=find(all_posit1==t & all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
 end %end func

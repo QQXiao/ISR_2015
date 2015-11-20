@@ -19,7 +19,10 @@ for s=subs
         %get fMRI data
 	vvcfile=sprintf('%s/sub%02d_vvc.txt',vvcdir,s);
 	tmp_vvc=load(vvcfile);	
-	vvc=tmp_vvc(4:end,1:end-1);
+	ttvvc=tmp_vvc(4:end,1:end-1);
+	tvvc=(ttvvc)';
+	zvvc=zscore(tvvc);
+	vvc=zvvc'
 	ss=size(vvc);
         pa=combntns([1:ss(1)],2);
 	
@@ -51,7 +54,6 @@ for s=subs
                 t_coorv=coorv(pt);                       
 		x=sum(coorv(tidx_mem_D)>t_coorv);
 		tpmem(v,n)=(x)/length(tidx_mem_DB_wc);
-        	tpln=[];tpmem=[];
 		end%voxels
 	end%retrieval phase  
         pmem=sum(tpmem,2)/length(t_sub_mem);
