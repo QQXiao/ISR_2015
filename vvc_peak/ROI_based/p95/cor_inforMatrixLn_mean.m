@@ -1,4 +1,4 @@
-function caculate_mem_ln(c,nt)
+function caculate_mem_ln()
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -6,7 +6,6 @@ addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
 
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
 
-condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc'}
 %%%%%%%%%
 xlength =  112;
 ylength =  112;
@@ -17,18 +16,13 @@ epsilon=1e-6;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-resultdir=sprintf('%s/peak/VVC/data/top/ps/ROI_based/%s/mean_rep',basedir,condname{c});
-lndir=sprintf('%s/peak/VVC/data/top/ps/set/%s',basedir,condname{c});
+resultdir=sprintf('%s/peak/VVC/data/top/ps/ROI_based/inform/ln',basedir);
+lndir=sprintf('%s/peak/VVC/data/top/inform',basedir);
 mkdir(resultdir);
 %nt=200;
-roi_name={'LdLOC','LvLOC',...
-                'LCC','LOF','LTOF','LpTF','LaTF',...
-                'LIFG','LpSMG','LaSMG','LANG',...             
-                'LHIP','LpPHG','LaPHG',...                           
-                'RdLOC','RvLOC',...
-                'RCC','ROF','RTOF','RpTF','RaTF',...
-                'RIFG','RpSMG','RaSMG','RANG',...             
-                'RHIP','RpPHG','RaPHG'}; 
+roi_name={'CC','VVC','dLOC','ANG','SMG','IFG',...                                                       
+                'HIP','pPHG','aPHG',...
+                'aSMG','pSMG'}
 
 mem_r=[];
 ln_r=[];
@@ -37,7 +31,7 @@ for s=subs;
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
 
         %get encoding materail similarity matrix
-        ln_file=sprintf('%s/Mrln_%d_sub%02d_mean.mat', lndir,nt,s);
+        ln_file=sprintf('%s/p95_ln_sub%02d_mean.mat', lndir,s);
         load(ln_file); ln=ln_tcc;                                                                                   
 	%get fMRI data
 	for roi=1:length(roi_name);
@@ -79,6 +73,6 @@ mem_z=[];ln_z=[];
     tln_z=0.5*(log(1+ln_r(:,3))-log(1-ln_r(:,3)));
 mem_z=[mem_r(:,1:2) tmem_z];
 ln_z=[ln_r(:,1:2) tln_z];
-    eval(sprintf('save %s/mem_%d.txt mem_z -ascii -tabs', resultdir,nt));
-    eval(sprintf('save %s/ln_%d.txt ln_z -ascii -tabs', resultdir,nt));
+    eval(sprintf('save %s/mem_mean.txt mem_z -ascii -tabs', resultdir));
+    eval(sprintf('save %s/ln_mean.txt ln_z -ascii -tabs', resultdir));
 end %function

@@ -1,12 +1,10 @@
-function caculate_mem_ln(c,nt)
+function caculate_mem_ln()
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
 
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
-
-condname={'ERS_IBwc','ERS_DBwc','mem_DBwc','ln_DBwc','ERS_ID'}
 %%%%%%%%%
 xlength =  112;
 ylength =  112;
@@ -17,20 +15,13 @@ epsilon=1e-6;
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-resultdir=sprintf('%s/peak/VVC/data/top/ps/ROI_based/%s/set',basedir,condname{c});
-lndir=sprintf('%s/peak/VVC/data/top/ps/set/%s',basedir,condname{c});
+resultdir=sprintf('%s/peak/VVC/data/top/ps/ROI_based/inform/ln',basedir);
+lndir=sprintf('%s/peak/VVC/data/top/inform',basedir);
 mkdir(resultdir);
 %nt=200;
-
-roi_name={'LdLOC','LvLOC',...
-		'LCC','LOF','LTOF','LpTF','LaTF',...
-		'LIFG','LpSMG','LaSMG','LANG',...
-		'LHIP','LpPHG','LaPHG',...
-		'RdLOC','RvLOC',...
-		'RCC','ROF','RTOF','RpTF','RaTF',...
-                'RIFG','RpSMG','RaSMG','RANG',...
-                'RHIP','RpPHG','RaPHG'};
-
+roi_name={'CC','VVC','dLOC','ANG','SMG','IFG',...                                                       
+                'HIP','pPHG','aPHG',...
+                'aSMG','pSMG'}
 mem_r=[];
 ln_r=[];
 
@@ -38,9 +29,9 @@ for s=subs;
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
 
         %get encoding materail similarity matrix
-        ln_file1=sprintf('%s/Mrln_%d_sub%02d_set1.mat', lndir,nt,s);                                                       
+        ln_file1=sprintf('%s/p95_ln_sub%02d_set1.mat', lndir,s);                                                       
         load(ln_file1); ln_set1=ln_tcc1;                                                                                   
-        ln_file2=sprintf('%s/Mrln_%d_sub%02d_set2.mat', lndir,nt,s);                                                       
+        ln_file2=sprintf('%s/p95_ln_sub%02d_set2.mat', lndir,s);                                                       
         load(ln_file2); ln_set2=ln_tcc2;        
 	%get fMRI data
 	for roi=1:length(roi_name);
@@ -99,8 +90,8 @@ ln_r_diff(ln_r_diff(:,1)==0,:)=[];mem_r_diff(mem_r_diff(:,1)==0,:)=[];
     tln_z_diff=0.5*(log(1+ln_r_diff(:,3))-log(1-ln_r_diff(:,3)));
 mem_z_same=[mem_r_same(:,1:2) tmem_z_same];mem_z_diff=[mem_r_diff(:,1:2) tmem_z_diff];
 ln_z_same=[ln_r_same(:,1:2) tln_z_same];ln_z_diff=[ln_r_diff(:,1:2) tln_z_diff];
-    eval(sprintf('save %s/mem_same_%d.txt mem_z_same -ascii -tabs', resultdir,nt));
-    eval(sprintf('save %s/ln_same_%d.txt ln_z_same -ascii -tabs', resultdir,nt));
-    eval(sprintf('save %s/mem_diff_%d.txt mem_z_diff -ascii -tabs', resultdir,nt));
-    eval(sprintf('save %s/ln_diff_%d.txt ln_z_diff -ascii -tabs', resultdir,nt));
+    eval(sprintf('save %s/mem_same.txt mem_z_same -ascii -tabs', resultdir));
+    eval(sprintf('save %s/ln_same.txt ln_z_same -ascii -tabs', resultdir));
+    eval(sprintf('save %s/mem_diff.txt mem_z_diff -ascii -tabs', resultdir));
+    eval(sprintf('save %s/ln_diff.txt ln_z_diff -ascii -tabs', resultdir));
 end %function
