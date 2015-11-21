@@ -56,8 +56,12 @@ for s=subs
         yy2=data_vln([25:48 73:96],:);
         m_ln_2=m_ln([25:48 73:96],:);
         tyy2=[yy2,m_ln_2];a=size(tyy2);ttyy2=sortrows(tyy2,a(2));data_ln_set2=ttyy2(:,[1:end-1]);
-        ln_tcc2=1-pdist(data_ln_set2(:,:),'correlation');
-        ln_cc2=0.5*(log(1+ln_tcc2)-log(1-ln_tcc2));
+	
+	data_ln_all=[data_ln_set1;data_ln_set2];
+        ln_cc_all=1-pdist(data_ln_all(:,:),'correlation');
+        ln_tcc_all=squareform(ln_cc_all);
+	tl=[ln_tcc_all([1:24],[73:96]);ln_tcc_all([25:48],[49:72])];
+	m_p95_ln=tl(:);
 
 	t_sub_mem=idx_mem_D;
 	for n=1:length(t_sub_mem)
@@ -82,26 +86,18 @@ for s=subs
         zz1=data_vmem([1:24 49:72],:);                                                                                     
         m_mem_1=m_mem([1:24 49:72],:);                                                                              
         tzz1=[zz1,m_mem_1];a=size(tzz1);ttzz1=sortrows(tzz1,a(2));data_mem_set1=ttzz1(:,[1:end-1]);                 
-        mem_tcc1=1-pdist(data_mem_set1(:,:),'correlation');                                                         
-        mem_cc1=0.5*(log(1+mem_tcc1)-log(1-mem_tcc1));                                                              
         zz2=data_vmem([25:48 73:96],:);                                                                                    
         m_mem_2=m_mem([25:48 73:96],:);                                                                             
         tzz2=[zz2,m_mem_2];a=size(tzz2);ttzz2=sortrows(tzz2,a(2));data_mem_set2=ttzz2(:,[1:end-1]);                 
-        mem_tcc2=1-pdist(data_mem_set2(:,:),'correlation');                                                         
-        mem_cc2=0.5*(log(1+mem_tcc2)-log(1-mem_tcc2));
+
+        data_mem_all=[data_mem_set1;data_mem_set2];
+        mem_cc_all=1-pdist(data_mem_all(:,:),'correlation');
+        mem_tcc_all=squareform(mem_cc_all);
+        tm=[mem_tcc_all([1:24],[73:96]);mem_tcc_all([25:48],[49:72])];
+        m_p95_mem=tm(:);
 end%sub
-        file_name=sprintf('%s/sub%02d_vvc_ln_inform_all.mat', resultdir,s);
-        eval(sprintf('save %s pln',file_name));
-        file_name=sprintf('%s/sub%02d_vvc_mem_inform_all.mat', resultdir,s);
-        eval(sprintf('save %s pmem',file_name));
-
-        file_name=sprintf('%s/p95_ln_sub%02d_set1', infodir,s);
-        eval(sprintf('save %s ln_tcc1',file_name));
-        file_name=sprintf('%s/p95_ln_sub%02d_set2', infodir,s);
-        eval(sprintf('save %s ln_tcc2',file_name));
-
-        file_name=sprintf('%s/p95_mem_sub%02d_set1', infodir,s);
-        eval(sprintf('save %s mem_tcc1',file_name));                                                                                      
-        file_name=sprintf('%s/p95_mem_sub%02d_set2', infodir,s);
-        eval(sprintf('save %s mem_tcc2',file_name));
+        file_name=sprintf('%s/p95_mattix_ln_sub%02d', infodir,s);
+        eval(sprintf('save %s m_p95_ln',file_name));
+        file_name=sprintf('%s/p95_matrix_mem_sub%02d', infodir,s);
+        eval(sprintf('save %s m_p95_mem',file_name));
 end %function
