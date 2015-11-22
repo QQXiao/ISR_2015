@@ -4,7 +4,7 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
 infodir=sprintf('%s/peak/VVC/data/top/inform',basedir);
-medir=sprintf('%s/me/data',basedir);
+medir=sprintf('%s/me/data/ROI',basedir);
 
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
 vvcdir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
@@ -30,14 +30,14 @@ for s=subs
         tmp_aphg=load(aPHGfile);
         pPHGfile=sprintf('%s/sub%02d_pPHG.txt',vvcdir,s);
         tmp_pphg=load(pPHGfile);
-	
+
 	ttvvc=[tmp_vvc(4:end,1:end-1) tmp_ang(4:end,1:end-1) tmp_smg(4:end,1:end-1) tmp_aphg(4:end,1:end-1) tmp_pphg(4:end,1:end-1)];
         tvvc=(ttvvc)';
         zvvc=zscore(tvvc);
-        vvc=zvvc';	
+        vvc=zvvc';
 	ss=size(vvc);
         pa=combntns([1:ss(1)],2);
-	
+
 	t_sub_ln=idx_ln_D;
 	for n=1:length(t_sub_ln)
 	t=pa(t_sub_ln(n),1);
@@ -46,11 +46,11 @@ for s=subs
         	data_voxel=vvc(:,v);
        		datav=data_voxel(:);
         	coorv=datav(pa(:,1)).*datav(pa(:,2));
-		t_coorv=coorv(tidx_ln_DB_all);	
+		t_coorv=coorv(tidx_ln_DB_all);
 		x=sum(coorv(tidx_ln_D)>t_coorv);
 		tpln(v,n)=(x)/length(tidx_ln_DB_all);
 		end%voxel
-	end%encoding phase	
+	end%encoding phase
 	pln=sum(tpln,2)/length(t_sub_ln);
         ln_p95=prctile(pln,95);
 	vln=find(pln>=ln_p95);
@@ -66,7 +66,7 @@ for s=subs
         yy2=data_vln([25:48 73:96],:);
         m_ln_2=m_ln([25:48 73:96],:);
         tyy2=[yy2,m_ln_2];a=size(tyy2);ttyy2=sortrows(tyy2,a(2));data_ln_set2=ttyy2(:,[1:end-1]);
-	
+
 	data_ln_all=[data_ln_set1;data_ln_set2];
         ln_cc_all=1-pdist(data_ln_all(:,:),'correlation');
         ln_tcc_all=squareform(ln_cc_all);
@@ -81,24 +81,24 @@ for s=subs
         	data_voxel=vvc(:,v);
        		datav=data_voxel(:);
         	coorv=datav(pa(:,1)).*datav(pa(:,2));
-                t_coorv=coorv(tidx_mem_DB_all);                       
+                t_coorv=coorv(tidx_mem_DB_all);
 		x=sum(coorv(tidx_mem_D)>t_coorv);
 		tpmem(v,n)=(x)/length(tidx_mem_DB_all);
 		end%voxels
-	end%retrieval phase  
+	end%retrieval phase
         pmem=sum(tpmem,2)/length(t_sub_mem);
         mem_p95=prctile(pmem,95);
 	vmem=find(pmem>=mem_p95);
         data_vmem=ttvvc(:,vmem);
         %tcc_mem=1-pdist(data_vmem(:,:),'correlation');
-        %vmem_cmem(1)=mean(tcc_mem(idx_mem_D))；  
+        %vmem_cmem(1)=mean(tcc_mem(idx_mem_D))；
         %vmem_cmem(2)=mean(tcc_mem(idx_mem_DBwc))；
-        zz1=data_vmem([1:24 49:72],:);                                                                                     
-        m_mem_1=m_mem([1:24 49:72],:);                                                                              
-        tzz1=[zz1,m_mem_1];a=size(tzz1);ttzz1=sortrows(tzz1,a(2));data_mem_set1=ttzz1(:,[1:end-1]);                 
-        zz2=data_vmem([25:48 73:96],:);                                                                                    
-        m_mem_2=m_mem([25:48 73:96],:);                                                                             
-        tzz2=[zz2,m_mem_2];a=size(tzz2);ttzz2=sortrows(tzz2,a(2));data_mem_set2=ttzz2(:,[1:end-1]);                 
+        zz1=data_vmem([1:24 49:72],:);
+        m_mem_1=m_mem([1:24 49:72],:);
+        tzz1=[zz1,m_mem_1];a=size(tzz1);ttzz1=sortrows(tzz1,a(2));data_mem_set1=ttzz1(:,[1:end-1]);
+        zz2=data_vmem([25:48 73:96],:);
+        m_mem_2=m_mem([25:48 73:96],:);
+        tzz2=[zz2,m_mem_2];a=size(tzz2);ttzz2=sortrows(tzz2,a(2));data_mem_set2=ttzz2(:,[1:end-1]);
 
         data_mem_all=[data_mem_set1;data_mem_set2];
         mem_cc_all=1-pdist(data_mem_all(:,:),'correlation');
