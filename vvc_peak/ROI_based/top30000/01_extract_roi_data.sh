@@ -13,7 +13,7 @@ do
         SUB=ISR${m}
     fi
     echo $SUB
-maskdir=$basedir/${SUB}/roi_ref/add
+maskdir=$basedir/${SUB}/roi_ref/sub_hipp
 #maskdir=$basedir/${SUB}/roi_ref
 datadir=$basedir/data_singletrial/ref_space/zscore/beta/merged
 resultdir=$basedir/data_singletrial/ref_space/zscore/beta/ROI

@@ -4,6 +4,7 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
 infodir=sprintf('%s/peak/VVC/data/top/inform',basedir);
+medir=sprintf('%s/me/data',basedir);
 
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
 vvcdir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
@@ -20,8 +21,17 @@ for s=subs
 
         %get fMRI data
 	vvcfile=sprintf('%s/sub%02d_vvc.txt',vvcdir,s);
-	tmp_vvc=load(vvcfile);	
-	ttvvc=tmp_vvc(4:end,1:end-1);
+	tmp_vvc=load(vvcfile);
+        ANGfile=sprintf('%s/sub%02d_ANG.txt',vvcdir,s);
+        tmp_ang=load(ANGfile);
+        SMGfile=sprintf('%s/sub%02d_SMG.txt',vvcdir,s);
+        tmp_smg=load(SMGfile);
+        aPHGfile=sprintf('%s/sub%02d_aPHG.txt',vvcdir,s);
+        tmp_aphg=load(aPHGfile);
+        pPHGfile=sprintf('%s/sub%02d_pPHG.txt',vvcdir,s);
+        tmp_pphg=load(pPHGfile);
+	
+	ttvvc=[tmp_vvc(4:end,1:end-1) tmp_ang(4:end,1:end-1) tmp_smg(4:end,1:end-1) tmp_aphg(4:end,1:end-1) tmp_pphg(4:end,1:end-1)];
         tvvc=(ttvvc)';
         zvvc=zscore(tvvc);
         vvc=zvvc';	
@@ -100,4 +110,8 @@ end%sub
         eval(sprintf('save %s m_p95_ln',file_name));
         file_name=sprintf('%s/p95_matrix_mem_sub%02d', infodir,s);
         eval(sprintf('save %s m_p95_mem',file_name));
+        file_name=sprintf('%s/p95_ln_sub%02d', medir,s);
+        eval(sprintf('save %s data_vln',file_name));
+        file_name=sprintf('%s/p95_mem_sub%02d', medir,s);
+        eval(sprintf('save %s data_vmem',file_name));
 end %function

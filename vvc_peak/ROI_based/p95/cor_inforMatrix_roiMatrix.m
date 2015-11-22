@@ -31,7 +31,7 @@ for s=subs;
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
 
         %get encoding materail similarity matrix
-        ln_file=sprintf('%s/p95_matrix_ln_sub%02d.mat', matrixdir,s);
+        ln_file=sprintf('%s/p95_mattix_ln_sub%02d.mat', matrixdir,s);
         load(ln_file); ln=m_p95_ln;
         mem_file=sprintf('%s/p95_matrix_mem_sub%02d.mat', matrixdir,s);
         load(mem_file); mem=m_p95_mem;
@@ -60,7 +60,9 @@ for s=subs;
                     zz2=data_mem([25:48 73:96],:);
                     m_mem_2=m_mem([25:48 73:96],:);
                     tzz2=[zz2,m_mem_2];a=size(tzz2);ttzz2=sortrows(tzz2,a(2));data_mem_set2=ttzz2(:,[1:end-1]);   
-                    data_all=[data_ln_all;data_mem_all];                                                                                                           
+                    data_mem_all=[data_mem_set1;data_mem_set2];
+                    
+		    data_all=[data_ln_all;data_mem_all];                                                                                                           
                     cc_all=1-pdist(data_all(:,:),'correlation');                                                                                                   
                     tcc_all=squareform(cc_all);                                                                                                                    
                                                                                                                                                                    
@@ -69,14 +71,14 @@ for s=subs;
                     tm=[tcc_all(96+[1:24],96+[73:96]);tcc_all(96+[25:48],96+[49:72])];                                                                         
                     c_mem_roi=tm(:); 
 
-		tdata_rln_mln=[ln;c_ln_roi];
+		tdata_rln_mln=[ln';c_ln_roi'];
                 tc_rln_mln=1-pdist(tdata_rln_mln(:,:),'correlation');                                                                                                   
-		tdata_rmem_mln=[ln;c_mem_roi];
+		tdata_rmem_mln=[ln';c_mem_roi'];
                 tc_rmem_mln=1-pdist(tdata_rmem_mln(:,:),'correlation');                                                                                                   
 
-		tdata_rln_mmem=[mem;c_ln_roi];
+		tdata_rln_mmem=[mem';c_ln_roi'];
                 tc_rln_mmem=1-pdist(tdata_rln_mmem(:,:),'correlation');                                                                                                   
-		tdata_rmem_mmem=[mem;c_mem_roi];
+		tdata_rmem_mmem=[mem';c_mem_roi'];
                 tc_rmem_mmem=1-pdist(tdata_rmem_mmem(:,:),'correlation');                                                                                                   
 
                 tln_r(s,roi,1)=s;tln_r(s,roi,2)=roi;
@@ -86,15 +88,19 @@ for s=subs;
 		tmem_mmem(s,roi)=mean(tc_rmem_mmem);
 	end %roi
 end %end sub
-zln_mln=0.5*(log(1+tln_mln(:))-log(1-tln_mln(:)));
-zmem_mln=0.5*(log(1+tmem_mln(:))-log(1-tmem_mln(:)));
-zln_mmem=0.5*(log(1+tln_mmem(:))-log(1-tln_mmem(:)));
-zmem_mmem=0.5*(log(1+tmem_mmem(:))-log(1-tmem_mmem(:)));
+ln_mln=tln_mln(subs,:);
+ln_mmem=tln_mmem(subs,:);
+mem_mln=tmem_mln(subs,:);
+mem_mmem=tmem_mmem(subs,:);
+zln_mln=0.5*(log(1+ln_mln(:))-log(1-ln_mln(:)));
+zmem_mln=0.5*(log(1+mem_mln(:))-log(1-mem_mln(:)));
+zln_mmem=0.5*(log(1+ln_mmem(:))-log(1-ln_mmem(:)));
+zmem_mmem=0.5*(log(1+mem_mmem(:))-log(1-mem_mmem(:)));
 ln_sub=tln_r(subs,:,1);ln_roi=tln_r(subs,:,2);
 ln_mln=[ln_sub(:) ln_roi(:) zln_mln];
-ln_mmem=[ln_sub(:) ln_roi(:) zln_mln];
+ln_mmem=[ln_sub(:) ln_roi(:) zln_mmem];
 mem_mln=[ln_sub(:) ln_roi(:) zmem_mln];
-mem_mmem=[ln_sub(:) ln_roi(:) zmem_mln];
+mem_mmem=[ln_sub(:) ln_roi(:) zmem_mmem];
     eval(sprintf('save %s/rln_mln.txt ln_mln -ascii -tabs', resultdir));
     eval(sprintf('save %s/rln_mmem.txt ln_mmem -ascii -tabs', resultdir));
     eval(sprintf('save %s/rmem_mln.txt mem_mln -ascii -tabs', resultdir));
