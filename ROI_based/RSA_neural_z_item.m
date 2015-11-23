@@ -23,39 +23,39 @@ for t=1:48
 	%perpare data
 	for roi=1:length(roi_name);
         xx=[];tmp_xx=[];
-	if roi==1
-	load(sprintf('%s/me/data/ROI/p95_ln_sub%02d_%s.mat',basedir,s));
-	ln=data_vln;
-	load(sprintf('%s/me/data/ROI/p95_mem_sub%02d_%s.mat',basedir,s));
-	mem=data_vmem;
-	else
-	tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
-    xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
-	%data_all=xx;
-    ln=xx(1:96,:);
-    mem=xx(97:end,:);
-	end
-    tln=find(list_pid(1:96)==t);
-    tmem=find(list_pid(97:end)==t);
-	roi_ln(t,roi,1)=mean(ln(tln(1),:),2);
-	roi_ln(t,roi,2)=mean(ln(tln(2),:),2);
-	roi_ln(t,roi,3)=mean(mean(ln(tln,:),2));
-	roi_mem(t,roi,1)=mean(mem(tmem(1),:),2);
-	roi_mem(t,roi,2)=mean(mem(tmem(2),:),2);
-	roi_mem(t,roi,3)=mean(mean(mem(tmem,:),2));
+		if roi==1
+		load(sprintf('%s/me/data/roi/p95_ln_sub%02d.mat',basedir,s));
+		ln=data_vln;
+		load(sprintf('%s/me/data/roi/p95_mem_sub%02d.mat',basedir,s));
+		mem=data_vmem;
+		else
+		tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
+    		xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
+    		ln=xx(1:96,:);
+   	 	mem=xx(97:end,:);
+		end
+    		tln=find(list_pid(1:96)==t);
+    		tmem=find(list_pid(97:end)==t);
+		roi_ln(t,roi,1)=mean(ln(tln(1),:),2);
+		roi_ln(t,roi,2)=mean(ln(tln(2),:),2);
+		roi_ln(t,roi,3)=mean(mean(ln(tln,:),2));
+		roi_mem(t,roi,1)=mean(mem(tmem(1),:),2);
+		roi_mem(t,roi,2)=mean(mem(tmem(2),:),2);
+		roi_mem(t,roi,3)=mean(mean(mem(tmem,:),2));
 
-	data_all=[ln;mem];
-    tcc=1-pdist(data_all(:,:),'correlation');
-	cc=0.5*(log(1+tcc)-log(1-tcc));
+		tcc_ln=1-pdist(ln(:,:),'correlation');
+		cc_ln=0.5*(log(1+tcc_ln)-log(1-tcc_ln));
+		tcc_mem=1-pdist(mem(:,:),'correlation');
+		cc_mem=0.5*(log(1+tcc_mem)-log(1-tcc_mem));
 
-    roi_mem(t,roi,4)=mean(cc(idx_mem_D));
-    roi_mem(t,roi,5)=mean(cc(idx_mem_DB_wc));
-    roi_mem(t,roi,6)=mean(cc(idx_mem_D))-mean(cc(idx_mem_DB_wc));
-    roi_ln(t,roi,4)=mean(cc(idx_ln_D));
-    roi_ln(t,roi,5)=mean(cc(idx_ln_DB_wc));
-    roi_ln(t,roi,6)=mean(cc(idx_ln_D))-mean(cc(idx_ln_DB_wc));
-    end %end t
-end %end roi
+    	roi_mem(t,roi,4)=mean(cc(idx_mem_D));
+    	roi_mem(t,roi,5)=mean(cc(idx_mem_DB_wc));
+    	roi_mem(t,roi,6)=mean(cc(idx_mem_D))-mean(cc(idx_mem_DB_wc));
+    	roi_ln(t,roi,4)=mean(cc(idx_ln_D));
+    	roi_ln(t,roi,5)=mean(cc(idx_ln_DB_wc));
+    	roi_ln(t,roi,6)=mean(cc(idx_ln_D))-mean(cc(idx_ln_DB_wc));
+    	end %end roi
+end %end t
     eval(sprintf('save %s/mem_sub%02d roi_mem', rdir,s));
     eval(sprintf('save %s/ln_sub%02d roi_ln', rdir,s));
 end %end func
