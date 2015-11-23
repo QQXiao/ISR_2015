@@ -10,8 +10,9 @@ library(lme4)
 #>---'CA1','CA2','DG','CA3','subiculum','ERC'};
 # Read in your data as an R dataframe
 basedir <- c("/seastor/helenhelen/ISR_2015")
-resultdir <- paste(basedir,"me/results/ln",sep="/")
-r.itemInfo <- matrix(data=NA, nr=4, nc=4)
+resultdir <- paste(basedir,"/me/results/ln",sep="/")
+setwd(resultdir)
+r.itemInfo <- matrix(data=NA, nr=8, nc=4)
 ## read data
 #get data for each trial
 item_file <- paste(basedir,"/me/data/item/ln.txt",sep="")
@@ -41,12 +42,26 @@ itemInfo_actrep <- lmer(p95_rsadiff~HIP_actrep+(1+HIP_actrep|subid)+(1+HIP_actre
 itemInfo_actrep.null <- lmer(p95_rsadiff~1+(1+HIP_actrep|subid)+(1+HIP_actrep|pid),REML=FALSE,data=subdata)
 itemInfo_rsadiff <- lmer(p95_rsadiff~HIP_rsadiff+(1+HIP_rsadiff|subid)+(1+HIP_rsadiff|pid),REML=FALSE,data=subdata)
 itemInfo_rsadiff.null <- lmer(p95_rsadiff~1+(1+HIP_rsadiff|subid)+(1+HIP_rsadiff|pid),REML=FALSE,data=subdata)
-itemInfo_rsaD <- lmer(p95_rsaD~HIP_rsaD+(1+HIP_rsaD|subid)+(1+HIP_rsaD|pid),REML=FALSE,data=subdata)
-itemInfo_rsaD.null <- lmer(p95_rsaD~1+(1+HIP_rsaD|subid)+(1+HIP_rsaD|pid),REML=FALSE,data=subdata)
+itemInfo_rsaD <- lmer(p95_rsadiff~HIP_rsaD+(1+HIP_rsaD|subid)+(1+HIP_rsaD|pid),REML=FALSE,data=subdata)
+itemInfo_rsaD.null <- lmer(p95_rsadiff~1+(1+HIP_rsaD|subid)+(1+HIP_rsaD|pid),REML=FALSE,data=subdata)
+
+itemInfo_actmeanD <- lmer(p95_rsaD~HIP_actmean+(1+HIP_actmean|subid)+(1+HIP_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_actmeanD.null <- lmer(p95_rsaD~1+(1+HIP_actmean|subid)+(1+HIP_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_actrepD <- lmer(p95_rsaD~HIP_actrep+(1+HIP_actrep|subid)+(1+HIP_actrep|pid),REML=FALSE,data=subdata)
+itemInfo_actrepD.null <- lmer(p95_rsaD~1+(1+HIP_actrep|subid)+(1+HIP_actrep|pid),REML=FALSE,data=subdata)
+itemInfo_rsadiffD <- lmer(p95_rsaD~HIP_rsadiff+(1+HIP_rsadiff|subid)+(1+HIP_rsadiff|pid),REML=FALSE,data=subdata)
+itemInfo_rsadiffD.null <- lmer(p95_rsaD~1+(1+HIP_rsadiff|subid)+(1+HIP_rsadiff|pid),REML=FALSE,data=subdata)
+itemInfo_rsaDD <- lmer(p95_rsaD~HIP_rsaD+(1+HIP_rsaD|subid)+(1+HIP_rsaD|pid),REML=FALSE,data=subdata)
+itemInfo_rsaDD.null <- lmer(p95_rsaD~1+(1+HIP_rsaD|subid)+(1+HIP_rsaD|pid),REML=FALSE,data=subdata)
+
 mainEffect.itemInfo_actmean <- anova(itemInfo_actmean,itemInfo_actmean.null)
 mainEffect.itemInfo_actrep <- anova(itemInfo_actrep,itemInfo_actrep.null)
 mainEffect.itemInfo_rsadiff <- anova(itemInfo_rsadiff,itemInfo_rsadiff.null)
 mainEffect.itemInfo_rsaD <- anova(itemInfo_rsaD,itemInfo_rsaD.null)
+mainEffect.itemInfo_actmeanD <- anova(itemInfo_actmeanD,itemInfo_actmeanD.null)
+mainEffect.itemInfo_actrepD <- anova(itemInfo_actrepD,itemInfo_actrepD.null)
+mainEffect.itemInfo_rsadiffD <- anova(itemInfo_rsadiffD,itemInfo_rsadiffD.null)
+mainEffect.itemInfo_rsaDD <- anova(itemInfo_rsaDD,itemInfo_rsaDD.null)
 r.itemInfo[1,1]=mainEffect.itemInfo_actmean[2,6]
 r.itemInfo[1,2]=mainEffect.itemInfo_actmean[2,7]
 r.itemInfo[1,3]=mainEffect.itemInfo_actmean[2,8]
@@ -63,4 +78,21 @@ r.itemInfo[4,1]=mainEffect.itemInfo_rsaD[2,6]
 r.itemInfo[4,2]=mainEffect.itemInfo_rsaD[2,7]
 r.itemInfo[4,3]=mainEffect.itemInfo_rsaD[2,8]
 r.itemInfo[4,4]=fixef(itemInfo_rsaD)[2];
+
+r.itemInfo[5,1]=mainEffect.itemInfo_actmeanD[2,6]
+r.itemInfo[5,2]=mainEffect.itemInfo_actmeanD[2,7]
+r.itemInfo[5,3]=mainEffect.itemInfo_actmeanD[2,8]
+r.itemInfo[5,4]=fixef(itemInfo_actmeanD)[2];
+r.itemInfo[6,1]=mainEffect.itemInfo_actrepD[2,6]
+r.itemInfo[6,2]=mainEffect.itemInfo_actrepD[2,7]
+r.itemInfo[6,3]=mainEffect.itemInfo_actrepD[2,8]
+r.itemInfo[6,4]=fixef(itemInfo_actrepD)[2];
+r.itemInfo[7,1]=mainEffect.itemInfo_rsadiffD[2,6]
+r.itemInfo[7,2]=mainEffect.itemInfo_rsadiffD[2,7]
+r.itemInfo[7,3]=mainEffect.itemInfo_rsadiffD[2,8]
+r.itemInfo[7,4]=fixef(itemInfo_rsadiffD)[2];
+r.itemInfo[8,1]=mainEffect.itemInfo_rsaDD[2,6]
+r.itemInfo[8,2]=mainEffect.itemInfo_rsaDD[2,7]
+r.itemInfo[8,3]=mainEffect.itemInfo_rsaDD[2,8]
+r.itemInfo[8,4]=fixef(itemInfo_rsaDD)[2];
 write.matrix(r.itemInfo,file="itemInfo_p95_HIP.txt",sep="\t")
