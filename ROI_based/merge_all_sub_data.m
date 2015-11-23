@@ -6,8 +6,8 @@ subs=setdiff(1:21,2);
 rois=[1:13]';
 ln=[];mem=[]
 for s=subs
-	load(sprintf('%s/mem_sub%02d.mat',datadir,s);
-	load(sprintf('%s/ln_sub%02d.mat',datadir,s);
+	load(sprintf('%s/mem_sub%02d.mat',datadir,s));
+	load(sprintf('%s/ln_sub%02d.mat',datadir,s));
 	for t=1:48
 	tln=[];tmem=[]
 	tln=[s*ones(13,1) rois squeeze(roi_ln(t,:,:))];
