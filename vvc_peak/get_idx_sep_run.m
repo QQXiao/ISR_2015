@@ -74,7 +74,7 @@ TN=96*2;
 	idx_ERS_DB_all=find(all_run1==r & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
         idx_ERS_DB_wc=find(all_run1==r & all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
         %mem
-        idx_mem_D=find(all_run1==r & all_phase1==2 & all_phase2==2 & all_mem1 ==1 & all_mem1==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
+        idx_mem_D=find(all_run1==r & all_phase1==2 & all_phase2==2 & all_mem1 ==1 & all_mem2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
         idx_mem_DB_all=find(all_run1==r & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
         idx_mem_DB_wc=find(all_run1==r & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
         %ln
