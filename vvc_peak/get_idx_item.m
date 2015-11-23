@@ -22,7 +22,7 @@ Mposit=14;
 Mmem=15;
 Msub=16;
 Mphase=17;
-TN=96*2;
+TN=96;
 Mp=18;
 %%%%%%%%%
 

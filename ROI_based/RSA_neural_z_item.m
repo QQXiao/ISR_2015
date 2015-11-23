@@ -11,7 +11,7 @@ addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
 
 TN=96*2;
 %%%%%%%%%
-roi_name={'VVC','p95','dLOC',...
+roi_name={'p95','VVC','dLOC',...
 	'ANG','SMG','IFG','HIP',...
 	'CA1','CA2','DG','CA3','subiculum','ERC'};
 ERS_r=[]; ERS_z=[]; mem_r=[]; mem_z=[]; ln_r=[]; ln_z=[];
@@ -48,12 +48,12 @@ for t=1:48
 		tcc_mem=1-pdist(mem(:,:),'correlation');
 		cc_mem=0.5*(log(1+tcc_mem)-log(1-tcc_mem));
 
-    	roi_mem(t,roi,4)=mean(cc(idx_mem_D));
-    	roi_mem(t,roi,5)=mean(cc(idx_mem_DB_wc));
-    	roi_mem(t,roi,6)=mean(cc(idx_mem_D))-mean(cc(idx_mem_DB_wc));
-    	roi_ln(t,roi,4)=mean(cc(idx_ln_D));
-    	roi_ln(t,roi,5)=mean(cc(idx_ln_DB_wc));
-    	roi_ln(t,roi,6)=mean(cc(idx_ln_D))-mean(cc(idx_ln_DB_wc));
+    	roi_mem(t,roi,4)=mean(cc_mem(idx_mem_D));
+    	roi_mem(t,roi,5)=mean(cc_mem(idx_mem_DB_wc));
+    	roi_mem(t,roi,6)=mean(cc_mem(idx_mem_D))-mean(cc_mem(idx_mem_DB_wc));
+    	roi_ln(t,roi,4)=mean(cc_ln(idx_ln_D));
+    	roi_ln(t,roi,5)=mean(cc_ln(idx_ln_DB_wc));
+    	roi_ln(t,roi,6)=mean(cc_ln(idx_ln_D))-mean(cc_ln(idx_ln_DB_wc));
     	end %end roi
 end %end t
     eval(sprintf('save %s/mem_sub%02d roi_mem', rdir,s));
