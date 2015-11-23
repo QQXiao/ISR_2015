@@ -31,50 +31,60 @@ Mp=18;
         list_subln=subln;
         list_subln(:,Msub)=s;
         list_subln(:,Mphase)=1;
-	m_ln=list_subln(:,MpID);
+        m_ln=list_subln(:,MpID);
         load(sprintf('%s/test_sub%02d.mat',labeldir,s));
         list_submem=submem;
         list_submem(:,Msub)=s;
         list_submem(:,Mphase)=2;
-	m_mem=list_submem(:,MpID);
+        m_mem=list_submem(:,MpID);
         for nn=1:96
         p=list_subln(nn,MpID);w=list_subln(nn,MwID);
         list_subln(nn,Mmem)=list_submem(list_submem(:,MpID)==p & list_submem(:,MwID)==w,Mmem);
         end
         all_label=[list_subln;list_submem];
-	list_pid=all_label(:,MpID);
-	all_label(:,Mp)=1:192;
+        list_pid=all_label(:,MpID);
+        all_label(:,Mp)=1:192;
         all_idx=1:TN*(TN-1)/2; %% all paired correlation idx;
-        all_pID1=[]; all_pID2=[]; all_wID1=[]; all_wID2=[]; all_Rcate=[]; all_mem1=[]; all_mem2=[]; all_phase1=[]; all_phase2=[]; all_cate1=[];  all_cate2=[]; check_run=[]; check_set=[]; check_cate=[];all_posit1=[];
-       for k=2:TN
-        all_pID1=[all_pID1 all_label(k-1,MpID)*ones(1,TN-k+1)];
-        all_pID2=[all_pID2 all_label(k:TN,MpID)'];
-        all_wID1=[all_wID1 all_label(k-1,MwID)*ones(1,TN-k+1)];
-        all_wID2=[all_wID2 all_label(k:TN,MwID)'];
-        all_mem1=[all_mem1 all_label(k-1,Mmem)*ones(1,TN-k+1)];
-        all_mem2=[all_mem2 all_label(k:TN,Mmem)'];
-        all_phase1=[all_phase1 all_label(k-1,Mphase)*ones(1,TN-k+1)];
-        all_phase2=[all_phase2 all_label(k:TN,Mphase)'];
-        all_cate1=[all_cate1 all_label(k-1,Mcat2)*ones(1,TN-k+1)];
-        all_cate2=[all_cate2 all_label(k:TN,Mcat2)'];
-        all_posit1=[all_posit1 all_label(k-1,Mp)*ones(1,TN-k+1)];
-
-        %1=same run;0=diff run 
-        check_run=[check_run (all_label(k:TN,Mrun)==all_label(k-1,Mrun))'];
-
-        %1=same set;0=diff set 
-        check_set=[check_set (all_label(k:TN,Mset)==all_label(k-1,Mset))'];
-
+        ln_all_pID1=[]; ln_all_pID2=[]; ln_all_wID1=[]; ln_all_wID2=[]; ln_all_Rcate=[]; ln_all_mem1=[]; ln_all_mem2=[]; ln_all_cate1=[]; ln_all_cate2=[]; ln_check_run=[]; ln_check_set=[]; ln_check_cate=[];
+        mem_all_pID1=[]; mem_all_pID2=[]; mem_all_wID1=[]; mem_all_wID2=[]; mem_all_Rcate=[]; mem_all_mem1=[]; mem_all_mem2=[]; mem_all_cate1=[]; mem_all_cate2=[]; mem_check_run=[]; mem_check_set=[]; mem_check_cate=[];
+        for k=2:TN
+        ln_all_pID1=[ln_all_pID1 list_subln(k-1,MpID)*ones(1,TN-k+1)];
+        ln_all_pID2=[ln_all_pID2 list_subln(k:TN,MpID)'];
+        ln_all_wID1=[ln_all_wID1 list_subln(k-1,MwID)*ones(1,TN-k+1)];
+        ln_all_wID2=[ln_all_wID2 list_subln(k:TN,MwID)'];
+        ln_all_mem1=[ln_all_mem1 list_subln(k-1,Mmem)*ones(1,TN-k+1)];
+        ln_all_mem2=[ln_all_mem2 list_subln(k:TN,Mmem)'];
+        ln_all_cate1=[ln_all_cate1 list_subln(k-1,Mcat2)*ones(1,TN-k+1)];
+        ln_all_cate2=[ln_all_cate2 list_subln(k:TN,Mcat2)'];
+        %1=same run;0=diff run
+        ln_check_run=[ln_check_run (list_subln(k:TN,Mrun)==list_subln(k-1,Mrun))'];
+        %1=same set;0=diff set
+        ln_check_set=[ln_check_set (list_subln(k:TN,Mset)==list_subln(k-1,Mset))'];
         %1=same category;0=diff categories
-        check_cate=[check_cate (all_label(k:TN,Mcat2)==all_label(k-1,Mcat2))'];
+        ln_check_cate=[ln_check_cate (list_subln(k:TN,Mcat2)==list_subln(k-1,Mcat2))'];
+
+        mem_all_pID1=[mem_all_pID1 list_submem(k-1,MpID)*ones(1,TN-k+1)];
+        mem_all_pID2=[mem_all_pID2 list_submem(k:TN,MpID)'];
+        mem_all_wID1=[mem_all_wID1 list_submem(k-1,MwID)*ones(1,TN-k+1)];
+        mem_all_wID2=[mem_all_wID2 list_submem(k:TN,MwID)'];
+        mem_all_mem1=[mem_all_mem1 list_submem(k-1,Mmem)*ones(1,TN-k+1)];
+        mem_all_mem2=[mem_all_mem2 list_submem(k:TN,Mmem)'];
+        mem_all_cate1=[mem_all_cate1 list_submem(k-1,Mcat2)*ones(1,TN-k+1)];
+        mem_all_cate2=[mem_all_cate2 list_submem(k:TN,Mcat2)'];
+        %1=same run;0=diff run
+        mem_check_run=[mem_check_run (list_submem(k:TN,Mrun)==list_submem(k-1,Mrun))'];
+        %1=same set;0=diff set
+        mem_check_set=[mem_check_set (list_submem(k:TN,Mset)==list_submem(k-1,Mset))'];
+        %1=same category;0=diff categories
+        mem_check_cate=[mem_check_cate (list_submem(k:TN,Mcat2)==list_submem(k-1,Mcat2))'];
         end
         %% get indexes
         %mem
-        idx_mem_D=find(all_pID1==t & all_phase1==2 & all_phase2==2 & all_mem1 ==1 & all_mem1==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
-        idx_mem_DB_all=find(all_pID1==t & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
-	idx_mem_DB_wc=find(all_pID1==t & all_phase1==2 & all_phase2==2 & all_mem1==1 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
+        idx_mem_D=find(mem_all_pID1==t & mem_all_mem1 ==1 & mem_all_mem2==1 & mem_all_pID1==mem_all_pID2 & mem_all_wID1~=mem_all_wID2);%%same face different words: p+c-
+        idx_mem_DB_all=find(mem_all_pID1==t & mem_all_mem1==1 & mem_all_mem2==1 & mem_all_pID1~=mem_all_pID2 & mem_check_run==1 & mem_check_set==0);
+        idx_mem_DB_wc=find(mem_all_pID1==t & mem_all_mem1==1 & mem_all_mem2==1 & mem_all_pID1~=mem_all_pID2 & mem_check_run==1 & mem_check_set==0 & mem_check_cate==1);
         %ln
-        idx_ln_D=find(all_pID1==t & all_phase1==1 & all_phase2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
-        idx_ln_DB_all=find(all_pID1==t & all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
-  	idx_ln_DB_wc=find(all_pID1==t & all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
+        idx_ln_D=find(ln_all_pID1==t & ln_all_pID1==ln_all_pID2 & ln_all_wID1~=ln_all_wID2);%%same face different words: p+c-
+        idx_ln_DB_all=find(ln_all_pID1==t & ln_all_pID1~=ln_all_pID2 & ln_check_run==1 & ln_check_set==0);
+        idx_ln_DB_wc=find(ln_all_pID1==t & ln_all_pID1~=ln_all_pID2 & ln_check_run==1 & ln_check_set==0 & ln_check_cate==1);
 end %end func
