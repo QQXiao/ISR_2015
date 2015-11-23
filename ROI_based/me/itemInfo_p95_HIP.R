@@ -4,7 +4,10 @@ library(Matrix)
 library(MASS)
 library(Rcpp)
 library(lme4)
-library(MBESS)
+#
+#roi_name={'p95','VVC','dLOC',...
+#>---'ANG','SMG','IFG','HIP',...
+#>---'CA1','CA2','DG','CA3','subiculum','ERC'};
 # Read in your data as an R dataframe
 basedir <- c("/seastor/helenhelen/ISR_2015")
 resultdir <- paste(basedir,"me/results/ln",sep="/")
@@ -25,14 +28,13 @@ colnames(item_data) <- c("subid","pid",
 "CA2_act1","CA2_act2","CA2_actmean","CA2_rsaD","CA2_rsaDBwc","CA2_rsadiff",
 "DG_act1","DG_act2","DG_actmean","DG_rsaD","DG_rsaDBwc","DG_rsadiff",
 "CA3_act1","CA3_act2","CA3_actmean","CA3_rsaD","CA3_rsaDBwc","CA3_rsadiff",
+"subiculum_act1","subiculum_act2","subiculum_actmean","subiculum_rsaD","subiculum_rsaDBwc","subiculum_rsadiff",
+"ERC_act1","ERC_act2","ERC_actmean","ERC_rsaD","ERC_rsaDBwc","ERC_rsadiff")
+item_data$subid <- as.factor(item_data$subid)
+item_data$pid <- as.factor(item_data$pid)
 
-subdata=item_data
-#subdata=cbind(item_data$subid,item_data$pid,
-#           item_data$p95_act1,item_data$p95_act2,item_data$p95_actmean,
-#           item_data$p95_rsaD,item_data$p95_rsaDBwc,item_data$p95_rsadiff,
-#           item_data$HIP_act1,item_data$HIP_act2,item_data$HIP_actmean,
-#           item_data$HIP_rsaD,item_data$HIP_rsaDBwc,item_data$HIP_rsadiff)
-subdata$HIP_actrep <- item_data$$HIP_act1-item_data$HIP_act2
+subdata <- item_data
+subdata$HIP_actrep <- item_data$HIP_act1-item_data$HIP_act2
 itemInfo_actmean <- lmer(p95_rsadiff~HIP_actmean+(1+HIP_actmean|subid)+(1+HIP_actmean|pid),REML=FALSE,data=subdata)
 itemInfo_actmean.null <- lmer(p95_rsadiff~1+(1+HIP_actmean|subid)+(1+HIP_actmean|pid),REML=FALSE,data=subdata)
 itemInfo_actrep <- lmer(p95_rsadiff~HIP_actrep+(1+HIP_actrep|subid)+(1+HIP_actrep|pid),REML=FALSE,data=subdata)
