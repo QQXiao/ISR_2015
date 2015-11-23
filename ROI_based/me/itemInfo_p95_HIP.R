@@ -7,7 +7,7 @@ library(lme4)
 library(MBESS)
 # Read in your data as an R dataframe
 basedir <- c("/seastor/helenhelen/ISR_2015")
-resultdir <- paste(basedir,"me/result/ln",sep="/")
+resultdir <- paste(basedir,"me/results/ln",sep="/")
 r.itemInfo <- matrix(data=NA, nr=4, nc=4)
 ## read data
 #get data for each trial
