@@ -70,13 +70,11 @@ cc_a_roi_ln_ln=cc_a_roi_ln_ln(subs,:,:);
 cc_a_roi_mem_mem=cc_a_roi_mem_mem(subs,:,:);
 cc_a_roi_ln_mem=cc_a_roi_ln_mem(subs,:,:);
 c_ln_mem_subs=0.5*(log(1+cc_a_roi_ln_mem)-log(1-cc_a_roi_ln_mem));                                                                                                                               
-
-
 c_ln_ln=squareform(squeeze(mean(cc_a_roi_ln_ln,1)));
 c_mem_mem=squareform(squeeze(mean(cc_a_roi_mem_mem,1)));
 %c_ln_ln=0.5*(log(1+tc_ln_ln)-log(1-tc_ln_ln));
 %c_mem_mem=0.5*(log(1+tc_mem_mem)-log(1-tc_mem_mem));
-tc_ln_mem=reshape(mean(cc_a_roi_ln_mem),11,11);
+tc_ln_mem=reshape(mean(cc_a_roi_ln_mem),17,17);
 c_ln_mem=0.5*(log(1+tc_ln_mem)-log(1-tc_ln_mem));
 
 eval(sprintf('save %s/a_roi_corr_ln_ln.txt c_ln_ln -ascii -tabs', resultdir));
