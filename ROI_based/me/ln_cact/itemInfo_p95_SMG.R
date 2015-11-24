@@ -5,12 +5,12 @@ library(MASS)
 library(Rcpp)
 library(lme4)
 #
-#roi_name={'p95','VVC','dLOC',...
-#>---'ANG','SMG','IFG','HIP',...
+#roi_name={'p95','p95','dLOC',...
+#>---'SMG','SMG','IFG','HIP',...
 #>---'CA1','CA2','DG','CA3','subiculum','ERC'};
 # Read in your data as an R dataframe
 basedir <- c("/seastor/helenhelen/ISR_2015")
-resultdir <- paste(basedir,"/me/results/ln",sep="/")
+resultdir <- paste(basedir,"/me/results/ln_cact",sep="/")
 setwd(resultdir)
 r.itemInfo <- matrix(data=NA, nr=8, nc=4)
 ## read data
@@ -36,23 +36,23 @@ item_data$pid <- as.factor(item_data$pid)
 
 subdata <- item_data
 subdata$SMG_actrep <- item_data$SMG_act1-item_data$SMG_act2
-itemInfo_actmean <- lmer(p95_rsadiff~SMG_actmean+(1+SMG_actmean|subid)+(1+SMG_actmean|pid),REML=FALSE,data=subdata)
-itemInfo_actmean.null <- lmer(p95_rsadiff~1+(1+SMG_actmean|subid)+(1+SMG_actmean|pid),REML=FALSE,data=subdata)
-itemInfo_actrep <- lmer(p95_rsadiff~SMG_actrep+(1+SMG_actrep|subid)+(1+SMG_actrep|pid),REML=FALSE,data=subdata)
-itemInfo_actrep.null <- lmer(p95_rsadiff~1+(1+SMG_actrep|subid)+(1+SMG_actrep|pid),REML=FALSE,data=subdata)
-itemInfo_rsadiff <- lmer(p95_rsadiff~SMG_rsadiff+(1+SMG_rsadiff|subid)+(1+SMG_rsadiff|pid),REML=FALSE,data=subdata)
-itemInfo_rsadiff.null <- lmer(p95_rsadiff~1+(1+SMG_rsadiff|subid)+(1+SMG_rsadiff|pid),REML=FALSE,data=subdata)
-itemInfo_rsaD <- lmer(p95_rsadiff~SMG_rsaD+(1+SMG_rsaD|subid)+(1+SMG_rsaD|pid),REML=FALSE,data=subdata)
-itemInfo_rsaD.null <- lmer(p95_rsadiff~1+(1+SMG_rsaD|subid)+(1+SMG_rsaD|pid),REML=FALSE,data=subdata)
+itemInfo_actmean <- lmer(p95_rsadiff~SMG_actmean+p95_actmean+(1+SMG_actmean+p95_actmean|subid)+(1+SMG_actmean+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_actmean.null <- lmer(p95_rsadiff~p95_actmean+(1+SMG_actmean+p95_actmean|subid)+(1+SMG_actmean+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_actrep <- lmer(p95_rsadiff~SMG_actrep+p95_actmean+(1+SMG_actrep+p95_actmean|subid)+(1+SMG_actrep+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_actrep.null <- lmer(p95_rsadiff~p95_actmean+(1+SMG_actrep+p95_actmean|subid)+(1+SMG_actrep+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_rsadiff <- lmer(p95_rsadiff~SMG_rsadiff+p95_actmean+(1+SMG_rsadiff+p95_actmean|subid)+(1+SMG_rsadiff+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_rsadiff.null <- lmer(p95_rsadiff~p95_actmean+(1+SMG_rsadiff+p95_actmean|subid)+(1+SMG_rsadiff+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_rsaD <- lmer(p95_rsadiff~SMG_rsaD+p95_actmean+(1+SMG_rsaD+p95_actmean|subid)+(1+SMG_rsaD+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_rsaD.null <- lmer(p95_rsadiff~p95_actmean+(1+SMG_rsaD+p95_actmean|subid)+(1+SMG_rsaD+p95_actmean|pid),REML=FALSE,data=subdata)
 
-itemInfo_actmeanD <- lmer(p95_rsaD~SMG_actmean+(1+SMG_actmean|subid)+(1+SMG_actmean|pid),REML=FALSE,data=subdata)
-itemInfo_actmeanD.null <- lmer(p95_rsaD~1+(1+SMG_actmean|subid)+(1+SMG_actmean|pid),REML=FALSE,data=subdata)
-itemInfo_actrepD <- lmer(p95_rsaD~SMG_actrep+(1+SMG_actrep|subid)+(1+SMG_actrep|pid),REML=FALSE,data=subdata)
-itemInfo_actrepD.null <- lmer(p95_rsaD~1+(1+SMG_actrep|subid)+(1+SMG_actrep|pid),REML=FALSE,data=subdata)
-itemInfo_rsadiffD <- lmer(p95_rsaD~SMG_rsadiff+(1+SMG_rsadiff|subid)+(1+SMG_rsadiff|pid),REML=FALSE,data=subdata)
-itemInfo_rsadiffD.null <- lmer(p95_rsaD~1+(1+SMG_rsadiff|subid)+(1+SMG_rsadiff|pid),REML=FALSE,data=subdata)
-itemInfo_rsaDD <- lmer(p95_rsaD~SMG_rsaD+(1+SMG_rsaD|subid)+(1+SMG_rsaD|pid),REML=FALSE,data=subdata)
-itemInfo_rsaDD.null <- lmer(p95_rsaD~1+(1+SMG_rsaD|subid)+(1+SMG_rsaD|pid),REML=FALSE,data=subdata)
+itemInfo_actmeanD <- lmer(p95_rsaD~SMG_actmean+p95_actmean+(1+SMG_actmean+p95_actmean|subid)+(1+SMG_actmean+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_actmeanD.null <- lmer(p95_rsaD~p95_actmean+(1+SMG_actmean+p95_actmean|subid)+(1+SMG_actmean+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_actrepD <- lmer(p95_rsaD~SMG_actrep+p95_actmean+(1+SMG_actrep+p95_actmean|subid)+(1+SMG_actrep+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_actrepD.null <- lmer(p95_rsaD~p95_actmean+(1+SMG_actrep+p95_actmean|subid)+(1+SMG_actrep+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_rsadiffD <- lmer(p95_rsaD~SMG_rsadiff+p95_actmean+(1+SMG_rsadiff+p95_actmean|subid)+(1+SMG_rsadiff+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_rsadiffD.null <- lmer(p95_rsaD~p95_actmean+(1+SMG_rsadiff+p95_actmean|subid)+(1+SMG_rsadiff+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_rsaDD <- lmer(p95_rsaD~SMG_rsaD+p95_actmean+(1+SMG_rsaD+p95_actmean|subid)+(1+SMG_rsaD+p95_actmean|pid),REML=FALSE,data=subdata)
+itemInfo_rsaDD.null <- lmer(p95_rsaD~p95_actmean+(1+SMG_rsaD+p95_actmean|subid)+(1+SMG_rsaD+p95_actmean|pid),REML=FALSE,data=subdata)
 
 mainEffect.itemInfo_actmean <- anova(itemInfo_actmean,itemInfo_actmean.null)
 mainEffect.itemInfo_actrep <- anova(itemInfo_actrep,itemInfo_actrep.null)
