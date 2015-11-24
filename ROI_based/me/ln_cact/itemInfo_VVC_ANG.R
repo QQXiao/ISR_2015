@@ -10,7 +10,7 @@ library(lme4)
 #>---'CA1','CA2','DG','CA3','subiculum','ERC'};
 # Read in your data as an R dataframe
 basedir <- c("/seastor/helenhelen/ISR_2015")
-resultdir <- paste(basedir,"/me/results/ln_act",sep="/")
+resultdir <- paste(basedir,"/me/results/ln_cact",sep="/")
 setwd(resultdir)
 r.itemInfo <- matrix(data=NA, nr=8, nc=4)
 ## read data
