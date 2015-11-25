@@ -5,7 +5,7 @@ fsl_sub bash run.sh itemInfo_VVC_DG.R
 fsl_sub bash run.sh itemInfo_VVC_subiculum.R
 fsl_sub bash run.sh itemInfo_VVC_ERC.R
 fsl_sub bash run.sh itemInfo_VVC_HIP.R
-fsl_sub bash run.sh itemInfo_VVC_LIFG.R
+fsl_sub bash run.sh itemInfo_VVC_IFG.R
 fsl_sub bash run.sh itemInfo_VVC_ANG.R
 fsl_sub bash run.sh itemInfo_VVC_SMG.R
 fsl_sub bash run.sh itemInfo_p95_CA1.R
@@ -15,7 +15,7 @@ fsl_sub bash run.sh itemInfo_p95_DG.R
 fsl_sub bash run.sh itemInfo_p95_subiculum.R
 fsl_sub bash run.sh itemInfo_p95_ERC.R
 fsl_sub bash run.sh itemInfo_p95_HIP.R
-fsl_sub bash run.sh itemInfo_p95_LIFG.R
+fsl_sub bash run.sh itemInfo_p95_IFG.R
 fsl_sub bash run.sh itemInfo_p95_ANG.R
 fsl_sub bash run.sh itemInfo_p95_SMG.R
 fsl_sub bash run.sh itemInfo_dLOC_CA1.R
@@ -25,6 +25,6 @@ fsl_sub bash run.sh itemInfo_dLOC_DG.R
 fsl_sub bash run.sh itemInfo_dLOC_subiculum.R
 fsl_sub bash run.sh itemInfo_dLOC_ERC.R
 fsl_sub bash run.sh itemInfo_dLOC_HIP.R
-fsl_sub bash run.sh itemInfo_dLOC_LIFG.R
+fsl_sub bash run.sh itemInfo_dLOC_IFG.R
 fsl_sub bash run.sh itemInfo_dLOC_ANG.R
 fsl_sub bash run.sh itemInfo_dLOC_SMG.R
