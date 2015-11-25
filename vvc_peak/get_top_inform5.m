@@ -52,7 +52,7 @@ for s=subs
         end%voxel
     end%encoding phase
     pln=sum(tpln,2)/length(t_sub_ln);
-    ln_p95=prctile(pln,95);
+    ln_p95=prctile(pln,99);
     vln=find(pln>=ln_p95);
     data_vln=ttvvc(:,vln);
     %tcc_ln=1-pdist(data_vln(:,:),'correlation');
@@ -87,7 +87,7 @@ for s=subs
         end%voxels
     end%retrieval phase
         pmem=sum(tpmem,2)/length(t_sub_mem);
-        mem_p95=prctile(pmem,95);
+        mem_p95=prctile(pmem,99);
         vmem=find(pmem>=mem_p95);
         data_vmem=ttvvc(:,vmem);
         %tcc_mem=1-pdist(data_vmem(:,:),'correlation');
@@ -106,12 +106,12 @@ for s=subs
         tm=[mem_tcc_all([1:24],[73:96]);mem_tcc_all([25:48],[49:72])];
         m_p95_mem=tm(:);
 end%sub
-        file_name=sprintf('%s/p95_matrix_ln_sub%02d', infodir,s);
-        eval(sprintf('save %s m_p95_ln',file_name));
-        file_name=sprintf('%s/p95_matrix_mem_sub%02d', infodir,s);
-        eval(sprintf('save %s m_p95_mem',file_name));
-        file_name=sprintf('%s/p95_ln_sub%02d', medir,s);
+        file_name=sprintf('%s/p99_matrix_ln_sub%02d', infodir,s);
+        eval(sprintf('save %s m_p99_ln',file_name));
+        file_name=sprintf('%s/p99_matrix_mem_sub%02d', infodir,s);
+        eval(sprintf('save %s m_p99_mem',file_name));
+        file_name=sprintf('%s/p99_ln_sub%02d', medir,s);
         eval(sprintf('save %s data_vln',file_name));
-        file_name=sprintf('%s/p95_mem_sub%02d', medir,s);
+        file_name=sprintf('%s/p99_mem_sub%02d', medir,s);
         eval(sprintf('save %s data_vmem',file_name));
 end %function
