@@ -58,13 +58,13 @@ r.itemInfo[2,1]=mainEffect.itemInfo_rsadiff[2,6]
 r.itemInfo[2,2]=mainEffect.itemInfo_rsadiff[2,7]
 r.itemInfo[2,3]=mainEffect.itemInfo_rsadiff[2,8]
 r.itemInfo[2,4]=fixef(itemInfo_rsadiff)[2];
-r.itemInfo[3,1]=mainEffect.itemInfo_actmeanD[3,6]
-r.itemInfo[3,2]=mainEffect.itemInfo_actmeanD[3,7]
-r.itemInfo[3,3]=mainEffect.itemInfo_actmeanD[3,8]
+r.itemInfo[3,1]=mainEffect.itemInfo_actmeanD[2,6]
+r.itemInfo[3,2]=mainEffect.itemInfo_actmeanD[2,7]
+r.itemInfo[3,3]=mainEffect.itemInfo_actmeanD[2,8]
 r.itemInfo[3,4]=fixef(itemInfo_actmeanD)[2];
-r.itemInfo[4,1]=mainEffect.itemInfo_rsaD[4,6]
-r.itemInfo[4,2]=mainEffect.itemInfo_rsaD[4,7]
-r.itemInfo[4,3]=mainEffect.itemInfo_rsaD[4,8]
+r.itemInfo[4,1]=mainEffect.itemInfo_rsaD[2,6]
+r.itemInfo[4,2]=mainEffect.itemInfo_rsaD[2,7]
+r.itemInfo[4,3]=mainEffect.itemInfo_rsaD[2,8]
 r.itemInfo[4,4]=fixef(itemInfo_rsaD)[2];
 
 write.matrix(r.itemInfo,file="itemInfo_dLOC_CA2.txt",sep="\t")
