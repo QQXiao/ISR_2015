@@ -14,8 +14,8 @@ ln=[];mem=[];
 	load(lnfile);load(memfile);
 	n=60:5:95
 	sizel=length(n);
-	ln=[s*ones(sizel(1),1) n' ln_ln(n,[2 3])];
-	mem=[s*ones(sizel(1),1) n' mem_mem(n,[2 3])];
+	ln=[s*ones(sizel(1),1) n' ln_ln(n,[1 2])];
+	mem=[s*ones(sizel(1),1) n' mem_mem(n,[1 2])];
 	ln_all=[ln_all;ln];mem_all=[mem_all;mem];
 end %sub
 eval(sprintf('save %s/allsub_ln.txt ln_all -ascii -tabs', pndir));
