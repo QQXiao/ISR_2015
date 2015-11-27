@@ -1,4 +1,4 @@
-function caulate_ps_matrix_p95()
+function caulate_ps_matrix_p95(subs)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -12,7 +12,7 @@ for s=subs
 	for c=1:2
                 xx=[];tmp_xx=[];
                 load(sprintf('%s/p95_%s_sub%02d.mat',datadir,condname{c},s));
-                eval(sprintf('tmp_xx=data_v%s',cond_name{c}));
+                eval(sprintf('tmp_xx=data_v%s',condname{c}));
 		xx=tmp_xx(:,:);
                 %%analysis
                 data_ln=xx(1:96,:);
