@@ -28,33 +28,53 @@ for s=subs;
                 %%analysis
         	data_ln=xx(1:96,:);
          	data_mem=xx(97:end,:);
-                    yy1=data_ln([1:24 49:72],:);
-		    m_ln_1=m_ln([1:24 49:72],:);                                                                                                 
-        	    tyy1=[yy1,m_ln_1];a=size(tyy1);ttyy1=sortrows(tyy1,a(2));data_ln_set1=ttyy1(:,[1:end-1]);
+                    yy11=data_ln([1:24],:);yy12=data_ln([25:48],:);yy21=data_ln([49:72],:);yy22=data_ln([73:96],:);
+                    p_ln_11=m_ln([1:24],:);p_ln_12=m_ln([25:48],:);p_ln_21=m_ln([49:72],:);p_ln_22=m_ln([73:96],:);
+                    zz11=data_mem([1:24],:);zz12=data_mem([25:48],:);zz21=data_mem([49:72],:);zz22=data_mem([73:96],:);
+                    p_mem_11=m_mem([1:24],:);p_mem_12=m_mem([25:48],:);p_mem_21=m_mem([49:72],:);p_mem_22=m_mem([73:96],:);
 
-                    yy2=data_ln([25:48 73:96],:);
-		    m_ln_2=m_ln([25:48 73:96],:);                                                                                                
-        	    tyy2=[yy2,m_ln_2];a=size(tyy2);ttyy2=sortrows(tyy2,a(2));data_ln_set2=ttyy2(:,[1:end-1]);
-                    data_ln_all=[data_ln_set1;data_ln_set2];
+        	    tyy11=[yy11,p_ln_11];a=size(tyy11);ttyy11=sortrows(tyy11,a(2));data_ln_11=ttyy11(:,[1:end-1]);
+        	    tyy12=[yy12,p_ln_12];a=size(tyy12);ttyy12=sortrows(tyy12,a(2));data_ln_12=ttyy12(:,[1:end-1]);
+        	    tyy21=[yy21,p_ln_21];a=size(tyy21);ttyy21=sortrows(tyy21,a(2));data_ln_21=ttyy21(:,[1:end-1]);
+        	    tyy22=[yy22,p_ln_22];a=size(tyy22);ttyy22=sortrows(tyy22,a(2));data_ln_22=ttyy22(:,[1:end-1]);
+                    data_ln_all=[data_ln_11;data_ln_12;data_ln_21;data_ln_22];
 
-		    zz1=data_mem([1:24 49:72],:);
-	            m_mem_1=m_mem([1:24 49:72],:);                                                                                               
-        	    tzz1=[zz1,m_mem_1];a=size(tzz1);ttzz1=sortrows(tzz1,a(2));data_mem_set1=ttzz1(:,[1:end-1]);
-
-                    zz2=data_mem([25:48 73:96],:);
-		    m_mem_2=m_mem([25:48 73:96],:);                                                                                              
-        	    tzz2=[zz2,m_mem_2];a=size(tzz2);ttzz2=sortrows(tzz2,a(2));data_mem_set2=ttzz2(:,[1:end-1]);
-
-                    data_mem_all=[data_mem_set1;data_mem_set2];
+        	    tzz11=[zz11,p_mem_11];a=size(tzz11);ttzz11=sortrows(tzz11,a(2));data_mem_11=ttzz11(:,[1:end-1]);
+        	    tzz12=[zz12,p_mem_12];a=size(tzz12);ttzz12=sortrows(tzz12,a(2));data_mem_12=ttzz12(:,[1:end-1]);
+        	    tzz21=[zz21,p_mem_21];a=size(tzz21);ttzz21=sortrows(tzz21,a(2));data_mem_21=ttzz21(:,[1:end-1]);
+        	    tzz22=[zz22,p_mem_22];a=size(tzz22);ttzz22=sortrows(tzz22,a(2));data_mem_22=ttzz22(:,[1:end-1]);
+                    data_mem_all=[data_mem_11;data_mem_12;data_mem_21;data_mem_22];
                     
 		    data_all=[data_ln_all;data_mem_all];
 		    cc_all=1-pdist(data_all(:,:),'correlation');
                     tcc_all=squareform(cc_all);
 
-			tl=[tcc_all([1:24],[49:72]);tcc_all([25:48],[73:96])];
-		    cc_ln_ln(roi,:)=tl(:);
-			tm=[tcc_all(96+[1:24],96+[49:72]);tcc_all(96+[25:48],96+[73:96])];
-		    cc_mem_mem(roi,:)=tm(:);
+			tl1=tcc_all([1:24],[25:48])
+			ttl1=tl1(:);
+			for i=1:24
+			de(i)=i+24*(i-1);
+			end
+			ttl1(de)=[];
+			tl2=tcc_all([49:72],[73:96]);
+			ttl2=tl2(:);
+                        for i=1:24
+                        de(i)=i+24*(i-1);
+                        end
+                        ttl2(de)=[];
+			cc_ln_ln(roi,:)=[ttl1' ttl2'];
+			tm1=tcc_all(96+[1:24],96+[25:48]);
+                        ttm1=tm1(:);
+                        for i=1:24
+                        de(i)=i+24*(i-1);
+                        end
+                        ttm1(de)=[];	
+			tm2=tcc_all(96+[49:72],96+[73:96]);
+                        ttm2=tm2(:);
+                        for i=1:24
+                        de(i)=i+24*(i-1);
+                        end
+                        ttm2(de)=[];		    	
+			cc_mem_mem(roi,:)=[ttm1' ttm2'];
         end %roi
 cc_a_roi_ln_ln(s,:)=1-pdist(cc_ln_ln(:,:),'correlation');
 cc_a_roi_mem_mem(s,:)=1-pdist(cc_mem_mem(:,:),'correlation');
@@ -74,7 +94,7 @@ c_ln_ln=squareform(squeeze(mean(cc_a_roi_ln_ln,1)));
 c_mem_mem=squareform(squeeze(mean(cc_a_roi_mem_mem,1)));
 %c_ln_ln=0.5*(log(1+tc_ln_ln)-log(1-tc_ln_ln));
 %c_mem_mem=0.5*(log(1+tc_mem_mem)-log(1-tc_mem_mem));
-tc_ln_mem=reshape(mean(cc_a_roi_ln_mem),17,17);
+tc_ln_mem=reshape(mean(cc_a_roi_ln_mem),21,21);
 c_ln_mem=0.5*(log(1+tc_ln_mem)-log(1-tc_ln_mem));
 
 eval(sprintf('save %s/a_roi_corr_ln_ln.txt c_ln_ln -ascii -tabs', resultdir));
