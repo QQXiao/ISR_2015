@@ -11,9 +11,10 @@ addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
 
 TN=96*2;
 %%%%%%%%%
-%roi_name={'p95','VVC','dLOC',...
-%	'ANG','SMG','IFG','HIP',...
-%	'CA1','CA2','DG','CA3','subiculum','ERC'};
+roi_name={'p90','p95','VVC','dLOC','IPL',...
+	'IFG','HIP',...
+	'CA1','CA2','DG','CA3','subiculum','ERC',...
+	'aPHG','pPHG'};
 ERS_r=[]; ERS_z=[]; mem_r=[]; mem_z=[]; ln_r=[]; ln_z=[];
 nERS=[]; nmem=[]; nln=[];
 s=subs;
@@ -24,10 +25,15 @@ for t=1:48
 	for roi=1:length(roi_name);
         xx=[];tmp_xx=[];
 		if roi==1
-		load(sprintf('%s/me/data/roi/p95_ln_sub%02d.mat',basedir,s));
+		load(sprintf('%s/me/data/roi/p90_ln_sub%02d.mat',basedir,s));
 		ln=data_vln;
-		load(sprintf('%s/me/data/roi/p95_mem_sub%02d.mat',basedir,s));
+		load(sprintf('%s/me/data/roi/p90_mem_sub%02d.mat',basedir,s));
 		mem=data_vmem;
+		elseif roi==2
+                load(sprintf('%s/me/data/roi/p95_ln_sub%02d.mat',basedir,s));
+                ln=data_vln;
+                load(sprintf('%s/me/data/roi/p95_mem_sub%02d.mat',basedir,s));
+                mem=data_vmem;		
 		else
 		tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
     		xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates

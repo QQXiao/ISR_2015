@@ -11,7 +11,7 @@ for s=subs
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
 	for c=1:2
                 xx=[];tmp_xx=[];
-                load(sprintf('%s/p95_%s_sub%02d.mat',datadir,condname{c},s));
+                load(sprintf('%s/p90_%s_sub%02d.mat',datadir,condname{c},s));
                 eval(sprintf('tmp_xx=data_v%s',condname{c}));
 		xx=tmp_xx(:,:);
                 %%analysis
@@ -41,9 +41,9 @@ for s=subs
 		cc_ln_ln(:)=tl(:);
 		tm=[tcc_all(96+[1:24],96+[73:96]);tcc_all(96+[25:48],96+[49:72])]; 
 		cc_mem_mem(:)=tm(:);             		
-        file_name=sprintf('%s/%s_top95_mps_ln_sub%02d',psdir,condname{c},s);
+        file_name=sprintf('%s/%s_top90_mps_ln_sub%02d',psdir,condname{c},s);
         eval(sprintf('save %s cc_ln_ln',file_name));
-        file_name=sprintf('%s/%s_top95_mps_mem_sub%02d',psdir,condname{c},s);
+        file_name=sprintf('%s/%s_top90_mps_mem_sub%02d',psdir,condname{c},s);
         eval(sprintf('save %s cc_mem_mem',file_name));
 end %end for
 end %end function
