@@ -9,7 +9,7 @@ tln=[];tmem=[];
 	rln=[];rmem=[]
 	load(sprintf('%s/mem_sub%02d.mat',datadir,s));
 	load(sprintf('%s/ln_sub%02d.mat',datadir,s));
-	for r=1:13
+	for r=1:15
 	rln=[rln squeeze(roi_ln(:,r,:))];
 	rmem=[rmem squeeze(roi_mem(:,r,:))];
 	end

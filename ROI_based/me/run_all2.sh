@@ -4,7 +4,6 @@ fsl_sub bash run.sh itemInfo_p90_CA3.R
 fsl_sub bash run.sh itemInfo_p90_DG.R
 fsl_sub bash run.sh itemInfo_p90_subiculum.R
 fsl_sub bash run.sh itemInfo_p90_ERC.R
-fsl_sub bash run.sh itemInfo_p90_HIP.R
 fsl_sub bash run.sh itemInfo_p90_IFG.R
 fsl_sub bash run.sh itemInfo_p90_aPHG.R
 fsl_sub bash run.sh itemInfo_p90_pPHG.R
@@ -14,7 +13,6 @@ fsl_sub bash run.sh itemInfo_p95_CA3.R
 fsl_sub bash run.sh itemInfo_p95_DG.R
 fsl_sub bash run.sh itemInfo_p95_subiculum.R
 fsl_sub bash run.sh itemInfo_p95_ERC.R
-fsl_sub bash run.sh itemInfo_p95_HIP.R
 fsl_sub bash run.sh itemInfo_p95_IFG.R
 fsl_sub bash run.sh itemInfo_p95_aPHG.R
 fsl_sub bash run.sh itemInfo_p95_pPHG.R
@@ -24,7 +22,6 @@ fsl_sub bash run.sh itemInfo_IPL_CA3.R
 fsl_sub bash run.sh itemInfo_IPL_DG.R
 fsl_sub bash run.sh itemInfo_IPL_subiculum.R
 fsl_sub bash run.sh itemInfo_IPL_ERC.R
-fsl_sub bash run.sh itemInfo_IPL_HIP.R
 fsl_sub bash run.sh itemInfo_IPL_IFG.R
 fsl_sub bash run.sh itemInfo_IPL_aPHG.R
 fsl_sub bash run.sh itemInfo_IPL_pPHG.R

@@ -8,5 +8,5 @@
 #$ -M water.read@gmail.com
 #$ -q long.q
 s=$1
-scriptdir=/home/helenhelen/DQ/project/gitrepo/ISR_2015/ROI_based/me/mem_cact
+scriptdir=/home/helenhelen/DQ/project/gitrepo/ISR_2015/ROI_based/me/mem_cact_unique2
 R CMD BATCH $scriptdir/$s
