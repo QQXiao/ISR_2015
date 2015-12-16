@@ -56,10 +56,10 @@ TN=96*2;
         all_cate1=[all_cate1 all_label(k-1,Mcat2)*ones(1,TN-k+1)];
         all_cate2=[all_cate2 all_label(k:TN,Mcat2)'];
 
-        %1=same run;0=diff run 
+        %1=same run;0=diff run
         check_run=[check_run (all_label(k:TN,Mrun)==all_label(k-1,Mrun))'];
 
-        %1=same set;0=diff set 
+        %1=same set;0=diff set
         check_set=[check_set (all_label(k:TN,Mset)==all_label(k-1,Mset))'];
 
         %1=same category;0=diff categories
@@ -70,8 +70,8 @@ TN=96*2;
         idx_ERS_I=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1==all_pID2 & all_wID1==all_wID2);%identity pair: p+c+
         idx_ERS_IB_all=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==1);
         idx_ERS_IB_wc=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==1 & check_cate==1);
-        idx_ERS_D=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-        
-	idx_ERS_DB_all=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
+        idx_ERS_D=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
+        idx_ERS_DB_all=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0);
         idx_ERS_DB_wc=find(all_phase1==1 & all_phase2==2 & all_mem2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & check_cate==1);
         %mem
         idx_mem_D=find(all_phase1==2 & all_phase2==2 & all_mem1 ==1 & all_mem2==1 & all_pID1==all_pID2 & all_wID1~=all_wID2);%%same face different words: p+c-
