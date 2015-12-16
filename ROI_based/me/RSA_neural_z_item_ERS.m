@@ -6,8 +6,7 @@ labeldir=[basedir,'/behav/label'];
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
 rdir=sprintf('%s/me/data/sub',basedir);
 addpath /seastor/helenhelen/scripts/NIFTI
-addpath /home/helenhelen/DQ/project/ISR_2015/behav
-addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
+addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 TN=96*2;
 %%%%%%%%%
@@ -20,7 +19,7 @@ nERS=[]; nmem=[]; nln=[];
 s=subs;
 for t=1:48
         %get idx
-	[idx_mem_D,idx_mem_DB_wc,idx_mem_DB_all,idx_ln_D,idx_ln_DB_wc,idx_ln_DB_all,list_pid]=get_idx_item(s,t)
+        [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,list_pid]=get_idx_item_ERS(s,t)
 	%perpare data
 	for roi=1:length(roi_name);
         xx=[];tmp_xx=[];
@@ -33,35 +32,31 @@ for t=1:48
                 load(sprintf('%s/me/data/roi/p95_ln_sub%02d.mat',basedir,s));
                 ln=data_vln;
                 load(sprintf('%s/me/data/roi/p95_mem_sub%02d.mat',basedir,s));
-                mem=data_vmem;		
+                mem=data_vmem;
 		else
 		tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
     		xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
     		ln=xx(1:96,:);
    	 	mem=xx(97:end,:);
 		end
+        tall=[ln;mem];
     		tln=find(list_pid(1:96)==t);
     		tmem=find(list_pid(97:end)==t);
-		roi_ln(t,roi,1)=mean(ln(tln(1),:),2);
-		roi_ln(t,roi,2)=mean(ln(tln(2),:),2);
-		roi_ln(t,roi,3)=mean(mean(ln(tln,:),2));
-		roi_mem(t,roi,1)=mean(mem(tmem(1),:),2);
-		roi_mem(t,roi,2)=mean(mem(tmem(2),:),2);
-		roi_mem(t,roi,3)=mean(mean(mem(tmem,:),2));
+		troi(t,roi,1)=mean(ln(tln(1),:),2);
+		troi(t,roi,2)=mean(ln(tln(2),:),2);
+		troi(t,roi,3)=mean(mem(tmem(1),:),2);
+		troi(t,roi,4)=mean(mem(tmem(2),:),2);
 
-		tcc_ln=1-pdist(ln(:,:),'correlation');
-		cc_ln=0.5*(log(1+tcc_ln)-log(1-tcc_ln));
-		tcc_mem=1-pdist(mem(:,:),'correlation');
-		cc_mem=0.5*(log(1+tcc_mem)-log(1-tcc_mem));
+		tcc=1-pdist(tall(:,:),'correlation');
+		cc=0.5*(log(1+tcc)-log(1-tcc));
 
-    	roi_mem(t,roi,4)=mean(cc_mem(idx_mem_D));
-    	roi_mem(t,roi,5)=mean(cc_mem(idx_mem_DB_wc));
-    	roi_mem(t,roi,6)=mean(cc_mem(idx_mem_D))-mean(cc_mem(idx_mem_DB_wc));
-    	roi_ln(t,roi,4)=mean(cc_ln(idx_ln_D));
-    	roi_ln(t,roi,5)=mean(cc_ln(idx_ln_DB_wc));
-    	roi_ln(t,roi,6)=mean(cc_ln(idx_ln_D))-mean(cc_ln(idx_ln_DB_wc));
+    	troi(t,roi,5)=mean(cc(idx_ERS_I));
+    	troi(t,roi,6)=mean(cc(idx_ERS_IB_all));
+    	troi(t,roi,7)=mean(cc(idx_ERS_IB_wc));
+    	troi(t,roi,8)=mean(cc(idx_ERS_D));
+    	troi(t,roi,9)=mean(cc(idx_ERS_DB_wc));
+    	troi(t,roi,10)=mean(cc(idx_ERS_DB_all));
     	end %end roi
 end %end t
-    eval(sprintf('save %s/mem_sub%02d roi_mem', rdir,s));
-    eval(sprintf('save %s/ln_sub%02d roi_ln', rdir,s));
+    eval(sprintf('save %s/ERS_sub%02d troi', rdir,s));
 end %end func
