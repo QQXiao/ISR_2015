@@ -4,45 +4,37 @@ library(Matrix)
 library(MASS)
 library(Rcpp)
 library(lme4)
-#
-#roi_name={'p90','p90','dLOC',...
-#>---'CA1','SMG','IFG','HIP',...
-#>---'CA1','CA2','DG','CA3','subiculum','ERC'};
 # Read in your data as an R dataframe
 basedir <- c("/seastor/helenhelen/ISR_2015")
-resultdir <- paste(basedir,"/me/results/mem_cact_unique",sep="/")
+resultdir <- paste(basedir,"/me/results/pspc",sep="/")
 setwd(resultdir)
 r.itemInfo <- matrix(data=NA, nr=2, nc=4)
 ## read data
 #get data for each trial
-item_file <- paste(basedir,"/me/data/item/mem.txt",sep="")
+item_file <- paste(basedir,"/me/data/item/ERS.txt",sep="")
 item_data <- read.table(item_file,header=FALSE)
 colnames(item_data) <- c("subid","pid",
-"p90_act1","p90_act2","p90_actmean","p90_rsaD","p90_rsaDBwc","p90_rsadiff",
-"p95_act1","p95_act2","p95_actmean","p95_rsaD","p95_rsaDBwc","p95_rsadiff",
-"VVC_act1","VVC_act2","VVC_actmean","VVC_rsaD","VVC_rsaDBwc","VVC_rsadiff",
-"dLOC_act1","dLOC_act2","dLOC_actmean","dLOC_rsaD","dLOC_rsaDBwc","dLOC_rsadiff",
-"IPL_act1","IPL_act2","IPL_actmean","IPL_rsaD","IPL_rsaDBwc","IPL_rsadiff",
-"IFG_act1","IFG_act2","IFG_actmean","IFG_rsaD","IFG_rsaDBwc","IFG_rsadiff",
-"HIP_act1","HIP_act2","HIP_actmean","HIP_rsaD","HIP_rsaDBwc","HIP_rsadiff",
-"CA1_act1","CA1_act2","CA1_actmean","CA1_rsaD","CA1_rsaDBwc","CA1_rsadiff",
-"CA2_act1","CA2_act2","CA2_actmean","CA2_rsaD","CA2_rsaDBwc","CA2_rsadiff",
-"DG_act1","DG_act2","DG_actmean","DG_rsaD","DG_rsaDBwc","DG_rsadiff",
-"CA3_act1","CA3_act2","CA3_actmean","CA3_rsaD","CA3_rsaDBwc","CA3_rsadiff",
-"subiculum_act1","subiculum_act2","subiculum_actmean","subiculum_rsaD","subiculum_rsaDBwc","subiculum_rsadiff",
-"ERC_act1","ERC_act2","ERC_actmean","ERC_rsaD","ERC_rsaDBwc","ERC_rsadiff",
-"aPHG_act1","aPHG_act2","aPHG_actmean","aPHG_rsaD","aPHG_rsaDBwc","aPHG_rsadiff",
-"pPHG_act1","pPHG_act2","pPHG_actmean","pPHG_rsaD","pPHG_rsaDBwc","pPHG_rsadiff")
+"VVC_actln1","VVC_actln2","VVC_actmem1","VVC_actmem2","VVC_rsaI","VVC_rsaIBall","VVC_rsaIBwc","VVC_rsaD","VVC_rsaDBall","VVC_rsaDBwc",
+"dLOC_actln1","dLOC_actln2","dLOC_actmem1","dLOC_actmem2","dLOC_rsaI","dLOC_rsaIBall","dLOC_rsaIBwc","dLOC_rsaD","dLOC_rsaDBall","dLOC_rsaDBwc",
+"IPL_actln1","IPL_actln2","IPL_actmem1","IPL_actmem2","IPL_rsaI","IPL_rsaIBall","IPL_rsaIBwc","IPL_rsaD","IPL_rsaDBall","IPL_rsaDBwc",
+"IFG_actln1","IFG_actln2","IFG_actmem1","IFG_actmem2","IFG_rsaI","IFG_rsaIBall","IFG_rsaIBwc","IFG_rsaD","IFG_rsaDBall","IFG_rsaDBwc",
+"HIP_actln1","HIP_actln2","HIP_actmem1","HIP_actmem2","HIP_rsaI","HIP_rsaIBall","HIP_rsaIBwc","HIP_rsaD","HIP_rsaDBall","HIP_rsaDBwc",
+"CA1_actln1","CA1_actln2","CA1_actmem1","CA1_actmem2","CA1_rsaI","CA1_rsaIBall","CA1_rsaIBwc","CA1_rsaD","CA1_rsaDBall","CA1_rsaDBwc",
+"CA2_actln1","CA2_actln2","CA2_actmem1","CA2_actmem2","CA2_rsaI","CA2_rsaIBall","CA2_rsaIBwc","CA2_rsaD","CA2_rsaDBall","CA2_rsaDBwc",
+"DG_actln1","DG_actln2","DG_actmem1","DG_actmem2","DG_rsaI","DG_rsaIBall","DG_rsaIBwc","DG_rsaD","DG_rsaDBall","DG_rsaDBwc",
+"CA3_actln1","CA3_actln2","CA3_actmem1","CA3_actmem2","CA3_rsaI","CA3_rsaIBall","CA3_rsaIBwc","CA3_rsaD","CA3_rsaDBall","CA3_rsaDBwc",
+"subiculum_actln1","subiculum_actln2","subiculum_actmem1","subiculum_actmem2","subiculum_rsaI","subiculum_rsaIBall","subiculum_rsaIBwc","subiculum_rsaD","subiculum_rsaDBall","subiculum_rsaDBwc",
+"ERC_actln1","ERC_actln2","ERC_actmem1","ERC_actmem2","ERC_rsaI","ERC_rsaIBall","ERC_rsaIBwc","ERC_rsaD","ERC_rsaDBall","ERC_rsaDBwc",
+"aPHG_actln1","aPHG_actln2","aPHG_actmem1","aPHG_actmem2","aPHG_rsaI","aPHG_rsaIBall","aPHG_rsaIBwc","aPHG_rsaD","aPHG_rsaDBall","aPHG_rsaDBwc",
+"pPHG_actln1","pPHG_actln2","pPHG_actmem1","pPHG_actmem2","pPHG_rsaI","pPHG_rsaIBall","pPHG_rsaIBwc","pPHG_rsaD","pPHG_rsaDBall","pPHG_rsaDBwc")
+
 item_data$subid <- as.factor(item_data$subid)
 item_data$pid <- as.factor(item_data$pid)
 
-subdata <- item_data
-itemInfo_actmean <- lmer(p90_rsadiff~CA1_actmean+CA1_rsadiff+(1+CA1_actmean+CA1_rsadiff|subid)+(1+CA1_actmean+CA1_rsadiff|pid),REML=FALSE,data=subdata)
-itemInfo_actmean.null <- lmer(p90_rsadiff~CA1_rsadiff+(1+CA1_actmean+CA1_rsadiff|subid)+(1+CA1_actmean+CA1_rsadiff|pid),REML=FALSE,data=subdata)
-itemInfo_rsadiff <- lmer(p90_rsadiff~CA1_rsadiff+CA1_actmean+(1+CA1_rsadiff+CA1_actmean|subid)+(1+CA1_rsadiff+CA1_actmean|pid),REML=FALSE,data=subdata)
+subdata <- cbind(item_data$subid,item_data$pid,item_data$DG_rsaI,item_data$DG_rsaI
+itemInfo_rsaI <- lmer(IPL_rsa~CA1_rsadiff+CA1_actmean+(1+CA1_rsadiff+CA1_actmean|subid)+(1+CA1_rsadiff+CA1_actmean|pid),REML=FALSE,data=subdata)
 itemInfo_rsadiff.null <- lmer(p90_rsadiff~CA1_actmean+(1+CA1_rsadiff+CA1_actmean|subid)+(1+CA1_rsadiff+CA1_actmean|pid),REML=FALSE,data=subdata)
 
-mainEffect.itemInfo_actmean <- anova(itemInfo_actmean,itemInfo_actmean.null)
 mainEffect.itemInfo_rsadiff <- anova(itemInfo_rsadiff,itemInfo_rsadiff.null)
 r.itemInfo[1,1]=mainEffect.itemInfo_actmean[2,6]
 r.itemInfo[1,2]=mainEffect.itemInfo_actmean[2,7]
