@@ -2,7 +2,7 @@ function caulate_ps_matrix_p95(subs)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
-addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
+addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 datadir=sprintf('%s/me/data/roi',basedir);
 psdir=sprintf('%s/me/data/ps_matrix',basedir);
 condname={'ln','mem'};
@@ -12,7 +12,7 @@ for s=subs
 	for c=1:2
                 xx=[];tmp_xx=[];
                 load(sprintf('%s/p90_%s_sub%02d.mat',datadir,condname{c},s));
-                eval(sprintf('tmp_xx=data_v%s',condname{c}));
+                eval(sprintf('tmp_xx=data_v%s;',condname{c}));
 		xx=tmp_xx(:,:);
                 %%analysis
                 data_ln=xx(1:96,:);

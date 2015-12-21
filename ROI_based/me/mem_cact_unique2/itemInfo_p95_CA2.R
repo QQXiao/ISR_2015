@@ -17,7 +17,7 @@ r.itemInfo <- matrix(data=NA, nr=2, nc=4)
 #get data for each trial
 item_file <- paste(basedir,"/me/data/item/mem.txt",sep="")
 item_data <- read.table(item_file,header=FALSE)
-colnames(item_data) <- c("subid","pid",
+colnames(item_data) <- c("subid","pid","mem",
 "p90_act1","p90_act2","p90_actmean","p90_rsaD","p90_rsaDBwc","p90_rsadiff",
 "p95_act1","p95_act2","p95_actmean","p95_rsaD","p95_rsaDBwc","p95_rsadiff",
 "VVC_act1","VVC_act2","VVC_actmean","VVC_rsaD","VVC_rsaDBwc","VVC_rsadiff",
@@ -36,7 +36,7 @@ colnames(item_data) <- c("subid","pid",
 item_data$subid <- as.factor(item_data$subid)
 item_data$pid <- as.factor(item_data$pid)
 
-subdata <- item_data
+subdata <- subset(item_data,mem==1)                    
 itemInfo_actmean <- lmer(p95_rsadiff~CA2_actmean+CA2_rsadiff+(1+CA2_actmean+CA2_rsadiff|subid)+(1+CA2_actmean+CA2_rsadiff|pid),REML=FALSE,data=subdata)
 itemInfo_actmean.null <- lmer(p95_rsadiff~CA2_rsadiff+(1+CA2_actmean+CA2_rsadiff|subid)+(1+CA2_actmean+CA2_rsadiff|pid),REML=FALSE,data=subdata)
 itemInfo_rsadiff <- lmer(p95_rsadiff~CA2_rsadiff+CA2_actmean+(1+CA2_rsadiff+CA2_actmean|subid)+(1+CA2_rsadiff+CA2_actmean|pid),REML=FALSE,data=subdata)

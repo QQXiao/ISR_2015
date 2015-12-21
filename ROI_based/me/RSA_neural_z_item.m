@@ -6,8 +6,7 @@ labeldir=[basedir,'/behav/label'];
 datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
 rdir=sprintf('%s/me/data/sub',basedir);
 addpath /seastor/helenhelen/scripts/NIFTI
-addpath /home/helenhelen/DQ/project/ISR_2015/behav
-addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
+addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 TN=96*2;
 %%%%%%%%%
@@ -26,14 +25,14 @@ for t=1:48
         xx=[];tmp_xx=[];
 		if roi==1
 		load(sprintf('%s/me/data/roi/p90_ln_sub%02d.mat',basedir,s));
-		ln=data_vln;
+		ln=data_vln(1:96,:);
 		load(sprintf('%s/me/data/roi/p90_mem_sub%02d.mat',basedir,s));
-		mem=data_vmem;
+		mem=data_vmem(97:end,:);
 		elseif roi==2
                 load(sprintf('%s/me/data/roi/p95_ln_sub%02d.mat',basedir,s));
-                ln=data_vln;
+                ln=data_vln(1:96,:);
                 load(sprintf('%s/me/data/roi/p95_mem_sub%02d.mat',basedir,s));
-                mem=data_vmem;		
+                mem=data_vmem(97:end,:);		
 		else
 		tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
     		xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates

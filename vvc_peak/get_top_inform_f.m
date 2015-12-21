@@ -2,7 +2,7 @@ function get_top_information(subs)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
-addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
+addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 infodir=sprintf('%s/peak/VVC/data/top/inform',basedir);
 medir=sprintf('%s/me/data/roi',basedir);
 
@@ -31,8 +31,14 @@ for s=subs
     pPHGfile=sprintf('%s/sub%02d_pPHG.txt',vvcdir,s);
     tmp_pphg=load(pPHGfile);
 
-    ttvvc_all=[tmp_vvc(:,1:end-1) tmp_ang(:,1:end-1) tmp_smg(:,1:end-1) tmp_aphg(:,1:end-1) tmp_pphg(:,1:end-1)];
+    ttvvc_all=[tmp_vvc(:,1:end) tmp_ang(:,1:end) tmp_smg(:,1:end) tmp_aphg(:,1:end) tmp_pphg(:,1:end)];
 	ttvvc=ttvvc_all(4:end,:);
+	size_all=length(ttvvc);
+	for j=1:size_all
+	u(j)=sum(ttvvc(:,j)==0)/192;
+	end
+	ttvvc(:,find(u>=0.125))=[];
+	ttvvc_all(:,find(u>=0.125))=[];
     tvvc=(ttvvc)';
     zvvc=zscore(tvvc);
     vvc=zvvc';
@@ -57,8 +63,11 @@ for s=subs
         ln_pn=prctile(pln,n);
         vln=find(pln>=ln_pn);
         data_vln=ttvvc(:,vln);                                                                                                                                
+        data_cvln=ttvvc_all(:,vln);                                                                                                                                
         file_name=sprintf('%s/p%d_ln_sub%02d', medir,n,s);                                                                                                     
         eval(sprintf('save %s data_vln',file_name));                                                                                                                                                                
+        file_name=sprintf('%s/p%d_ln_sub%02d_withc', medir,n,s);                                                                                                     
+        eval(sprintf('save %s data_cvln',file_name));                                                                                                                                                                
         ln_cc=1-pdist(data_vln(:,:),'correlation');
         ERS_ln(n,1)=mean(ln_cc(idx_ERS_I));
         ERS_ln(n,2)=mean(ln_cc(idx_ERS_IB_wc));
@@ -94,8 +103,11 @@ for s=subs
         mem_pn=prctile(pmem,n);
         vmem=find(pmem>=mem_pn);
         data_vmem=ttvvc(:,vmem);          
+        data_cvmem=ttvvc_all(:,vmem);          
         file_name=sprintf('%s/p%d_mem_sub%02d', medir,n,s);
         eval(sprintf('save %s data_vmem',file_name));
+        file_name=sprintf('%s/p%d_mem_sub%02d_withc', medir,n,s);
+        eval(sprintf('save %s data_cvmem',file_name));
         
 	mem_cc=1-pdist(data_vmem(:,:),'correlation');
         ERS_mem(n,1)=mean(mem_cc(idx_ERS_I));
