@@ -1,14 +1,12 @@
-function get_sub_mask(subs)
+function get_sub_mask(subs,n)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
-niidir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
-datadir=sprintf('%s/me/data/roi',basedir);
-resultdir=sprintf('%s/peak/VVC/data/top/mask',basedir);
-n=99;
+niidir=sprintf('%s/data_singletrial/LSS/ref_space/all',basedir);
+datadir=sprintf('%s/top/z_after_model/data',basedir);
+resultdir=sprintf('%s/top/z_after_model/mask',basedir);
 %%%%%%%%%
-mkdir(resultdir);
 for s=subs
     	%get fMRI data
     	niifile=sprintf('%s/sub%02d.nii.gz',niidir,s);

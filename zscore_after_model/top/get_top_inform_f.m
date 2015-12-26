@@ -3,15 +3,14 @@ function get_top_information(subs)
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
-infodir=sprintf('%s/peak/VVC/data/top/inform',basedir);
-medir=sprintf('%s/me/data/roi',basedir);
 
-datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/merged',basedir);
-vvcdir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
+datadir=sprintf('%s/data_singletrial/LSS/ref_space',basedir);
+roidir=sprintf('%s/ROI_based/ref_space/LSS/raw',basedir);
 %%%%%%%%%
 TN=192;
 %subs=setdiff(1:21,2);
-resultdir=sprintf('%s/peak/VVC/data/top/coordinate',basedir);
+resultdir=sprintf('%s/top/z_after_model/data',basedir);
+simidir=sprintf('%s/top/z_after_model/similarity_in_topN',basedir);
 mkdir(resultdir);
 ERS=[];mem=[];ln=[];
 ERS_z=[];mem_z=[];ln_z=[];
@@ -20,15 +19,15 @@ for s=subs
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
 
         %get fMRI data
-    vvcfile=sprintf('%s/sub%02d_vvc.txt',vvcdir,s);
+    vvcfile=sprintf('%s/sub%02d_vvc.txt',roidir,s);
     tmp_vvc=load(vvcfile);
-    ANGfile=sprintf('%s/sub%02d_ANG.txt',vvcdir,s);
+    ANGfile=sprintf('%s/sub%02d_ANG.txt',roidir,s);
     tmp_ang=load(ANGfile);
-    SMGfile=sprintf('%s/sub%02d_SMG.txt',vvcdir,s);
+    SMGfile=sprintf('%s/sub%02d_SMG.txt',roidir,s);
     tmp_smg=load(SMGfile);
-    aPHGfile=sprintf('%s/sub%02d_aPHG.txt',vvcdir,s);
+    aPHGfile=sprintf('%s/sub%02d_aPHG.txt',roidir,s);
     tmp_aphg=load(aPHGfile);
-    pPHGfile=sprintf('%s/sub%02d_pPHG.txt',vvcdir,s);
+    pPHGfile=sprintf('%s/sub%02d_pPHG.txt',roidir,s);
     tmp_pphg=load(pPHGfile);
 
     ttvvc_all=[tmp_vvc(:,1:end) tmp_ang(:,1:end) tmp_smg(:,1:end) tmp_aphg(:,1:end) tmp_pphg(:,1:end)];
@@ -59,16 +58,29 @@ for s=subs
         end%voxel
     end%encoding phase
     pln=sum(tpln,2)/length(t_sub_ln);
-        for n=99%[60:5:95]
+        for n=[60:5:95]
         ln_pn=prctile(pln,n);
         vln=find(pln>=ln_pn);
-        data_vln=ttvvc(:,vln);                                                                                                                                
-        data_cvln=ttvvc_all(:,vln);                                                                                                                                
-        file_name=sprintf('%s/p%d_ln_sub%02d', medir,n,s);                                                                                                     
-        eval(sprintf('save %s data_vln',file_name));                                                                                                                                                                
-        file_name=sprintf('%s/p%d_ln_sub%02d_withc', medir,n,s);                                                                                                     
-        eval(sprintf('save %s data_cvln',file_name));                                                                                                                                                                
-        ln_cc=1-pdist(data_vln(:,:),'correlation');
+        data_vln=ttvvc(:,vln);
+        data_cvln=ttvvc_all(:,vln);
+        file_name=sprintf('%s/p%d_ln_sub%02d', resultdir,n,s);
+	eval(sprintf('save %s data_vln',file_name));
+	file_name=sprintf('%s/p%d_ln_sub%02d_withc',resultdir,n,s);
+        eval(sprintf('save %s data_cvln',file_name));
+
+	tl=data_vln(1:96,:);
+	tm=data_vln(97:192,:);
+	al=[];am=[];
+	for r=1:4
+	rtl=tl(24*(r-1)+[1:24],:);
+	zrtl=zscore(rtl,0,2);
+	rtm=tm(24*(r-1)+[1:24],:);
+	zrtm=zscore(rtm,0,2);
+	al=[al;zrtl];
+	am=[am;zrtm];
+	end         
+	data_avln=[al;am];                                                                                                                       
+        ln_cc=1-pdist(data_avln(:,:),'correlation');
         ERS_ln(n,1)=mean(ln_cc(idx_ERS_I));
         ERS_ln(n,2)=mean(ln_cc(idx_ERS_IB_wc));
         ERS_ln(n,3)=mean(ln_cc(idx_ERS_IB_all));
@@ -99,17 +111,29 @@ for s=subs
         end%voxels
     end%retrieval phase
         pmem=sum(tpmem,2)/length(t_sub_mem);
-	for n=99%[60:5:95]
+	for n=[60:5:95]
         mem_pn=prctile(pmem,n);
         vmem=find(pmem>=mem_pn);
         data_vmem=ttvvc(:,vmem);          
         data_cvmem=ttvvc_all(:,vmem);          
-        file_name=sprintf('%s/p%d_mem_sub%02d', medir,n,s);
+        file_name=sprintf('%s/p%d_mem_sub%02d', resultdir,n,s);
         eval(sprintf('save %s data_vmem',file_name));
-        file_name=sprintf('%s/p%d_mem_sub%02d_withc', medir,n,s);
+        file_name=sprintf('%s/p%d_mem_sub%02d_withc', resultdir,n,s);
         eval(sprintf('save %s data_cvmem',file_name));
-        
-	mem_cc=1-pdist(data_vmem(:,:),'correlation');
+
+        tl=data_vmem(1:96,:);
+        tm=data_vmem(97:192,:);
+        al=[];am=[];
+        for r=1:4
+        rtl=tl(24*(r-1)+[1:24],:);
+	zrtl=zscore(rtl,0,2);
+        rtm=tm(24*(r-1)+[1:24],:);
+	zrtm=zscore(rtm,0,2);
+        al=[al;zrtl];
+        am=[am;zrtm];
+        end                                                                                                                                
+        data_avmem=[al;am];
+	mem_cc=1-pdist(data_avmem(:,:),'correlation');
         ERS_mem(n,1)=mean(mem_cc(idx_ERS_I));
         ERS_mem(n,2)=mean(mem_cc(idx_ERS_IB_wc));
         ERS_mem(n,3)=mean(mem_cc(idx_ERS_IB_all));
@@ -125,17 +149,17 @@ for s=subs
         ln_mem(n,2)=mean(mem_cc(idx_ln_DB_wc));
         ln_mem(n,3)=mean(mem_cc(idx_ln_DB_all));
 	end	
-        file_name=sprintf('%s/ERS_ln_sub%02d', medir,s);
+        file_name=sprintf('%s/ERS_ln_sub%02d', simidir,s);
         eval(sprintf('save %s ERS_ln',file_name));
-        file_name=sprintf('%s/ERS_mem_sub%02d', medir,s);
+        file_name=sprintf('%s/ERS_mem_sub%02d', simidir,s);
         eval(sprintf('save %s ERS_mem',file_name));
-        file_name=sprintf('%s/mem_ln_sub%02d', medir,s);
+        file_name=sprintf('%s/mem_ln_sub%02d', simidir,s);
         eval(sprintf('save %s mem_ln',file_name));
-        file_name=sprintf('%s/mem_mem_sub%02d', medir,s);
+        file_name=sprintf('%s/mem_mem_sub%02d', simidir,s);
         eval(sprintf('save %s mem_mem',file_name));
-        file_name=sprintf('%s/ln_ln_sub%02d', medir,s);
+        file_name=sprintf('%s/ln_ln_sub%02d', simidir,s);
         eval(sprintf('save %s ln_ln',file_name));
-        file_name=sprintf('%s/ln_mem_sub%02d', medir,s);
+        file_name=sprintf('%s/ln_mem_sub%02d', simidir,s);
         eval(sprintf('save %s ln_mem',file_name));
 end%sub
 end %function
