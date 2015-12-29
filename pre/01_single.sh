@@ -17,10 +17,10 @@ do
 	for ((s=1;s<=2;s++))
 	do
 	#sed -e "s/ISR05/${SUB}/g" -e "s/encoding/${c}/g" -e "s/run1/run${r}/g" -e "s/set1/set${s}/g" $outputdir/script/design/ms_singletrial.fsf > $outputdir/script/fsf/ms_single_${c}_${SUB}_run${r}_set${s}.fsf
-	#sed -e "s/ISR05/${SUB}/g" -e "s/encoding/${c}/g" -e "s/run1/run${r}/g" -e "s/set1/set${s}/g" $outputdir/script/design/singletrial.fsf > $outputdir/script/fsf/single_${c}_${SUB}_run${r}_set${s}.fsf
+	sed -e "s/ISR05/${SUB}/g" -e "s/encoding/${c}/g" -e "s/run1/run${r}/g" -e "s/set1/set${s}/g" $outputdir/script/design/singletrial.fsf > $outputdir/script/fsf/single_${c}_${SUB}_run${r}_set${s}.fsf
 	
-	sed -e "s/ISR05/${SUB}/g"  -e "s/encoding/${c}/g" -e "s/run1/run${r}/g" -e "s/set1/set${s}/g" $outputdir/script/design/pre.fsf > $outputdir/script/fsf/pre_${c}_${SUB}_run${r}_set${s}.fsf
-        feat $outputdir/script/fsf/pre_${c}_${SUB}_run${r}_set${s}.fsf
+	#sed -e "s/ISR05/${SUB}/g"  -e "s/encoding/${c}/g" -e "s/run1/run${r}/g" -e "s/set1/set${s}/g" $outputdir/script/design/pre.fsf > $outputdir/script/fsf/pre_${c}_${SUB}_run${r}_set${s}.fsf
+        #feat $outputdir/script/fsf/pre_${c}_${SUB}_run${r}_set${s}.fsf
 	done
 	done
 	done
