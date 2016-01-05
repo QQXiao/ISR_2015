@@ -2,21 +2,30 @@ function caculate_m_set()
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
-addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
+addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
-datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
+datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
+%datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
 %%%%%%%%%
 TN=192;
 subs=setdiff(1:21,2);
 %for c=1:4
-resultdir=sprintf('%s/ROI_based/ps_matrix_all_roi/21rois',basedir);
+resultdir=sprintf('%s/ROI_based/ps_matrix_all_roi/glm/5rois',basedir);
+%resultdir=sprintf('%s/ROI_based/ps_matrix_all_roi/glm/21rois',basedir);
 mkdir(resultdir);
 %nt=200;
-roi_name={'CC','vLOC','OF','TOF','pTF','aTF','dLOC',...
-        'ANG','SMG','IFG','HIP',...
-        'CA1','CA2','DG','CA3','subiculum','ERC',...
-                'pPHG','aPHG',...
-                'aSMG','pSMG'};
+%roi_name={'VVC','dLOC','IPL','IFG','HIP','PHG'};
+%roi_name={'CC','vLOC','OF','TOF','pTF','aTF','dLOC',...
+%        'ANG','SMG','IFG','HIP',...
+%        'CA1','CA2','DG','CA3','subiculum','ERC',...
+%                'pPHG','aPHG',...
+%                'aSMG','pSMG'};
+%roi_name={'CC','vLOC','OF','TOF','pTF','aTF','dLOC',...
+%        'ANG','SMG','IFG',...
+%	'HIP','pPHG','aPHG'}
+roi_name={'CC','VVC','dLOC',...
+        'IPL','PHG'} 
+nroi=length(roi_name);
 for s=subs;
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
 
@@ -83,7 +92,8 @@ cor_matrix_all=[cc_ln_ln;cc_mem_mem];
 cc_cor_matrix_all=1-pdist(cor_matrix_all(:,:),'correlation');
 ttlm=squareform(cc_cor_matrix_all);
 %tlm=ttlm([1:28],[29:56]);                                                                                                                             
-tlm=ttlm([1:21],[22:42]);                                                                                                                             
+%tlm=ttlm([1:21],[22:42]);                                                                                                                             
+tlm=ttlm([1:nroi],[(nroi+1):(2*nroi)]);                                                                                                                             
 cc_a_roi_ln_mem(s,:)=tlm(:);
 end %end sub
 cc_a_roi_ln_ln=cc_a_roi_ln_ln(subs,:,:);
@@ -94,7 +104,7 @@ c_ln_ln=squareform(squeeze(mean(cc_a_roi_ln_ln,1)));
 c_mem_mem=squareform(squeeze(mean(cc_a_roi_mem_mem,1)));
 %c_ln_ln=0.5*(log(1+tc_ln_ln)-log(1-tc_ln_ln));
 %c_mem_mem=0.5*(log(1+tc_mem_mem)-log(1-tc_mem_mem));
-tc_ln_mem=reshape(mean(cc_a_roi_ln_mem),21,21);
+tc_ln_mem=reshape(mean(cc_a_roi_ln_mem),nroi,nroi);
 c_ln_mem=0.5*(log(1+tc_ln_mem)-log(1-tc_ln_mem));
 
 eval(sprintf('save %s/a_roi_corr_ln_ln.txt c_ln_ln -ascii -tabs', resultdir));

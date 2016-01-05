@@ -35,7 +35,7 @@ for s=subs
 
     t_sub_ln=idx_ln_D;
     for h=1:2
-    	for nh=1:48
+    	for nh=1:24
 	n=nh+length(t_sub_ln)/2*(h-1);
     	t=pa(t_sub_ln(n),1);
     	[tidx_mem_D,tidx_mem_DB_wc,tidx_mem_DB_all,tidx_ln_D,tidx_ln_DB_wc,tidx_ln_DB_all]= get_idx_matrix(s,t);
@@ -63,7 +63,7 @@ for s=subs
 
     t_sub_mem=idx_mem_D;
     for h=1:2
-        for nh=1:48
+        for nh=1:24
         n=nh+length(t_sub_ln)/2*(h-1);
     	t=pa(t_sub_mem(n),1);
     	[tidx_mem_D,tidx_mem_DB_wc,tidx_mem_DB_all,tidx_ln_D,tidx_ln_DB_wc,tidx_ln_DB_all]= get_idx_matrix(s,t);

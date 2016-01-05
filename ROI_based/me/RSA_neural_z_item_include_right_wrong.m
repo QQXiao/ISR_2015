@@ -3,7 +3,8 @@ function RSA_neural_z_item(subs)
 methodname={'LSS','TR34','ms_LSS'};
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behav/label'];
-datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
+%datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
+datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
 rdir=sprintf('%s/me/data/sub',basedir);
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav

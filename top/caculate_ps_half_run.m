@@ -1,4 +1,4 @@
-function caculate_ps_half_run(subs,nh)
+function caculate_ps_half_run(subs)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -8,11 +8,13 @@ resultdir=sprintf('%s/top/tmap/ps',basedir);
 %%%%%%%%%
 for s=subs
 	for hd=1:2
-		for hr=1:yy2	
-		[idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s,hr);
-		for n=[60:5:95]；
-		ln_file=sprintf('%s/p%d_ln_sub%02d_half%d', datadir,n,s,hd);
-		mem_file=sprintf('%s/p%d_mem_sub%02d_half%d', datadir,n,s,hd);
+		for hr=1:2	
+		[idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx_two_runs(s,hr);
+		tn=[60:5:95];
+		for n=1:length(tn)
+		nn=tn(n);
+		ln_file=sprintf('%s/p%d_ln_sub%02d_h%d', datadir,nn,s,hd);
+		mem_file=sprintf('%s/p%d_mem_sub%02d_h%d', datadir,nn,s,hd);
 		load(ln_file);load(mem_file);
 		%item-specific information sensitive voxels from encoding phase
 		half_data_vln=data_vln([1:48 97:144]+48*(hr-1),:);
@@ -32,7 +34,7 @@ for s=subs
         	ln_ln(n,2)=mean(ln_cc(idx_ln_DB_wc));                                                                                                                    
         	ln_ln(n,3)=mean(ln_cc(idx_ln_DB_all));
                 %item-specific information sensitive voxels from retrieval phase
-                half_data_vln=data_vmem([1:48 97:144]+48*(h-1),:);
+                half_data_vmem=data_vmem([1:48 97:144]+48*(hr-1),:);
         	mem_cc=1-pdist(half_data_vmem(:,:),'correlation');
         	ERS_mem(n,1)=mean(mem_cc(idx_ERS_I));
         	ERS_mem(n,2)=mean(mem_cc(idx_ERS_IB_wc));

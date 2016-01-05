@@ -1,7 +1,7 @@
 function RSA_neural(subs,m)
 %subs=1;
 %m=2;
-methodsname={'LSS','TR34','ms_LSS'};
+methodsname={'LSS','TR34','ms_LSS','glm'};
 Mtrial=1; % trial number
 MpID=2;  % material id_pic
 MwID=3;  % material id_word
@@ -33,7 +33,7 @@ TN=96*2
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behav/label'];
-datadir=sprintf('%s/data_singletrial/%s/ref_space/all',basedir,methodsname{m});
+datadir=sprintf('%s/data_singletrial/%s/all',basedir,methodsname{m});
 rdir=sprintf('%s/Searchlight_RSM/ref_space/%s/r',basedir,methodsname{m});
 addpath /seastor/helenhelen/scripts/NIFTI
 %%%%%%%%%
