@@ -1,10 +1,10 @@
 #!/sh/bin
 basedir=/seastor/helenhelen/ISR_2015	
 refdir=$basedir/group/cate_ln/cope1.gfeat
-resultdir=$basedir/Searchlight_RSM/standard_space/LSS/zscore/group
+resultdir=$basedir/Searchlight_RSM/standard_space/glm/group
 mkdir -p $resultdir
 cd $resultdir
-datadir=$basedir/Searchlight_RSM/standard_space/LSS/zscore/sub
+datadir=$basedir/Searchlight_RSM/standard_space/glm/sub
 for c in ln mem
 do
 for cc in DBwc DBall

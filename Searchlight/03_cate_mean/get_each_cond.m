@@ -1,5 +1,5 @@
 function calculate_mean(subs,m)
-methodname={'LSS','TR34'};
+methodname={'LSS','TR34','mLSS','glm'};
 addpath /seastor/helenhelen/scripts/NIFTI
 basedir='/seastor/helenhelen/ISR_2015';
 datadir=sprintf('%s/Searchlight_RSM/ref_space/%s/z',basedir,methodname{m});
