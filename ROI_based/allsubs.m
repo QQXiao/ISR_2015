@@ -7,9 +7,20 @@ resultdir=sprintf('%s/ROI_based/ref_space/glm',basedir);
 %datadir=sprintf('%s/ROI_based/ref_space/zscore/final/sub/z',basedir);
 %resultdir=sprintf('%s/ROI_based/ref_space/zscore/final',basedir);
 addpath /seastor/helenhelen/scripts/NIFTI
-roi_name={'VVC','dLOC','IPL','PHG','HIP'}                                                       
+roi_name={'CC','VVC','dLOC','IPL','IFG','HIP','PHG'}                                                       
+%roi_name={'CC','vLOC','OF','TOF','pTF','aTF',...
+%'dLOC','ANG','SMG','IFG',...
+%'HIP','pPHG','aPHG'}
 %roi_name={'VVC','dLOC','IPL','PHG','HIP','IFG',...
 %        'CA1','CA2','DG','CA3','subiculum','ERC'};
+%roi_name={'LIFG','RIFG','LIPL','RIPL','LFUS','RFUS','LITG','RITG',...
+%          'LdLOC','RdLOC','LvLOC','RvLOC','LMTG','RMTG','LHIP','RHIP',...
+%         'LAMG','RAMG','LPHG','RPHG','LaPHG','RaPHG','LpPHG','RpPHG',...
+%          'LaSMG','RaSMG','LpSMG','RpSMG','LANG','RANG','LSPL','RSPL',...
+%          'LFFA','RFFA',...
+%          'PCC','Precuneous','LFOC','LPreCG','RFOC','RPreCG'};
+%roi_name={'CA1','CA2','DG','CA3','subiculum','ERC'};
+
 subs=setdiff([1:21],2);
 s=subs';
 for roi=1:length(roi_name)
@@ -31,13 +42,13 @@ for roi=1:length(roi_name)
         aln_z=[s all_ln_z];
 
         %file_name=sprintf('%s/ERS_%s_ISR.txt', resultdir,roi_name{roi});
-        file_name=sprintf('%s/ERS_%s.txt', resultdir,roi_name{roi});
+        file_name=sprintf('%s/7roi_ERS_%s.txt', resultdir,roi_name{roi});
         eval(sprintf('save %s aERS_z -ascii',file_name));
         %file_name=sprintf('%s/mem_%s_ISR.txt', resultdir,roi_name{roi});
-        file_name=sprintf('%s/mem_%s.txt', resultdir,roi_name{roi});
+        file_name=sprintf('%s/7roi_mem_%s.txt', resultdir,roi_name{roi});
         eval(sprintf('save %s amem_z -ascii',file_name));
 	%file_name=sprintf('%s/ln_%s_ISR.txt', resultdir,roi_name{roi});
-	file_name=sprintf('%s/ln_%s.txt', resultdir,roi_name{roi});
+	file_name=sprintf('%s/7roi_ln_%s.txt', resultdir,roi_name{roi});
         eval(sprintf('save %s aln_z -ascii',file_name));
 end %end roi
 end%end function

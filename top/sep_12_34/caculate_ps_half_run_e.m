@@ -3,12 +3,14 @@ function caculate_ps_half_run(subs)
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
-datadir=sprintf('%s/top/tmap/data',basedir);
-resultdir=sprintf('%s/top/tmap/ps',basedir);
+datadir=sprintf('%s/top/tmap/data/equal',basedir);
+resultdir=sprintf('%s/top/tmap/ps/equal',basedir);
 %%%%%%%%%
 for s=subs
 	for hd=1:2
-		for hr=1:2	
+		for hr=1:2
+		ERS_ln=[];ln_ln=[];mem_ln=[];	
+		ERS_mem=[];ln_mem=[];mem_mem=[];	
 		[idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx_sep_12_34(s,hr);
 		tn=[0:10:90];
 		for n=1:length(tn)

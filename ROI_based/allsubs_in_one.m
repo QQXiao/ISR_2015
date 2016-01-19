@@ -2,14 +2,17 @@ function allroi(m)
 methodname={'LSS','TR34'};
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behavior/label'];
-datadir=sprintf('%s/ROI_based/ref_space/glm/sub/z',basedir);
-resultdir=sprintf('%s/ROI_based/ref_space/glm',basedir);
+datadir=sprintf('%s/ROI_based/ref_space/glm/sub/z/sub_hipp',basedir);
+resultdir=sprintf('%s/ROI_based/ref_space/glm/sub_hipp',basedir);
 %datadir=sprintf('%s/ROI_based/ref_space/zscore/final/sub/z',basedir);
 %resultdir=sprintf('%s/ROI_based/ref_space/zscore/final',basedir);
 addpath /seastor/helenhelen/scripts/NIFTI
+%roi_name={'CC','vLOC','OF','TOF','pTF','aTF',...
+%'dLOC','ANG','SMG','IFG',...
+%'HIP','pPHG','aPHG'};
 %roi_name={'CA1','CA2','DG','CA3','subiculum','ERC'};
-roi_name={'VVC','dLOC','IPL'}                                                       
-%roi_name={'CC','VVC','dLOC','ANG','SMG','IFG',...                                                       
+%roi_name={'VVC','dLOC','IPL'}                                                       
+roi_name={'CC','VVC','dLOC','IPL','IFG','HIP','PHG'}                                                      
 %                'HIP','pPHG','aPHG',...
 %                'aSMG','pSMG'}
 %roi_name={'LIFG','RIFG','LIPL','RIPL','LFUS','RFUS','LITG','RITG',...

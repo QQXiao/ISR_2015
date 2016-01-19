@@ -4,7 +4,6 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 infodir=sprintf('%s/top/tmap/data',basedir);
-psdir=sprintf('%s/top/tmap/ps',basedir);
 
 datadir=sprintf('%s/data_singletrial/glm/all',basedir);
 vvcdir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
@@ -16,8 +15,9 @@ ERS_z=[];mem_z=[];ln_z=[];
 vln_cln=[];vmem_cmem=[];
 subs
 for s=subs
+tpln1=[];tpln2=[];tpmem1=[];tpmem2=[];
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
-
+	u=[];
         %get fMRI data
 	vvcfile=sprintf('%s/sub%02d_vvc.txt',vvcdir,s);
 	tmp_vvc=load(vvcfile);
@@ -32,7 +32,7 @@ for s=subs
 
 	ttvvc_all=[tmp_vvc(:,1:end) tmp_ang(:,1:end) tmp_smg(:,1:end) tmp_aphg(:,1:end) tmp_pphg(:,1:end)];
 	ttvvc=ttvvc_all(4:end,:);
-	size_all=length(ttvvc);
+	size_all=size(ttvvc,2);
 	for j=1:size_all
 	u(j)=sum(ttvvc(:,j)==0)/192;
 	end
@@ -69,7 +69,7 @@ for s=subs
 	end%encoding phase
 	pln1=mean(tpln1,2);
 	pln2=mean(tpln2,2);
-        for pn=[60:5:95]
+        for pn=[0:10:90]
 		for h=1:2
 		eval(sprintf('pln=pln%d;',h));
         	ln_pn=prctile(pln,pn);
@@ -108,7 +108,7 @@ for s=subs
     end%retrieval phase
         pmem1=mean(tpmem1,2);
         pmem2=mean(tpmem2,2);
-	for pn=[60:5:95]
+	for pn=[0:10:90]
 	        for h=1:2
                 eval(sprintf('ppmem=pmem%d',h));
         	mem_pn=prctile(ppmem,pn);

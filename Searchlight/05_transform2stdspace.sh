@@ -2,8 +2,8 @@
 basedir='/seastor/helenhelen/ISR_2015'
 #datadir=$basedir/Searchlight_RSM/ref_space/LSS/zscore/diff
 #resultdir=$basedir/Searchlight_RSM/standard_space/LSS/zscore/sub
-datadir=$basedir/Searchlight_RSM/ref_space/zscore/diff
-resultdir=$basedir/Searchlight_RSM/standard_space/zscore/sub
+datadir=$basedir/Searchlight_RSM/ref_space/glm/diff
+resultdir=$basedir/Searchlight_RSM/standard_space/glm/sub
 mkdir $resultdir -p
 affinedir=$basedir/data_singletrial/transform/e2t
 templatefile=/opt/fmritools/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz

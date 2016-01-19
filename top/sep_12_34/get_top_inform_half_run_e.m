@@ -3,8 +3,8 @@ function get_top_information(subs)
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
-infodir=sprintf('%s/top/tmap/data',basedir);
-psdir=sprintf('%s/top/tmap/ps',basedir);
+infodir=sprintf('%s/top/tmap/data/equal/',basedir);
+
 datadir=sprintf('%s/data_singletrial/glm/all',basedir);
 vvcdir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
 %%%%%%%%%
@@ -15,8 +15,9 @@ ERS_z=[];mem_z=[];ln_z=[];
 vln_cln=[];vmem_cmem=[];
 subs
 for s=subs
+tpln1=[];tpln2=[];tpmem1=[];tpmem2=[];
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
-u=[];
+	u=[];
         %get fMRI data
 	vvcfile=sprintf('%s/sub%02d_vvc.txt',vvcdir,s);
 	tmp_vvc=load(vvcfile);
@@ -68,18 +69,19 @@ u=[];
 	end%encoding phase
 	pln1=mean(tpln1,2);
 	pln2=mean(tpln2,2);
-        for pn=[60:5:95]
-        	ln_pn1=prctile(pln1,pn);
-        	vln1=find(pln1>=ln_pn1);
-        	ln_pn2=prctile(pln2,pn);
-        	vln2=find(pln2>=ln_pn2);
-		cvln=intersect(vln1,vln2);
-        	data_vln=ttvvc(:,cvln);
-        	data_cvln=ttvvc_all(:,cvln);
-        	file_name=sprintf('%s/p%d_ln_sub%02d_common',infodir,pn,s);
+        for pn=[0:10:50]
+		for h=1:2
+		eval(sprintf('pln=pln%d;',h));
+        	bo_ln_pn=prctile(pln,pn);
+        	to_ln_pn=prctile(pln,pn+10);
+        	vln=find(pln>=bo_ln_pn & pln<to_ln_pn);
+        	data_vln=ttvvc(:,vln);
+        	data_cvln=ttvvc_all(:,vln);
+        	file_name=sprintf('%s/p%d_ln_sub%02d_h%d',infodir,pn,s,h);
         	eval(sprintf('save %s data_vln',file_name));
-        	file_name=sprintf('%s/p%d_ln_sub%02d_withc_common',infodir,pn,s);
+        	file_name=sprintf('%s/p%d_ln_sub%02d_withc_h%d',infodir,pn,s,h);
         	eval(sprintf('save %s data_cvln',file_name)); 
+		end %half
 	end %pn
     
     t_sub_mem=idx_mem_D;
@@ -107,18 +109,19 @@ u=[];
     end%retrieval phase
         pmem1=mean(tpmem1,2);
         pmem2=mean(tpmem2,2);
-	for pn=[60:5:95]
-		mem_pn1=prctile(pmem1,pn);
-                vmem1=find(pmem1>=mem_pn1);
-                mem_pn2=prctile(pmem2,pn);
-                vmem2=find(pmem2>=mem_pn2);
-                cvmem=intersect(vmem1,vmem2);
-        	data_vmem=ttvvc(:,cvmem);          
-        	data_cvmem=ttvvc_all(:,cvmem);          
-        	file_name=sprintf('%s/p%d_mem_sub%02d_common',infodir,pn,s);
+	for pn=[0:10:50]
+	        for h=1:2
+                eval(sprintf('ppmem=pmem%d',h));
+        	bo_mem_pn=prctile(ppmem,pn);
+        	to_mem_pn=prctile(ppmem,pn+10);
+        	vmem=find(ppmem>=bo_mem_pn & ppmem<to_mem_pn);
+        	data_vmem=ttvvc(:,vmem);          
+        	data_cvmem=ttvvc_all(:,vmem);          
+        	file_name=sprintf('%s/p%d_mem_sub%02d_h%d',infodir,pn,s,h);
         	eval(sprintf('save %s data_vmem',file_name));
-        	file_name=sprintf('%s/p%d_mem_sub%02d_withc_common',infodir,pn,s);
+        	file_name=sprintf('%s/p%d_mem_sub%02d_withc_h%d',infodir,pn,s,h);
         	eval(sprintf('save %s data_cvmem',file_name));
+		end %half
 	end %n
 end%sub
 end %function

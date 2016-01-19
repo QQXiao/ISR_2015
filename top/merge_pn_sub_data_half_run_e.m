@@ -3,7 +3,7 @@ function merge_pn_sub_data()
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
-psdir=sprintf('%s/top/tmap/ps',basedir);
+psdir=sprintf('%s/top/tmap/ps/equal',basedir);
 subs=setdiff(1:21,2);
 for hd=1:2 %data
 	for hr=1:2 %result
@@ -19,7 +19,8 @@ for hd=1:2 %data
 		ln_memfile=sprintf('%s/ln_mem_sub%02d_d%d_r%d.mat',psdir,s,hd,hr);           
 		load(ln_lnfile);load(mem_lnfile);
 		load(ln_memfile);load(mem_memfile);
-		n=0:10:90
+		%n=0:10:90
+		n=10:10:100
 		sizel=length(n);
 		ln_mln=[s*ones(sizel(1),1) n' ln_ln(:,[1 2])];
 		mem_mln=[s*ones(sizel(1),1) n' mem_ln(:,[1 2])];

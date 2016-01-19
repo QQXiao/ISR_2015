@@ -3,8 +3,8 @@ function get_top_information(subs)
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
-infodir=sprintf('%s/top/tmap/data',basedir);
-psdir=sprintf('%s/top/tmap/ps',basedir);
+infodir=sprintf('%s/top/tmap/data/sep_roi',basedir);
+
 datadir=sprintf('%s/data_singletrial/glm/all',basedir);
 vvcdir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
 %%%%%%%%%
@@ -13,23 +13,17 @@ TN=192;
 ERS=[];mem=[];ln=[];
 ERS_z=[];mem_z=[];ln_z=[];
 vln_cln=[];vmem_cmem=[];
-subs
+roi_name={'VVC','IPL','PHG','IFG'};
 for s=subs
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
-u=[];
+	for roi=1
+	%for roi=1:length(roi_name);
+	tpln1=[];tpln2=[];tpmem1=[];tpmem2=[];u=[];
         %get fMRI data
-	vvcfile=sprintf('%s/sub%02d_vvc.txt',vvcdir,s);
+	vvcfile=sprintf('%s/sub%02d_%s.txt',vvcdir,s,roi_name{roi});
 	tmp_vvc=load(vvcfile);
-	ANGfile=sprintf('%s/sub%02d_ANG.txt',vvcdir,s);
-	tmp_ang=load(ANGfile);
-	SMGfile=sprintf('%s/sub%02d_SMG.txt',vvcdir,s);
-	tmp_smg=load(SMGfile);
-	aPHGfile=sprintf('%s/sub%02d_aPHG.txt',vvcdir,s);
-	tmp_aphg=load(aPHGfile);
-	pPHGfile=sprintf('%s/sub%02d_pPHG.txt',vvcdir,s);
-	tmp_pphg=load(pPHGfile);
 
-	ttvvc_all=[tmp_vvc(:,1:end) tmp_ang(:,1:end) tmp_smg(:,1:end) tmp_aphg(:,1:end) tmp_pphg(:,1:end)];
+	ttvvc_all=[tmp_vvc(:,1:end)]
 	ttvvc=ttvvc_all(4:end,:);
 	size_all=size(ttvvc,2);
 	for j=1:size_all
@@ -68,18 +62,18 @@ u=[];
 	end%encoding phase
 	pln1=mean(tpln1,2);
 	pln2=mean(tpln2,2);
-        for pn=[60:5:95]
-        	ln_pn1=prctile(pln1,pn);
-        	vln1=find(pln1>=ln_pn1);
-        	ln_pn2=prctile(pln2,pn);
-        	vln2=find(pln2>=ln_pn2);
-		cvln=intersect(vln1,vln2);
-        	data_vln=ttvvc(:,cvln);
-        	data_cvln=ttvvc_all(:,cvln);
-        	file_name=sprintf('%s/p%d_ln_sub%02d_common',infodir,pn,s);
+        for pn=[90.5:0.5:99.5]
+		for h=1:2
+		eval(sprintf('pln=pln%d;',h));
+        	ln_pn=prctile(pln,pn);
+        	vln=find(pln>=ln_pn);
+        	data_vln=ttvvc(:,vln);
+        	data_cvln=ttvvc_all(:,vln);
+        	file_name=sprintf('%s/p%.1f_ln_sub%02d_h%d_%s',infodir,pn,s,h,roi_name{roi});
         	eval(sprintf('save %s data_vln',file_name));
-        	file_name=sprintf('%s/p%d_ln_sub%02d_withc_common',infodir,pn,s);
+        	file_name=sprintf('%s/p%.1f_ln_sub%02d_withc_h%d_%s',infodir,pn,s,h,roi_name{roi});
         	eval(sprintf('save %s data_cvln',file_name)); 
+		end %half
 	end %pn
     
     t_sub_mem=idx_mem_D;
@@ -107,18 +101,20 @@ u=[];
     end%retrieval phase
         pmem1=mean(tpmem1,2);
         pmem2=mean(tpmem2,2);
-	for pn=[60:5:95]
-		mem_pn1=prctile(pmem1,pn);
-                vmem1=find(pmem1>=mem_pn1);
-                mem_pn2=prctile(pmem2,pn);
-                vmem2=find(pmem2>=mem_pn2);
-                cvmem=intersect(vmem1,vmem2);
-        	data_vmem=ttvvc(:,cvmem);          
-        	data_cvmem=ttvvc_all(:,cvmem);          
-        	file_name=sprintf('%s/p%d_mem_sub%02d_common',infodir,pn,s);
+	%for pn=[0:10:90]
+	for pn=[90.5:0.5:99.5]
+	        for h=1:2
+                eval(sprintf('ppmem=pmem%d',h));
+        	mem_pn=prctile(ppmem,pn);
+        	vmem=find(ppmem>=mem_pn);
+        	data_vmem=ttvvc(:,vmem);          
+        	data_cvmem=ttvvc_all(:,vmem);          
+        	file_name=sprintf('%s/p%.1f_mem_sub%02d_h%d_%s',infodir,pn,s,h,roi_name{roi});
         	eval(sprintf('save %s data_vmem',file_name));
-        	file_name=sprintf('%s/p%d_mem_sub%02d_withc_common',infodir,pn,s);
+        	file_name=sprintf('%s/p%.1f_mem_sub%02d_withc_h%d_%s',infodir,pn,s,h,roi_name{roi});
         	eval(sprintf('save %s data_cvmem',file_name));
+		end %half
 	end %n
+end %roi
 end%sub
 end %function

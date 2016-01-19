@@ -108,9 +108,11 @@ ln_r=zeros(xlength,ylength,zlength,3);
                     data_ball = data(k-radius:k+radius,j-radius:j+radius,i-radius:i+radius,:); % define small cubic for memory data
                     a=size(data_ball);
                     b=a(1)*a(2)*a(3);
+			u=[];
                     v_data = reshape(data_ball,b,TN);
+			u=sum(v_data==0)/192;
                     %bb=reshape(v_data,b*TN,1);
-                    if sum(std(v_data(:,:))==0)>epsilon
+                    if sum(std(v_data(:,:))==0)>epsilon | u>=0.125
                     ERS_r(k,j,i,:)=10;
                     mem_r(k,j,i,:)=10;
                     ln_r(k,j,i,:)=10;

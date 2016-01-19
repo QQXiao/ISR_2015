@@ -1,6 +1,6 @@
 basedir=/seastor/helenhelen/ISR_2015
-datadir=$basedir/Searchlight_RSM/ref_space/zscore/each_cond
-resultdir=$basedir/Searchlight_RSM/ref_space/zscore/diff
+datadir=$basedir/Searchlight_RSM/ref_space/glm/each_cond
+resultdir=$basedir/Searchlight_RSM/ref_space/glm/diff
 mkdir -p $resultdir
 
 cd $datadir
