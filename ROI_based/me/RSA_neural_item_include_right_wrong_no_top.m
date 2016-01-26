@@ -13,10 +13,7 @@ addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 TN=96*2;
 %%%%%%%%%
 %roi_name={'p90','p95','VVC','dLOC','IPL',...
-roi_name={'VVC','dLOC','IPL',...
-	'IFG','HIP','PHG',...
-	'CA1','CA2','DG','CA3','subiculum','ERC',...
-	'aPHG','pPHG'};
+roi_name={'LVVC','LdLOC','LIPL','LIFG','RVVC','RdLOC','RIPL','RIFG'};
 ERS_r=[]; ERS_z=[]; mem_r=[]; mem_z=[]; ln_r=[]; ln_z=[];
 nERS=[]; nmem=[]; nln=[];
 s=subs;
@@ -25,10 +22,22 @@ for t=1:48
 	[idx_mem_D,idx_mem_DB_wc,idx_mem_DB_all,idx_ln_D,idx_ln_DB_wc,idx_ln_DB_all,list_pid]=get_idx_item_all(s,t)
 	%perpare data
 	for roi=1:length(roi_name);
-        xx=[];tmp_xx=[];
+        xx=[];tmp_xx=[];u=[];
 		tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
-    		xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
-    		ln=xx(1:96,:);
+	       txx=tmp_xx(4:end,:);                                  
+		%data_all=xx
+		size_all=size(txx,2);                                 
+		for j=1:size_all                                      
+		%u(j)=sum(txx(:,j)==0)/192;                           
+		a=txx(:,j);                                           
+		ta=a';                                                
+		b = diff([0 a'==0 0]);                                
+		res = find(b==-1) - find(b==1);                       
+		u(j)=sum(res>=6);                                    
+		end                                                   
+		txx(:,find(u>=1))=[];                                 
+		xx=txx;                    		
+		ln=xx(1:96,:);
    	 	mem=xx(97:end,:);
     		tln=find(list_pid(1:96)==t);
     		tmem=find(list_pid(97:end)==t);

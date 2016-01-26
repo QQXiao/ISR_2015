@@ -2,7 +2,6 @@ function merge_pn_sub_data()
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
-addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
 psdir=sprintf('%s/top/tmap/ps',basedir);
 cond_name={'ln_mln','mem_mln','mem_mmem','ln_mmem'};
 	for c = 1:4

@@ -13,7 +13,10 @@ do
     fi
     echo $SUB
 #datadir=${basedir}/${SUB}/data/anatomy/sub_hipp/bi/
-#datadir=${basedir}/${SUB}/behav
+datadir=${basedir}/${SUB}/roi_ref
+rm $datadir/add $datadir/final $datadir/*.nii.gz -r
+#datadir=${basedir}/ROI_based/ref_space/glm/raw
+#rm $datadir/*.txt
 #rm $datadir/encoding*t?.txt
 #rm $datadir/test*t?.txt
 #cd $datadir
@@ -21,20 +24,20 @@ do
 #rm WarpTimeSeriesImageM*
 #rm core
 #cp $datadir/roi_ref/add/* $datadir/roi_ref
-	for c in encoding test
-	do
-	for ((r=1;r<=2;r++))
-	do
-	for ((s=1;s<=2;s++))
-	do
-	for ((t=1;t<=24;t++))
-	do
-	datadir=${basedir}/${SUB}/analysis/singletrial_glm/${c}_run${r}_set${s}_T${t}.feat
-	cd ${datadir}
-	rm report* logs mc *.txt custom_timing_files design* example_func* mean_func* filtered* mask* -r
-	#rm $datadir -r
-	done
-	done
-	done
-	done
+	#for c in encoding test
+	#do
+	#for ((r=1;r<=2;r++))
+	#do
+	#for ((s=1;s<=2;s++))
+	#do
+	#for ((t=1;t<=24;t++))
+	#do
+	#datadir=${basedir}/${SUB}/analysis/singletrial_glm/${c}_run${r}_set${s}_T${t}.feat
+	#cd ${datadir}
+	#rm report* logs mc *.txt custom_timing_files design* example_func* mean_func* filtered* mask* -r
+	##rm $datadir -r
+	#done
+	#done
+	#done
+	#done
 done

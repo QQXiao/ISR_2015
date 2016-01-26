@@ -16,8 +16,8 @@ vln_cln=[];vmem_cmem=[];
 roi_name={'VVC','IPL','PHG','IFG'};
 for s=subs
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
-	for roi=1
-	%for roi=1:length(roi_name);
+	%for roi=1
+	for roi=1:length(roi_name);
 	tpln1=[];tpln2=[];tpmem1=[];tpmem2=[];u=[];
         %get fMRI data
 	vvcfile=sprintf('%s/sub%02d_%s.txt',vvcdir,s,roi_name{roi});
@@ -62,7 +62,7 @@ for s=subs
 	end%encoding phase
 	pln1=mean(tpln1,2);
 	pln2=mean(tpln2,2);
-        for pn=[90.5:0.5:99.5]
+        for pn=[0:10:90]
 		for h=1:2
 		eval(sprintf('pln=pln%d;',h));
         	ln_pn=prctile(pln,pn);
@@ -101,8 +101,8 @@ for s=subs
     end%retrieval phase
         pmem1=mean(tpmem1,2);
         pmem2=mean(tpmem2,2);
-	%for pn=[0:10:90]
-	for pn=[90.5:0.5:99.5]
+	for pn=[0:10:90]
+	%for pn=[90.5:0.5:99.5]
 	        for h=1:2
                 eval(sprintf('ppmem=pmem%d',h));
         	mem_pn=prctile(ppmem,pn);

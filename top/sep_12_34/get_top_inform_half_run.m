@@ -19,25 +19,35 @@ tpln1=[];tpln2=[];tpmem1=[];tpmem2=[];
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
 	u=[];
         %get fMRI data
-	vvcfile=sprintf('%s/sub%02d_vvc.txt',vvcdir,s);
-	tmp_vvc=load(vvcfile);
-	ANGfile=sprintf('%s/sub%02d_ANG.txt',vvcdir,s);
-	tmp_ang=load(ANGfile);
-	SMGfile=sprintf('%s/sub%02d_SMG.txt',vvcdir,s);
-	tmp_smg=load(SMGfile);
-	aPHGfile=sprintf('%s/sub%02d_aPHG.txt',vvcdir,s);
-	tmp_aphg=load(aPHGfile);
-	pPHGfile=sprintf('%s/sub%02d_pPHG.txt',vvcdir,s);
-	tmp_pphg=load(pPHGfile);
+	VVCfile=sprintf('%s/sub%02d_VVC.txt',vvcdir,s);
+	tmp_VVC=load(VVCfile);
+	IPLfile=sprintf('%s/sub%02d_IPL.txt',vvcdir,s);
+	tmp_IPL=load(IPLfile);
+	IFGfile=sprintf('%s/sub%02d_IFG.txt',vvcdir,s);
+	tmp_IFG=load(IFGfile);
+	MFGfile=sprintf('%s/sub%02d_MFG.txt',vvcdir,s);
+	tmp_MFG=load(MFGfile);
+	PHGfile=sprintf('%s/sub%02d_PHG.txt',vvcdir,s);
+	tmp_PHG=load(PHGfile);
+	pTFfile=sprintf('%s/sub%02d_pTF.txt',vvcdir,s);
+	tmp_pTF=load(pTFfile);
+	aTFfile=sprintf('%s/sub%02d_aTF.txt',vvcdir,s);
+	tmp_aTF=load(aTFfile);
+	dLOCfile=sprintf('%s/sub%02d_dLOC.txt',vvcdir,s);
+	tmp_dLOC=load(dLOCfile);
 
-	ttvvc_all=[tmp_vvc(:,1:end) tmp_ang(:,1:end) tmp_smg(:,1:end) tmp_aphg(:,1:end) tmp_pphg(:,1:end)];
+	ttvvc_all=[tmp_VVC(:,1:end) tmp_IPL(:,1:end) tmp_IFG(:,1:end) tmp_MFG(:,1:end) tmp_PHG(:,1:end) tmp_pTF(:,1:end) tmp_aTF(:,1:end) tmp_dLOC(:,1:end)];
 	ttvvc=ttvvc_all(4:end,:);
 	size_all=size(ttvvc,2);
 	for j=1:size_all
-	u(j)=sum(ttvvc(:,j)==0)/192;
-	end
-	ttvvc(:,find(u>=0.125))=[];
-	ttvvc_all(:,find(u>=0.125))=[];
+                a=ttvvc(:,j);
+                ta=a';
+                b = diff([0 a'==0 0]);
+                res = find(b==-1) - find(b==1);
+                u(j)=sum(res>=6);
+        end
+	ttvvc(:,find(u>=1))=[];
+	ttvvc_all(:,find(u>=1))=[];
     	tvvc=(ttvvc)';
 	zvvc=zscore(tvvc);
 	vvc=zvvc';
@@ -69,7 +79,7 @@ tpln1=[];tpln2=[];tpmem1=[];tpmem2=[];
 	end%encoding phase
 	pln1=mean(tpln1,2);
 	pln2=mean(tpln2,2);
-        for pn=[0:10:90]
+        for pn=[0:5:95]
 		for h=1:2
 		eval(sprintf('pln=pln%d;',h));
         	ln_pn=prctile(pln,pn);
@@ -108,7 +118,7 @@ tpln1=[];tpln2=[];tpmem1=[];tpmem2=[];
     end%retrieval phase
         pmem1=mean(tpmem1,2);
         pmem2=mean(tpmem2,2);
-	for pn=[0:10:90]
+	for pn=[0:5:95]
 	        for h=1:2
                 eval(sprintf('ppmem=pmem%d',h));
         	mem_pn=prctile(ppmem,pn);

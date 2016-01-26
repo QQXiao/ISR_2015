@@ -5,28 +5,30 @@ methodname={'LSS','TR34','ms_LSS','glm'};
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behav/label'];
 datadir=sprintf('%s/ROI_based/ref_space/%s/raw',basedir,methodname{m});
-rdir=sprintf('%s/ROI_based/ref_space/%s/sub/r',basedir,methodname{m});
-zdir=sprintf('%s/ROI_based/ref_space/%s/sub/z/sub_hipp',basedir,methodname{m});
+rdir=sprintf('%s/ROI_based/ref_space/%s/t24/sub/r',basedir,methodname{m});
+zdir=sprintf('%s/ROI_based/ref_space/%s/t24/sub//z',basedir,methodname{m});
+%zdir=sprintf('%s/ROI_based/ref_space/%s/sub/z/sub_hipp',basedir,methodname{m});
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 TN=96*2;
 %%%%%%%%%
-%roi_name={'VVC','dLOC','IPL','PHG','HIP'};
+%roi_name={'CC','VVC','dLOC','IPL','IFG','PHG','HIP'};
 %roi_name={'CC','vLOC','OF','TOF','pTF','aTF',...
 %'dLOC','ANG','SMG','IFG',...
 %'HIP','pPHG','aPHG'}
-roi_name={'CA1','CA2','DG','CA3','subiculum','ERC'};
+%roi_name={'CA1','CA2','DG','CA3','subiculum','ERC'};
 %roi_name={'CC','VVC','dLOC','ANG','SMG','IFG',...
 %        'CA1','CA2','DG','CA3','subiculum','ERC',...        
 %	'HIP','pPHG','aPHG',...
 %               'aSMG','pSMG'} 
-%roi_name={'LIFG','RIFG','LIPL','RIPL','LFUS','RFUS','LITG','RITG',...        
-%            'LdLOC','RdLOC','LvLOC','RvLOC','LMTG','RMTG','LHIP','RHIP',...  
-%            'LAMG','RAMG','LPHG','RPHG','LaPHG','RaPHG','LpPHG','RpPHG',...  
-%            'LaSMG','RaSMG','LpSMG','RpSMG','LANG','RANG','LSPL','RSPL',...  
-%            'LFFA','RFFA',...                                 
-%            'PCC','Precuneous','LFOC','LPreCG','RFOC','RPreCG'};
+roi_name={'CC','VVC','dLOC','IPL','SPL','IFG','MFG','HIP','PHG',...
+'vLOC','OF','TOF','pTF','aTF','ANG','SMG','pSMG','aSMG','pPHG','aPHG',...
+'LCC','LVVC','LdLOC','LIPL','LSPL','LIFG','LMFG','LHIP','LPHG',...
+'LvLOC','LOF','LTOF','LpTF','LaTF','LANG','LSMG','LpSMG','LaSMG','LpPHG','LaPHG',...
+'RCC','RVVC','RdLOC','RIPL','RSPL','RIFG','RMFG','RHIP','RPHG',...
+'RvLOC','ROF','RTOF','RpTF','RaTF','RANG','RSMG','RpSMG','RaSMG','RpPHG','RaPHG'};
+
 ERS_r=[]; ERS_z=[]; mem_r=[]; mem_z=[]; ln_r=[]; ln_z=[];
 nERS=[]; nmem=[]; nln=[];
 for s=subs
@@ -36,13 +38,19 @@ for s=subs
 	for roi=1:length(roi_name);
         txx=[];xx=[];tmp_xx=[];u=[];
         tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
-        txx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
-        %data_all=xx;
+        %txx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
+        txx=tmp_xx(4:end,:);
+	%data_all=xx;
 	size_all=size(txx,2); 
 	for j=1:size_all
-	u(j)=sum(txx(:,j)==0)/192;
+	%u(j)=sum(txx(:,j)==0)/192;
+	a=txx(:,j);
+	ta=a';
+	b = diff([0 a'==0 0]);
+	res = find(b==-1) - find(b==1);
+	u(j)=sum(res>=24);
 	end
-	txx(:,find(u>=0.125))=[];
+	txx(:,find(u>=1))=[];
 	xx=txx;
         ln=xx(1:96,:);
         mem=xx(97:end,:);

@@ -6,9 +6,9 @@ addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 datadir=sprintf('%s/top/tmap/data/sep_roi',basedir);
 resultdir=sprintf('%s/top/tmap/ps/sep_roi',basedir);
 %%%%%%%%%
-roi_name={'VVC','IPL','PHG','IFG'};
+roi_name={'vvc','VVC','IPL','PHG','IFG'};
 for s=subs
-	for roi=1
+	for roi=2:5
 	%for roi=1:length(roi_name);
 		for hd=1:2
 			for hr=1:2

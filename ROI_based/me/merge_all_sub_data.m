@@ -1,7 +1,7 @@
 function merge_all_sub_data()
 basedir='/seastor/helenhelen/ISR_2015';
-datadir=sprintf('%s/me/data/sub',basedir);
-resultdir=sprintf('%s/me/data/item',basedir);
+datadir=sprintf('%s/me/tmap/data/sub',basedir);
+resultdir=sprintf('%s/me/tmap/data/item',basedir);
 subs=setdiff(1:21,2);
 ln=[];mem=[]
 %%%%%%%%%%%%%
@@ -39,8 +39,9 @@ tln=[];tmem=[];
         al2=al(2:2:end,:);                                   
         ll=2*ones(48,1);                                     
         ll(al1(:,Mmem)==1 & al2(:,Mmem)==1)=1;               
+        ll(al1(:,Mmem)==3 | al2(:,Mmem)==3)=3;               
         l=[al1(:,MpID) ll];
-	for r=1:15
+	for r=1:14
 	rln=[rln squeeze(roi_ln(:,r,:))];
 	rmem=[rmem squeeze(roi_mem(:,r,:))];
 	end

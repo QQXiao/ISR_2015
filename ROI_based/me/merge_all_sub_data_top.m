@@ -28,11 +28,12 @@ Msub=16;
 Mphase=17;
 %%%%%%%%%%%%
 labeldir='/seastor/helenhelen/ISR_2015/behav/label';
+for h=1:2
 for s=subs
-tln=[];tmem=[];
+	tln=[];tmem=[];
 	rln=[];rmem=[]
-	load(sprintf('%s/all_mem_sub%02d.mat',datadir,s));
-	load(sprintf('%s/all_ln_sub%02d.mat',datadir,s));
+	load(sprintf('%s/top_mem_sub%02d_h%d.mat',datadir,s,h));
+	load(sprintf('%s/top_ln_sub%02d_h%d.mat',datadir,s,h));
 	load(sprintf('%s/test_sub%02d.mat',labeldir,s));
 	al=sortrows(submem,[MpID Monset]);
 	al1=al(1:2:end,:);
@@ -41,7 +42,7 @@ tln=[];tmem=[];
 	ll(al1(:,Mmem)==1 & al2(:,Mmem)==1)=1;
 	ll(al1(:,Mmem)==3 | al2(:,Mmem)==3)=3;
 	l=[al1(:,MpID) ll];
-	for r=1:8
+	for r=1:2
 	rln=[rln squeeze(roi_ln(:,r,:))];
 	rmem=[rmem squeeze(roi_mem(:,r,:))];
 	end
@@ -49,6 +50,7 @@ tln=[];tmem=[];
 	tmem=[s*ones(48,1) l rmem];
 ln=[ln;tln]; mem=[mem;tmem];
 end
-eval(sprintf('save %s/all_mem.txt mem -ascii -tabs', resultdir));
-eval(sprintf('save %s/all_ln.txt ln -ascii -tabs', resultdir));
+eval(sprintf('save %s/top_all_mem_h%d.txt mem -ascii -tabs', resultdir,h));
+eval(sprintf('save %s/top_all_ln_h%d.txt ln -ascii -tabs', resultdir,h));
+end %end half
 end

@@ -1,7 +1,7 @@
 #!sh/bin/
    #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data();quit;"
    #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_half_run();quit;"
-   #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_half_run_mean();quit;"
+   fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_half_run_mean();quit;"
    #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_half_run_MTL();quit;"
    #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_half_run_mean_MTL();quit;"
    #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_half_run_e();quit;"
@@ -11,6 +11,6 @@
    #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_sep_roi_e();quit;"
    #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_sep_roi_mean_e();quit;"
    #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_sep_roi();quit;"
-   fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_sep_roi_mean();quit;"
+   #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_sep_roi_mean();quit;"
    #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_sep_roi_trials_e();quit;"
    #fsl_sub matlab -nodesktop -nosplash -r "merge_pn_sub_data_sep_roi_trials_mean_e();quit;"

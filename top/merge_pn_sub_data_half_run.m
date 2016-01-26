@@ -19,7 +19,7 @@ for hd=1:2 %data
 		ln_memfile=sprintf('%s/ln_mem_sub%02d_d%d_r%d.mat',psdir,s,hd,hr);           
 		load(ln_lnfile);load(mem_lnfile);
 		load(ln_memfile);load(mem_memfile);
-		n=0:10:90
+		n=0:5:95
 		sizel=length(n);
 		ln_mln=[s*ones(sizel(1),1) n' ln_ln(:,[1 2])];
 		mem_mln=[s*ones(sizel(1),1) n' mem_ln(:,[1 2])];

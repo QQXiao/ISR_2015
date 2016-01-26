@@ -5,7 +5,7 @@ addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/vvc_peak
 psdir=sprintf('%s/top/tmap/ps/sep_roi',basedir);
 subs=setdiff(1:21,2);
-roi_name={'vvc','IPL','PHG','IFG'};
+roi_name={'vvc','VVC','IPL','PHG','IFG'};
 for roi=1:length(roi_name);
 	for hd=1:2 %data
 		for hr=1:2 %result

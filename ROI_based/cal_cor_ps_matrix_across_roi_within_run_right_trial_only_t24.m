@@ -31,19 +31,17 @@ Mphase=17;
 %%%%%%%%%
 TN=192;
 subs=setdiff(1:21,2);
-%for c=1:4
 %nt=200;
-%roi_name={'CC','VVC','dLOC','IPL','SPL','IFG','MFG','HIP','PHG'};        
-%roi_name={'vLOC','OF','TOF','pTF','aTF','ANG','SMG','pSMG','aSMG','pPHG','aPHG'};      
-%roi_name={'LVVC','LdLOC','LIPL','LIFG','RVVC','RdLOC','RIPL','RIFG'};    
-roi_name={'LVVC','LIPL','LIFG','RVVC','RIPL','RIFG'};
+%roi_name={'CC','VVC','dLOC','IPL','SPL','IFG','MFG','HIP','PHG'};
+%roi_name={'vLOC','OF','TOF','pTF','aTF','ANG','SMG','pSMG','aSMG','pPHG','aPHG'};
+roi_name={'LVVC','LdLOC','LIPL','LIFG','RVVC','RdLOC','RIPL','RIFG'};
+%roi_name={'LVVC','LIPL','LIFG','RVVC','RIPL','RIFG'};
 nroi=length(roi_name);
-resultdir=sprintf('%s/ROI_based/ps_matrix_all_roi/glm/%droi_right_trial_only',basedir,nroi);
+resultdir=sprintf('%s/ROI_based/ps_matrix_all_roi/glm/t24/%droi_right_trial_only',basedir,nroi);
+mkdir(resultdir);
 for s=subs;
-cc_ln_ln1=[];
-cc_mem_mem1=[];
-cc_ln_ln2=[];
-cc_mem_mem2=[];
+cc_ln_ln=[];
+cc_mem_mem=[];
 [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem]= get_idx(s);
 load(sprintf('%s/encoding_sub%02d.mat',labeldir,s));
 load(sprintf('%s/test_sub%02d.mat',labeldir,s));
@@ -60,14 +58,11 @@ list_mem(:,Mphase)=2;
 all_label=[list_ln;list_mem];
 all_idx=1:TN*(TN-1)/2;
 all_pID1=[]; all_pID2=[]; all_mem1=[]; all_mem2=[]; all_phase1=[]; all_phase2=[]; check_run=[]; check_set=[];
-all_run1=[];all_run2=[];
 for k=2:TN
         all_pID1=[all_pID1 all_label(k-1,MpID)*ones(1,TN-k+1)];
         all_pID2=[all_pID2 all_label(k:TN,MpID)'];
         all_mem1=[all_mem1 all_label(k-1,Mmem)*ones(1,TN-k+1)];
         all_mem2=[all_mem2 all_label(k:TN,Mmem)'];
-        all_run1=[all_run1 all_label(k-1,Mrun)*ones(1,TN-k+1)];
-        all_run2=[all_run2 all_label(k:TN,Mrun)'];
         all_phase1=[all_phase1 all_label(k-1,Mphase)*ones(1,TN-k+1)];
         all_phase2=[all_phase2 all_label(k:TN,Mphase)'];
         %1=same run;0=diff run 
@@ -75,26 +70,24 @@ for k=2:TN
         %1=same set;0=diff set 
         check_set=[check_set (all_label(k:TN,Mset)==all_label(k-1,Mset))'];
 end
-idx_ln1=find(all_phase1==1 & all_phase2==1 & all_run1==1  & all_pID1~=all_pID2 & check_run==1 & check_set==0 & all_mem1==1 & all_mem2==1);
-idx_ln2=find(all_phase1==1 & all_phase2==1 & all_run1==2  & all_pID1~=all_pID2 & check_run==1 & check_set==0 & all_mem1==1 & all_mem2==1);
-idx_mem1=find(all_phase1==2 & all_phase2==2 & all_run1==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & all_mem1==1 & all_mem2==1);
-idx_mem2=find(all_phase1==2 & all_phase2==2 & all_run1==2 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & all_mem1==1 & all_mem2==1);
+idx_ln=find(all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & all_mem1==1 & all_mem2==1);
+idx_mem=find(all_phase1==2 & all_phase2==2 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & all_mem1==1 & all_mem2==1);
         %get fMRI data
         for roi=1:length(roi_name);
                 xx=[];tmp_xx=[];u=[];
                 tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
                 %xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
-                txx=tmp_xx(4:end,:);
-                size_all=size(txx,2);                                       
-                for j=1:size_all                                            
+		txx=tmp_xx(4:end,:);
+		size_all=size(txx,2);
+		for j=1:size_all
 		a=txx(:,j);
 		ta=a';
 		b = diff([0 a'==0 0]);
 		res = find(b==-1) - find(b==1);
-		u(j)=sum(res>=6);            
-		end                                                         
-                txx(:,find(u>=1))=[];
-		xx=txx;
+		u(j)=sum(res>=24);
+		end
+        	txx(:,find(u>=1))=[];
+		xx=txx;                
 		%%analysis
         	data_ln=xx(1:96,:);
          	data_mem=xx(97:end,:);
@@ -119,51 +112,31 @@ idx_mem2=find(all_phase1==2 & all_phase2==2 & all_run1==2 & all_pID1~=all_pID2 &
 		    cc_all=1-pdist(data_all(:,:),'correlation');
                     %tcc_all=squareform(cc_all);
 
-		    cc_ln_ln1(roi,:)=cc_all(idx_ln1);
-		    cc_mem_mem1(roi,:)=cc_all(idx_mem1);
-		    cc_ln_ln2(roi,:)=cc_all(idx_ln2);
-		    cc_mem_mem2(roi,:)=cc_all(idx_mem2);
+		    cc_ln_ln(roi,:)=cc_all(idx_ln);
+		    cc_mem_mem(roi,:)=cc_all(idx_mem);
         end %roi
-cc_a_roi_ln_ln1(s,:)=1-pdist(cc_ln_ln1(:,:),'correlation');
-cc_a_roi_ln_ln2(s,:)=1-pdist(cc_ln_ln2(:,:),'correlation');
-cc_a_roi_mem_mem1(s,:)=1-pdist(cc_mem_mem1(:,:),'correlation');
-cc_a_roi_mem_mem2(s,:)=1-pdist(cc_mem_mem2(:,:),'correlation');
+cc_a_roi_ln_ln(s,:)=1-pdist(cc_ln_ln(:,:),'correlation');
+cc_a_roi_mem_mem(s,:)=1-pdist(cc_mem_mem(:,:),'correlation');
 
-cor_matrix_all1=[cc_ln_ln1;cc_mem_mem1];
-cor_matrix_all2=[cc_ln_ln2;cc_mem_mem2];
-cc_cor_matrix_all1=1-pdist(cor_matrix_all1(:,:),'correlation');
-cc_cor_matrix_all2=1-pdist(cor_matrix_all2(:,:),'correlation');
-ttlm1=squareform(cc_cor_matrix_all1);
-ttlm2=squareform(cc_cor_matrix_all2);
-tlm1=ttlm1([1:nroi],[(nroi+1):(2*nroi)]);
-tlm2=ttlm2([1:nroi],[(nroi+1):(2*nroi)]);
-cc_a_roi_ln_mem1(s,:)=tlm1(:);
-cc_a_roi_ln_mem2(s,:)=tlm2(:);
+cor_matrix_all=[cc_ln_ln;cc_mem_mem];
+cc_cor_matrix_all=1-pdist(cor_matrix_all(:,:),'correlation');
+ttlm=squareform(cc_cor_matrix_all);
+tlm=ttlm([1:nroi],[(nroi+1):(2*nroi)]);
+cc_a_roi_ln_mem(s,:)=tlm(:);
 end %end sub
-cc_a_roi_ln_ln1=cc_a_roi_ln_ln1(subs,:,:);
-cc_a_roi_ln_ln2=cc_a_roi_ln_ln2(subs,:,:);
-cc_a_roi_mem_mem1=cc_a_roi_mem_mem1(subs,:,:);
-cc_a_roi_mem_mem2=cc_a_roi_mem_mem2(subs,:,:);
-cc_a_roi_ln_mem1=cc_a_roi_ln_mem1(subs,:,:);
-cc_a_roi_ln_mem2=cc_a_roi_ln_mem2(subs,:,:);
-c_ln_mem_subs1=0.5*(log(1+cc_a_roi_ln_mem1)-log(1-cc_a_roi_ln_mem1));
-c_ln_mem_subs2=0.5*(log(1+cc_a_roi_ln_mem2)-log(1-cc_a_roi_ln_mem2));
-c_ln_ln1=squareform(squeeze(mean(cc_a_roi_ln_ln1,1)));
-c_ln_ln2=squareform(squeeze(mean(cc_a_roi_ln_ln2,1)));
-c_mem_mem1=squareform(squeeze(mean(cc_a_roi_mem_mem1,1)));
-c_mem_mem2=squareform(squeeze(mean(cc_a_roi_mem_mem2,1)));
+cc_a_roi_ln_ln=cc_a_roi_ln_ln(subs,:,:);
+cc_a_roi_mem_mem=cc_a_roi_mem_mem(subs,:,:);
+cc_a_roi_ln_mem=cc_a_roi_ln_mem(subs,:,:);
+c_ln_mem_subs=0.5*(log(1+cc_a_roi_ln_mem)-log(1-cc_a_roi_ln_mem));
+c_ln_ln=squareform(squeeze(mean(cc_a_roi_ln_ln,1)));
+c_mem_mem=squareform(squeeze(mean(cc_a_roi_mem_mem,1)));
 %c_ln_ln=0.5*(log(1+tc_ln_ln)-log(1-tc_ln_ln));
 %c_mem_mem=0.5*(log(1+tc_mem_mem)-log(1-tc_mem_mem));
-tc_ln_mem1=reshape(mean(cc_a_roi_ln_mem1),nroi,nroi);                                             
-c_ln_mem1=0.5*(log(1+tc_ln_mem1)-log(1-tc_ln_mem1));                                        
-tc_ln_mem2=reshape(mean(cc_a_roi_ln_mem2),nroi,nroi);                                             
-c_ln_mem2=0.5*(log(1+tc_ln_mem2)-log(1-tc_ln_mem2));                                        
-eval(sprintf('save %s/a_roi_corr_ln_ln1.txt c_ln_ln1 -ascii -tabs', resultdir));            
-eval(sprintf('save %s/a_roi_corr_mem_mem1.txt c_mem_mem1 -ascii -tabs', resultdir));        
-eval(sprintf('save %s/a_roi_corr_ln_mem1.txt c_ln_mem1 -ascii -tabs', resultdir));          
-eval(sprintf('save %s/a_roi_corr_ln_mem_subs1.txt c_ln_mem_subs1 -ascii -tabs', resultdir));
-eval(sprintf('save %s/a_roi_corr_ln_ln2.txt c_ln_ln2 -ascii -tabs', resultdir));            
-eval(sprintf('save %s/a_roi_corr_mem_mem2.txt c_mem_mem2 -ascii -tabs', resultdir));        
-eval(sprintf('save %s/a_roi_corr_ln_mem2.txt c_ln_mem2 -ascii -tabs', resultdir));          
-eval(sprintf('save %s/a_roi_corr_ln_mem_subs2.txt c_ln_mem_subs2 -ascii -tabs', resultdir));
+tc_ln_mem=reshape(mean(cc_a_roi_ln_mem),nroi,nroi);
+c_ln_mem=0.5*(log(1+tc_ln_mem)-log(1-tc_ln_mem));
+
+eval(sprintf('save %s/a_roi_corr_ln_ln.txt c_ln_ln -ascii -tabs', resultdir));
+eval(sprintf('save %s/a_roi_corr_mem_mem.txt c_mem_mem -ascii -tabs', resultdir));
+eval(sprintf('save %s/a_roi_corr_ln_mem.txt c_ln_mem -ascii -tabs', resultdir));
+eval(sprintf('save %s/a_roi_corr_ln_mem_subs.txt c_ln_mem_subs -ascii -tabs', resultdir));
 end %function

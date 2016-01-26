@@ -2,25 +2,15 @@ function allroi(m)
 methodname={'LSS','TR34','mLSS','glm'};
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behavior/label'];
-datadir=sprintf('%s/ROI_based/ref_space/glm/sub/z',basedir);
-resultdir=sprintf('%s/ROI_based/ref_space/glm',basedir);
-%datadir=sprintf('%s/ROI_based/ref_space/zscore/final/sub/z',basedir);
-%resultdir=sprintf('%s/ROI_based/ref_space/zscore/final',basedir);
+datadir=sprintf('%s/ROI_based/ref_space/glm/t24/sub/z',basedir);
+resultdir=sprintf('%s/ROI_based/ref_space/glm/t24',basedir);
 addpath /seastor/helenhelen/scripts/NIFTI
-roi_name={'CC','VVC','dLOC','IPL','IFG','HIP','PHG'}                                                       
-%roi_name={'CC','vLOC','OF','TOF','pTF','aTF',...
-%'dLOC','ANG','SMG','IFG',...
-%'HIP','pPHG','aPHG'}
-%roi_name={'VVC','dLOC','IPL','PHG','HIP','IFG',...
-%        'CA1','CA2','DG','CA3','subiculum','ERC'};
-%roi_name={'LIFG','RIFG','LIPL','RIPL','LFUS','RFUS','LITG','RITG',...
-%          'LdLOC','RdLOC','LvLOC','RvLOC','LMTG','RMTG','LHIP','RHIP',...
-%         'LAMG','RAMG','LPHG','RPHG','LaPHG','RaPHG','LpPHG','RpPHG',...
-%          'LaSMG','RaSMG','LpSMG','RpSMG','LANG','RANG','LSPL','RSPL',...
-%          'LFFA','RFFA',...
-%          'PCC','Precuneous','LFOC','LPreCG','RFOC','RPreCG'};
-%roi_name={'CA1','CA2','DG','CA3','subiculum','ERC'};
-
+roi_name={'CC','VVC','dLOC','IPL','SPL','IFG','MFG','HIP','PHG',...
+'vLOC','OF','TOF','pTF','aTF','ANG','SMG','pSMG','aSMG','pPHG','aPHG',...
+'LCC','LVVC','LdLOC','LIPL','LSPL','LIFG','LMFG','LHIP','LPHG',...
+'LvLOC','LOF','LTOF','LpTF','LaTF','LANG','LSMG','LpSMG','LaSMG','LpPHG','LaPHG',...
+'RCC','RVVC','RdLOC','RIPL','RSPL','RIFG','RMFG','RHIP','RPHG',...
+'RvLOC','ROF','RTOF','RpTF','RaTF','RANG','RSMG','RpSMG','RaSMG','RpPHG','RaPHG'};
 subs=setdiff([1:21],2);
 s=subs';
 for roi=1:length(roi_name)
@@ -29,9 +19,6 @@ for roi=1:length(roi_name)
         load(sprintf('%s/ERS_sub%02d',datadir,sub));
         load(sprintf('%s/mem_sub%02d',datadir,sub));
         load(sprintf('%s/ln_sub%02d',datadir,sub));
-        %load(sprintf('%s/ERS_sub%02d_ISR',datadir,sub));
-        %load(sprintf('%s/mem_sub%02d_ISR',datadir,sub));
-        %load(sprintf('%s/ln_sub%02d_ISR',datadir,sub));
 
          all_ERS_z=[all_ERS_z;ERS_z(roi,:)];
          all_mem_z=[all_mem_z;mem_z(roi,:)];
@@ -41,14 +28,11 @@ for roi=1:length(roi_name)
         amem_z=[s all_mem_z];
         aln_z=[s all_ln_z];
 
-        %file_name=sprintf('%s/ERS_%s_ISR.txt', resultdir,roi_name{roi});
-        file_name=sprintf('%s/7roi_ERS_%s.txt', resultdir,roi_name{roi});
+        file_name=sprintf('%s/ERS_%s.txt', resultdir,roi_name{roi});
         eval(sprintf('save %s aERS_z -ascii',file_name));
-        %file_name=sprintf('%s/mem_%s_ISR.txt', resultdir,roi_name{roi});
-        file_name=sprintf('%s/7roi_mem_%s.txt', resultdir,roi_name{roi});
+        file_name=sprintf('%s/mem_%s.txt', resultdir,roi_name{roi});
         eval(sprintf('save %s amem_z -ascii',file_name));
-	%file_name=sprintf('%s/ln_%s_ISR.txt', resultdir,roi_name{roi});
-	file_name=sprintf('%s/7roi_ln_%s.txt', resultdir,roi_name{roi});
+	file_name=sprintf('%s/ln_%s.txt', resultdir,roi_name{roi});
         eval(sprintf('save %s aln_z -ascii',file_name));
 end %end roi
 end%end function

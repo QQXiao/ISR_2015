@@ -43,7 +43,7 @@ Mp=18;
         end
         all_label=[list_subln;list_submem];
         list_pid=all_label(:,MpID);
-        all_label(:,Mp)=1:192;
+        all_label(:,Mp)=1:192;%
         all_idx=1:TN*(TN-1)/2; %% all paired correlation idx;
         ln_all_pID1=[]; ln_all_pID2=[]; ln_all_wID1=[]; ln_all_wID2=[]; ln_all_Rcate=[]; ln_all_mem1=[]; ln_all_mem2=[]; ln_all_cate1=[]; ln_all_cate2=[]; ln_check_run=[]; ln_check_set=[]; ln_check_cate=[];
         mem_all_pID1=[]; mem_all_pID2=[]; mem_all_wID1=[]; mem_all_wID2=[]; mem_all_Rcate=[]; mem_all_mem1=[]; mem_all_mem2=[]; mem_all_cate1=[]; mem_all_cate2=[]; mem_check_run=[]; mem_check_set=[]; mem_check_cate=[];
