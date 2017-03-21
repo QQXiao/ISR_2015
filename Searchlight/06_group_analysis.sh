@@ -1,4 +1,4 @@
-#!/sh/bin
+e!/sh/bin
 basedir=/seastor/helenhelen/ISR_2015	
 refdir=$basedir/group/cate_ln/cope1.gfeat
 resultdir=$basedir/Searchlight_RSM/standard_space/glm/group

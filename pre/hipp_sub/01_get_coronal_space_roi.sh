@@ -17,11 +17,12 @@ do
 		resultdir=$basedir/${SUB}/data/anatomy/sub_hipp/${s}
 		mkdir ${resultdir} -p
 		datafile=${datadir}/seg_hipp_${s}_lfseg_corr_usegray.nii.gz
-		for ((n=0; n<=8; n++))
-		do
-		t=$[$n+1]
-		roi=${roi_name[${n}]}
-		fsl_sub fslmaths $datafile -thr $t -uthr $t -bin ${resultdir}/${roi}.nii.gz
-		done
+		#for ((n=0; n<=8; n++))
+		#do
+		#t=$[$n+1]
+		#roi=${roi_name[${n}]}
+		#fsl_sub fslmaths $datafile -thr $t -uthr $t -bin ${resultdir}/${roi}.nii.gz
+	#	done
+		fslmaths $datafile -thr 10 -uthr 11 -bin ${resultdir}/PRC.nii.gz
 	done
 done

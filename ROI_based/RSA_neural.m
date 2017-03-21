@@ -1,38 +1,43 @@
 function RSA_neural(subs,m)
 %subs=1;
 %m=2;
-methodname={'LSS','TR34','ms_LSS','glm'};
+methodname={'LSS','TR','ms_LSS','glm'};
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behav/label'];
 datadir=sprintf('%s/ROI_based/ref_space/%s/raw',basedir,methodname{m});
-rdir=sprintf('%s/ROI_based/ref_space/%s/t24/sub/r',basedir,methodname{m});
-zdir=sprintf('%s/ROI_based/ref_space/%s/t24/sub//z',basedir,methodname{m});
-%zdir=sprintf('%s/ROI_based/ref_space/%s/sub/z/sub_hipp',basedir,methodname{m});
+%rdir=sprintf('%s/ROI_based/ref_space/%s/tVVC/sub/r',basedir,methodname{m});
+zdir=sprintf('%s/ROI_based/ref_space/%s/tVVC/sub/z',basedir,methodname{m});
+%zdir=sprintf('%s/ROI_based/ref_space/%s/sub_hipp/sub/z',basedir,methodname{m});
+%rdir=sprintf('%s/ROI_based/ref_space/%s/sub_hipp/sub/r',basedir,methodname{m});
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 TN=96*2;
 %%%%%%%%%
+%roi_name={'tLVVC','tRVVC'};
+%roi_name={'mPFC','PCC','LSFG','RSFG','LMFG','RMFG'};
 %roi_name={'CC','VVC','dLOC','IPL','IFG','PHG','HIP'};
 %roi_name={'CC','vLOC','OF','TOF','pTF','aTF',...
 %'dLOC','ANG','SMG','IFG',...
 %'HIP','pPHG','aPHG'}
-%roi_name={'CA1','CA2','DG','CA3','subiculum','ERC'};
+%roi_name={'CA1','CA2','DG','CA3','subiculum','PRC','ERC','pPHG'};
 %roi_name={'CC','VVC','dLOC','ANG','SMG','IFG',...
-%        'CA1','CA2','DG','CA3','subiculum','ERC',...        
+%        'CA1','CA2','DG','CA3','subiculum','ERC',...
 %	'HIP','pPHG','aPHG',...
-%               'aSMG','pSMG'} 
+%               'aSMG','pSMG'}
 roi_name={'CC','VVC','dLOC','IPL','SPL','IFG','MFG','HIP','PHG',...
 'vLOC','OF','TOF','pTF','aTF','ANG','SMG','pSMG','aSMG','pPHG','aPHG',...
+'mPFC','PCC','LSFG','RSFG','LMFG','RMFG','tLVVC','tRVVC',...
 'LCC','LVVC','LdLOC','LIPL','LSPL','LIFG','LMFG','LHIP','LPHG',...
 'LvLOC','LOF','LTOF','LpTF','LaTF','LANG','LSMG','LpSMG','LaSMG','LpPHG','LaPHG',...
 'RCC','RVVC','RdLOC','RIPL','RSPL','RIFG','RMFG','RHIP','RPHG',...
-'RvLOC','ROF','RTOF','RpTF','RaTF','RANG','RSMG','RpSMG','RaSMG','RpPHG','RaPHG'};
-
+'RvLOC','ROF','RTOF','RpTF','RaTF','RANG','RSMG','RpSMG','RaSMG','RpPHG','RaPHG',...
+'LITG','RITG','LpFUS','RpFUS',...
+'CA1','CA2','DG','CA3','subiculum','PRC','ERC'};
 ERS_r=[]; ERS_z=[]; mem_r=[]; mem_z=[]; ln_r=[]; ln_z=[];
 nERS=[]; nmem=[]; nln=[];
 for s=subs
-        %get idx                                              
+        %get idx
         [idx_ERS_I,idx_ERS_IB_all,idx_ERS_IB_wc,idx_ERS_D,idx_ERS_DB_all,idx_ERS_DB_wc,idx_mem_D,idx_mem_DB_all,idx_mem_DB_wc,idx_ln_D,idx_ln_DB_all,idx_ln_DB_wc,m_ln,m_mem] = get_idx(s);
         %perpare data
 	for roi=1:length(roi_name);
@@ -41,14 +46,14 @@ for s=subs
         %txx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates
         txx=tmp_xx(4:end,:);
 	%data_all=xx;
-	size_all=size(txx,2); 
+	size_all=size(txx,2);
 	for j=1:size_all
 	%u(j)=sum(txx(:,j)==0)/192;
 	a=txx(:,j);
 	ta=a';
 	b = diff([0 a'==0 0]);
 	res = find(b==-1) - find(b==1);
-	u(j)=sum(res>=24);
+	u(j)=sum(res>=6);
 	end
 	txx(:,find(u>=1))=[];
 	xx=txx;

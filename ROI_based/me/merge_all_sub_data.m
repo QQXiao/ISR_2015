@@ -34,7 +34,7 @@ tln=[];tmem=[];
 	load(sprintf('%s/mem_sub%02d.mat',datadir,s));
 	load(sprintf('%s/ln_sub%02d.mat',datadir,s));
         load(sprintf('%s/test_sub%02d.mat',labeldir,s));     
-        al=sortrows(submem,[MpID Monset]);                   
+        al=sortrows(submem,[MpID Mposit]);                   
         al1=al(1:2:end,:);                                   
         al2=al(2:2:end,:);                                   
         ll=2*ones(48,1);                                     

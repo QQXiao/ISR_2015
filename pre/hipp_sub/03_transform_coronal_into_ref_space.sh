@@ -16,10 +16,11 @@ do
 	resultdir=$basedir/${SUB}/roi_ref/sub_hipp
 	mkdir ${resultdir} -p
 	cd $datadir
-	for i in *.nii.gz
+	for i in PRC.nii.gz
+	#for i in *.nii.gz
 	do
 	#roiname=`echo $i|sed -e "s/.nii.gz//g"`
-	fsl_sub WarpTimeSeriesImageMultiTransform 4 ${i} $resultdir/${i} -R $reffile $affinedir/${sub}_Affine.txt
+	WarpTimeSeriesImageMultiTransform 4 ${i} $resultdir/${i} -R $reffile $affinedir/${sub}_Affine.txt
 	done
 done
 

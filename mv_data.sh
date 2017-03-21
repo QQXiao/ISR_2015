@@ -13,10 +13,11 @@ do
     fi
     echo $SUB
 #datadir=${basedir}/${SUB}/data/anatomy/sub_hipp/bi/
-datadir=${basedir}/${SUB}/roi_ref
-rm $datadir/add $datadir/final $datadir/*.nii.gz -r
+#datadir=${basedir}/${SUB}/roi_ref
+#rm $datadir/add $datadir/final $datadir/*.nii.gz -r
 #datadir=${basedir}/ROI_based/ref_space/glm/raw
-#rm $datadir/*.txt
+datadir=${basedir}/${SUB}/analysis
+rm $datadir/singletrial_glm/*.feat -r
 #rm $datadir/encoding*t?.txt
 #rm $datadir/test*t?.txt
 #cd $datadir

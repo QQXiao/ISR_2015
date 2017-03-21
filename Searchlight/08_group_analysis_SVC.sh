@@ -3,7 +3,7 @@ basedir=/seastor/helenhelen/ISR_2015
 #for mask in MTL attention
 #do
 #maskdir=/seastor/helenhelen/roi/${mask}/sep
-maskdir=/seastor/helenhelen/roi/ISR/final
+maskdir=/seastor/helenhelen/roi/for_svc
 cd $maskdir
 for file in *.nii.gz
 do

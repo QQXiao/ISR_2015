@@ -35,9 +35,13 @@ subs=setdiff(1:21,2);
 %roi_name={'CC','VVC','dLOC','IPL','SPL','IFG','MFG','HIP','PHG'};
 %roi_name={'vLOC','OF','TOF','pTF','aTF','ANG','SMG','pSMG','aSMG','pPHG','aPHG'};
 %roi_name={'LVVC','LdLOC','LIPL','LIFG','RVVC','RdLOC','RIPL','RIFG'};
-roi_name={'LVVC','LIPL','LIFG','RVVC','RIPL','RIFG'};
+%roi_name={'LVVC','LIPL','LIFG','RVVC','RIPL','RIFG'};
+%roi_name={'LVVC','LANG','LSMG','LIFG','RVVC','RANG','RSMG','RIFG'};
+%roi_name={'LVVC','LPHG','LANG','LSMG','LIFG','RVVC','RPHG','RANG','RSMG','RIFG'};
+%roi_name={'tLVVC','LANG','LSMG','LIFG','tRVVC','RANG','RSMG','RIFG'};
+roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','tRVVC','RANG','RSMG','RIFG','RMFG'};
 nroi=length(roi_name);
-resultdir=sprintf('%s/ROI_based/ps_matrix_all_roi/glm/%droi_right_trial_only',basedir,nroi);
+resultdir=sprintf('%s/ROI_based/ps_matrix_all_roi/glm/new_vvc_%droi_right_trial_only',basedir,nroi);
 mkdir(resultdir);
 for s=subs;
 cc_ln_ln=[];
@@ -51,10 +55,10 @@ list_ln(:,Mphase)=1;
 list_mem=sortrows(submem,[Mrun Mset MpID]);
 list_mem(:,Msub)=s;
 list_mem(:,Mphase)=2;
-        for nn=1:96                                               
-        p=list_ln(nn,MpID);w=list_ln(nn,MwID);              
+        for nn=1:96
+        p=list_ln(nn,MpID);w=list_ln(nn,MwID);
         list_ln(nn,Mmem)=list_mem(list_mem(:,MpID)==p & list_mem(:,MwID)==w,Mmem);
-        end 
+        end
 all_label=[list_ln;list_mem];
 all_idx=1:TN*(TN-1)/2;
 all_pID1=[]; all_pID2=[]; all_mem1=[]; all_mem2=[]; all_phase1=[]; all_phase2=[]; check_run=[]; check_set=[];
@@ -65,9 +69,9 @@ for k=2:TN
         all_mem2=[all_mem2 all_label(k:TN,Mmem)'];
         all_phase1=[all_phase1 all_label(k-1,Mphase)*ones(1,TN-k+1)];
         all_phase2=[all_phase2 all_label(k:TN,Mphase)'];
-        %1=same run;0=diff run 
+        %1=same run;0=diff run
         check_run=[check_run (all_label(k:TN,Mrun)==all_label(k-1,Mrun))'];
-        %1=same set;0=diff set 
+        %1=same set;0=diff set
         check_set=[check_set (all_label(k:TN,Mset)==all_label(k-1,Mset))'];
 end
 idx_ln=find(all_phase1==1 & all_phase2==1 & all_pID1~=all_pID2 & check_run==1 & check_set==0 & all_mem1==1 & all_mem2==1);
@@ -87,7 +91,7 @@ idx_mem=find(all_phase1==2 & all_phase2==2 & all_pID1~=all_pID2 & check_run==1 &
 		u(j)=sum(res>=6);
 		end
         	txx(:,find(u>=1))=[];
-		xx=txx;                
+		xx=txx;
 		%%analysis
         	data_ln=xx(1:96,:);
          	data_mem=xx(97:end,:);
@@ -107,7 +111,7 @@ idx_mem=find(all_phase1==2 & all_phase2==2 & all_pID1~=all_pID2 & check_run==1 &
         	    tzz21=[zz21,p_mem_21];a=size(tzz21);ttzz21=sortrows(tzz21,a(2));data_mem_21=ttzz21(:,[1:end-1]);
         	    tzz22=[zz22,p_mem_22];a=size(tzz22);ttzz22=sortrows(tzz22,a(2));data_mem_22=ttzz22(:,[1:end-1]);
                     data_mem_all=[data_mem_11;data_mem_12;data_mem_21;data_mem_22];
-                    
+
 		    data_all=[data_ln_all;data_mem_all];
 		    cc_all=1-pdist(data_all(:,:),'correlation');
                     %tcc_all=squareform(cc_all);

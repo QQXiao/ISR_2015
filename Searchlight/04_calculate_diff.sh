@@ -14,17 +14,18 @@ do
         s=${m}
     fi
 
-        for c in mem ln
-        do
-	fsl_sub fslmaths ${c}_D_sub${s} -sub ${c}_Bwc_sub${s} $resultdir/${c}_DBwc_sub${s} 
-	fsl_sub fslmaths ${c}_D_sub${s} -sub ${c}_Ball_sub${s} $resultdir/${c}_DBall_sub${s} 
-	done
+        #for c in mem ln
+        #do
+	#fsl_sub fslmaths ${c}_D_sub${s} -sub ${c}_Bwc_sub${s} $resultdir/${c}_DBwc_sub${s} 
+	#fsl_sub fslmaths ${c}_D_sub${s} -sub ${c}_Ball_sub${s} $resultdir/${c}_DBall_sub${s} 
+	#done
 	for c in ERS
 	do
-	fsl_sub fslmaths ${c}_I_sub${s} -sub ${c}_D_sub${s} $resultdir/${c}_ID_sub${s} 
-	fsl_sub fslmaths ${c}_I_sub${s} -sub ${c}_IBwc_sub${s} $resultdir/${c}_IBwc_sub${s} 
-	fsl_sub fslmaths ${c}_I_sub${s} -sub ${c}_IBall_sub${s} $resultdir/${c}_IBall_sub${s} 
-	fsl_sub fslmaths ${c}_D_sub${s} -sub ${c}_DBwc_sub${s} $resultdir/${c}_DBwc_sub${s} 
-	fsl_sub fslmaths ${c}_D_sub${s} -sub ${c}_DBall_sub${s} $resultdir/${c}_DBall_sub${s} 
+	#fsl_sub fslmaths ${c}_I_sub${s} -sub ${c}_D_sub${s} $resultdir/${c}_ID_sub${s} 
+	#fsl_sub fslmaths ${c}_I_sub${s} -sub ${c}_IBwc_sub${s} $resultdir/${c}_IBwc_sub${s} 
+	fsl_sub fslmaths ${c}_I_sub${s} -sub ${c}_DBwc_sub${s} $resultdir/${c}_IBwc2_sub${s} 
+	#fsl_sub fslmaths ${c}_I_sub${s} -sub ${c}_IBall_sub${s} $resultdir/${c}_IBall_sub${s} 
+	#fsl_sub fslmaths ${c}_D_sub${s} -sub ${c}_DBwc_sub${s} $resultdir/${c}_DBwc_sub${s} 
+	#fsl_sub fslmaths ${c}_D_sub${s} -sub ${c}_DBall_sub${s} $resultdir/${c}_DBall_sub${s} 
 	done
 done

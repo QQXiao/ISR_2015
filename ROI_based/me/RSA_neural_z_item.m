@@ -3,17 +3,18 @@ function RSA_neural_z_item(subs)
 methodname={'LSS','TR34','ms_LSS'};
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behav/label'];
-datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
-rdir=sprintf('%s/me/data/sub',basedir);
+datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
+rdir=sprintf('%s/me/tmap/data/sub',basedir);
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 TN=96*2;
 %%%%%%%%%
-roi_name={'p90','p95','VVC','dLOC','IPL',...
-	'IFG','HIP',...
-	'CA1','CA2','DG','CA3','subiculum','ERC',...
-	'aPHG','pPHG'};
+roi_name={'p97',...
+'tLVVC','LANG','LSMG','LIFG','LMFG',...
+'tRVVC','RANG','RSMG','RIFG','RMFG',...
+'LaPHG','LpPHG','RaPHG','RpPHG',...
+'HIP','CA1','CA2','DG','CA3','subiculum','ERC','PRC','pPHG'}
 ERS_r=[]; ERS_z=[]; mem_r=[]; mem_z=[]; ln_r=[]; ln_z=[];
 nERS=[]; nmem=[]; nln=[];
 s=subs;
@@ -24,15 +25,10 @@ for t=1:48
 	for roi=1:length(roi_name);
         xx=[];tmp_xx=[];
 		if roi==1
-		load(sprintf('%s/me/data/roi/p90_ln_sub%02d.mat',basedir,s));
+		load(sprintf('%s/top/tmap/data/value_based/p97_ln_sub%02d_h1.mat',basedir,s));
 		ln=data_vln(1:96,:);
-		load(sprintf('%s/me/data/roi/p90_mem_sub%02d.mat',basedir,s));
+		load(sprintf('%s/top/tmap/data/value_based/p97_mem_sub%02d_h1.mat',basedir,s));
 		mem=data_vmem(97:end,:);
-		elseif roi==2
-                load(sprintf('%s/me/data/roi/p95_ln_sub%02d.mat',basedir,s));
-                ln=data_vln(1:96,:);
-                load(sprintf('%s/me/data/roi/p95_mem_sub%02d.mat',basedir,s));
-                mem=data_vmem(97:end,:);		
 		else
 		tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
     		xx=tmp_xx(4:end,1:end-1); % remove the final zero and the first three rows showing the coordinates

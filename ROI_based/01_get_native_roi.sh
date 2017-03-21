@@ -1,6 +1,8 @@
 basedir='/seastor/helenhelen/ISR_2015'
 affinedir=$basedir/data_singletrial/transform/t2e
-roidir=/seastor/helenhelen/roi/ISR/single
+#roidir=/seastor/helenhelen/roi
+#roidir=/seastor/helenhelen/roi/ISR/bio
+roidir=/seastor/helenhelen/roi/ISR_add
 for m in 1 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21
 do
     if [ ${m} -lt 10 ];
@@ -14,9 +16,10 @@ resultdir=$basedir/ISR${SUB}/roi_ref
 mkdir -p $resultdir
 reffile=$basedir/ISR${SUB}/data/bold/ref.nii.gz
 cd $roidir
-for roi in *PHG.nii.gz
+#for roi in WB.nii.gz
+for roi in *
 do
 roi_prefix=`basename $roi | sed -e "s/.nii.gz//"`
-fsl_sub WarpImageMultiTransform 3 ${roi} $resultdir/${roi_prefix}.nii.gz -R $reffile $affinedir/sub${SUB}_Affine.txt
+fsl_sub -q verylong.q WarpImageMultiTransform 3 ${roi} $resultdir/${roi_prefix}.nii.gz -R $reffile $affinedir/sub${SUB}_Affine.txt
 done
 done

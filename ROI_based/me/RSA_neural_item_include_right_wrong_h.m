@@ -4,8 +4,8 @@ basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behav/label'];
 %datadir=sprintf('%s/data_singletrial/ref_space/zscore/beta/ROI',basedir);
 datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
-topdir=sprintf('%s/top/tmap/data',basedir);
-rdir=sprintf('%s/me/tmap/data/sub',basedir);
+topdir=sprintf('%s/top/tmap/data/value_based',basedir);
+rdir=sprintf('%s/me/tmap/data/value_based/sub',basedir);
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
@@ -14,13 +14,13 @@ TN=96*2;
 ERS_r=[]; ERS_z=[]; mem_r=[]; mem_z=[]; ln_r=[]; ln_z=[];
 nERS=[]; nmem=[]; nln=[];
 s=subs;
-tn=[90 95];
+tn=[95:1:99];
 for h=1:2
 for t=1:48
         %get idx
 	[idx_mem_D,idx_mem_DB_wc,idx_mem_DB_all,idx_ln_D,idx_ln_DB_wc,idx_ln_DB_all,list_pid]=get_idx_item_all(s,t)
 	%perpare data
-	for nn=1:2
+	for nn=1:length(tn)
 		n=tn(nn);
         	xx=[];tmp_xx=[];
 		load(sprintf('%s/p%d_ln_sub%02d_h%d.mat',topdir,n,s,h));
@@ -44,7 +44,7 @@ for t=1:48
     	roi_ln(t,nn,3)=mean(cc_ln(idx_ln_DB_wc));
 	end %end n
 end %end t
-    eval(sprintf('save %s/top_mem_sub%02d_h%d roi_mem', rdir,s,h));
-    eval(sprintf('save %s/top_ln_sub%02d_h%d roi_ln', rdir,s,h));
+    eval(sprintf('save %s/mem_sub%02d_h%d roi_mem', rdir,s,h));
+    eval(sprintf('save %s/ln_sub%02d_h%d roi_ln', rdir,s,h));
 end %end half
 end %end func

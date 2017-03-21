@@ -1,7 +1,7 @@
 function merge_all_sub_data()
 basedir='/seastor/helenhelen/ISR_2015';
-datadir=sprintf('%s/me/tmap/data/sub',basedir);
-resultdir=sprintf('%s/me/tmap/data/item',basedir);
+datadir=sprintf('%s/me/tmap/data/value_based/sub',basedir);
+resultdir=sprintf('%s/me/tmap/data/value_based/item',basedir);
 subs=setdiff(1:21,2);
 ln=[];mem=[];
 %%%%%%%%%%%%%
@@ -32,17 +32,17 @@ for h=1:2
 for s=subs
 	tln=[];tmem=[];
 	rln=[];rmem=[]
-	load(sprintf('%s/top_mem_sub%02d_h%d.mat',datadir,s,h));
-	load(sprintf('%s/top_ln_sub%02d_h%d.mat',datadir,s,h));
+	load(sprintf('%s/mem_sub%02d_h%d.mat',datadir,s,h));
+	load(sprintf('%s/ln_sub%02d_h%d.mat',datadir,s,h));
 	load(sprintf('%s/test_sub%02d.mat',labeldir,s));
-	al=sortrows(submem,[MpID Monset]);
+	al=sortrows(submem,[MpID Mposit]);
 	al1=al(1:2:end,:);
 	al2=al(2:2:end,:);
 	ll=2*ones(48,1);
 	ll(al1(:,Mmem)==1 & al2(:,Mmem)==1)=1;
 	ll(al1(:,Mmem)==3 | al2(:,Mmem)==3)=3;
 	l=[al1(:,MpID) ll];
-	for r=1:2
+	for r=1:5
 	rln=[rln squeeze(roi_ln(:,r,:))];
 	rmem=[rmem squeeze(roi_mem(:,r,:))];
 	end
@@ -50,7 +50,7 @@ for s=subs
 	tmem=[s*ones(48,1) l rmem];
 ln=[ln;tln]; mem=[mem;tmem];
 end
-eval(sprintf('save %s/top_all_mem_h%d.txt mem -ascii -tabs', resultdir,h));
-eval(sprintf('save %s/top_all_ln_h%d.txt ln -ascii -tabs', resultdir,h));
+eval(sprintf('save %s/all_mem_h%d.txt mem -ascii -tabs', resultdir,h));
+eval(sprintf('save %s/all_ln_h%d.txt ln -ascii -tabs', resultdir,h));
 end %end half
 end
