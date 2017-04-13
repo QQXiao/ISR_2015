@@ -30,7 +30,7 @@ Mmem=15;
 Msub=16;
 Mphase=17;
 %%%%%%%%%
-TN=192;
+TN=96;%96 trials in encoding and retrieval, respectively;
 subs=setdiff(1:21,2);
 nsub=length(subs);
 roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
@@ -45,6 +45,17 @@ for np=1:1000
     for s=subs;
         load(sprintf('%s/encoding_sub%02d.mat',labeldir,s));
         load(sprintf('%s/test_sub%02d.mat',labeldir,s));
+        for nn=1:TN
+            p=subln(nn,MpID);w=subln(nn,MwID);
+            subln(nn,Mmem)=submem(submem(:,MpID)==p & submem(:,MwID)==w,Mmem);
+        end
+        m_ln=subln(:,MpID);
+        m_mem=submem(:,MpID);
+        %shuffling PID;
+        t_m_ln=m_ln(randperm(TN),:);
+        t_m_mem=m_mem(randperm(TN),:);
+        subln(:,MpID)=t_m_ln;
+        submem(:,MpID)=t_m_mem;
         m_ln=subln(:,MpID);
         m_mem=submem(:,MpID);
         list_ln=sortrows(subln,[Mset MpID]);
@@ -53,16 +64,12 @@ for np=1:1000
         list_mem=sortrows(submem,[Mset MpID]);
         list_mem(:,Msub)=s;
         list_mem(:,Mphase)=2;  
-        for nn=1:96
-            p=list_ln(nn,MpID);w=list_ln(nn,MwID);
-            list_ln(nn,Mmem)=list_mem(list_mem(:,MpID)==p & list_mem(:,MwID)==w,Mmem);
-        end
         %get memory performance for sorted behavioral list for later git
         %rid of forgotten items.
-        memp_ln1=list_ln([1:48],Mmem);
-        memp_ln2=list_ln([49:96],Mmem);
-        memp_mem1=list_mem([1:48],Mmem);
-        memp_mem2=list_mem([49:96],Mmem);
+        memp_ln1=list_ln([1:(TN/2)],Mmem);
+        memp_ln2=list_ln([(TN/2+1):TN],Mmem);
+        memp_mem1=list_mem([1:(TN/2)],Mmem);
+        memp_mem2=list_mem([(TN/2+1):TN],Mmem);
         %get fMRI data
         xx=[];tmp_xx=[];u=[];
         tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
@@ -78,12 +85,12 @@ for np=1:1000
         txx(:,find(u>=1))=[];
         xx=txx;
         %%analysis
-        data_ln=xx(1:96,:);
-        data_mem=xx(97:end,:);
-        yy1=data_ln([1:48],:);p_ln_1=m_ln([1:48],:);
-        yy2=data_ln([49:96],:);p_ln_2=m_ln([49:96],:);
-        zz1=data_mem([1:48],:);p_mem_1=m_mem([1:48],:);
-        zz2=data_mem([49:96],:);p_mem_2=m_mem([49:96],:);
+        data_ln=xx(1:TN,:);
+        data_mem=xx((TN+1):end,:);
+        yy1=data_ln([1:(TN/2)],:);p_ln_1=m_ln([1:(TN/2)],:);
+        yy2=data_ln([(TN/2+1):TN],:);p_ln_2=m_ln([(TN/2+1):TN],:);
+        zz1=data_mem([1:(TN/2)],:);p_mem_1=m_mem([1:(TN/2)],:);
+        zz2=data_mem([(TN/2+1):TN],:);p_mem_2=m_mem([(TN/2+1):TN],:);
         %%sort fMRI data acording to pic ID, for each repeat respectively 
         tyy1=[yy1,p_ln_1];a=size(tyy1);ttyy1=sortrows(tyy1,a(2));
         tyy2=[yy2,p_ln_2];a=size(tyy2);ttyy2=sortrows(tyy2,a(2));
@@ -192,14 +199,12 @@ for np=1:1000
         cERS21(sf,2,np)=mean(cc_ERS21(all_sub1==sf & check_sub==0 & check_ERS21==0));
     end
 end %end perm
-    ln=mean(cln,3);mem=mean(cmem,3);
-    ERS12=mean(cERS12,3);ERS21=mean(cERS21,3);
-    ln_z=0.5*(log(1+ln)-log(1-ln));
-    mem_z=0.5*(log(1+mem)-log(1-mem));
-    ERS12_z=0.5*(log(1+ERS12)-log(1-ERS12));
-    ERS21_z=0.5*(log(1+ERS21)-log(1-ERS21));
-    eval(sprintf('save %s/ln_%s.txt ln_z -ascii -tabs', resultdir,roi_name{roi}));
-    eval(sprintf('save %s/mem_%s.txt mem_z -ascii -tabs', resultdir,roi_name{roi}));
-    eval(sprintf('save %s/ERS12_%s.txt ERS12_z -ascii -tabs', resultdir,roi_name{roi}));
-    eval(sprintf('save %s/ERS21_%s.txt ERS21_z -ascii -tabs', resultdir,roi_name{roi}));
+    ln_z=0.5*(log(1+cln)-log(1-cln));
+    mem_z=0.5*(log(1+cmem)-log(1-cmem));
+    ERS12_z=0.5*(log(1+cERS12)-log(1-cERS12));
+    ERS21_z=0.5*(log(1+cERS21)-log(1-cERS21));
+    eval(sprintf('save %s/BL_ln_%s.mat ln_z', resultdir,roi_name{roi}));
+    eval(sprintf('save %s/BL_mem_%s.mat mem_z', resultdir,roi_name{roi}));
+    eval(sprintf('save %s/BL_ERS12_%s.mat ERS12_z', resultdir,roi_name{roi}));
+    eval(sprintf('save %s/BL_ERS21_%s.mat ERS21_z', resultdir,roi_name{roi}));
 end %function

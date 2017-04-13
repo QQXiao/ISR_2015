@@ -6,7 +6,7 @@ addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
 labeldir=[basedir,'/behav/label'];
-resultdir=sprintf('%s/ROI_based/subs_within_between',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/new_bl2',basedir);
 
 %data structure
 Mtrial=1; % trial number
@@ -30,13 +30,14 @@ Mmem=15;
 Msub=16;
 Mphase=17;
 %%%%%%%%%
-TN=192;
+TN=96;
 subs=setdiff(1:21,2);
 nsub=length(subs);
-roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
-    'tRVVC','RANG','RSMG','RIFG','RMFG','RSFG',...
-    'mPFC','PCC'...
-    'CA1','DG','subiculum','PRC','ERC'};
+%roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
+%    'tRVVC','RANG','RSMG','RIFG','RMFG','RSFG',...
+%    'mPFC','PCC'...
+%    'CA1','DG','subiculum','PRC','ERC'};
+roi_name={'fmPFC','fPMC'};
 nroi=length(roi_name);
 roi=r;
 for np=1:1000
@@ -52,17 +53,17 @@ for np=1:1000
         list_ln(:,Mphase)=1;
         list_mem=sortrows(submem,[Mset MpID]);
         list_mem(:,Msub)=s;
-        list_mem(:,Mphase)=2;  
-        for nn=1:96
+        list_mem(:,Mphase)=2;
+        for nn=1:TN
             p=list_ln(nn,MpID);w=list_ln(nn,MwID);
             list_ln(nn,Mmem)=list_mem(list_mem(:,MpID)==p & list_mem(:,MwID)==w,Mmem);
         end
         %get memory performance for sorted behavioral list for later git
         %rid of forgotten items.
-        memp_ln1=list_ln([1:48],Mmem);
-        memp_ln2=list_ln([49:96],Mmem);
-        memp_mem1=list_mem([1:48],Mmem);
-        memp_mem2=list_mem([49:96],Mmem);
+        memp_ln1=list_ln([1:(TN/2)],Mmem);
+        memp_ln2=list_ln([(TN/2+1):TN],Mmem);
+        memp_mem1=list_mem([1:(TN/2)],Mmem);
+        memp_mem2=list_mem([(TN/2+1):TN],Mmem);
         %get fMRI data
         xx=[];tmp_xx=[];u=[];
         tmp_xx=load(sprintf('%s/sub%02d_%s.txt',datadir,s,roi_name{roi}));
@@ -78,13 +79,13 @@ for np=1:1000
         txx(:,find(u>=1))=[];
         xx=txx;
         %%analysis
-        data_ln=xx(1:96,:);
-        data_mem=xx(97:end,:);
-        yy1=data_ln([1:48],:);p_ln_1=m_ln([1:48],:);
-        yy2=data_ln([49:96],:);p_ln_2=m_ln([49:96],:);
-        zz1=data_mem([1:48],:);p_mem_1=m_mem([1:48],:);
-        zz2=data_mem([49:96],:);p_mem_2=m_mem([49:96],:);
-        %%sort fMRI data acording to pic ID, for each repeat respectively 
+        data_ln=xx(1:TN,:);
+        data_mem=xx((TN+1):end,:);
+        yy1=data_ln([1:(TN/2)],:);p_ln_1=m_ln([1:(TN/2)],:);
+        yy2=data_ln([(TN/2+1):TN],:);p_ln_2=m_ln([(TN/2+1):TN],:);
+        zz1=data_mem([1:(TN/2)],:);p_mem_1=m_mem([1:(TN/2)],:);
+        zz2=data_mem([(TN/2+1):TN],:);p_mem_2=m_mem([(TN/2+1):TN],:);
+        %%sort fMRI data acording to pic ID, for each repeat respectively
         tyy1=[yy1,p_ln_1];a=size(tyy1);ttyy1=sortrows(tyy1,a(2));
         tyy2=[yy2,p_ln_2];a=size(tyy2);ttyy2=sortrows(tyy2,a(2));
         tzz1=[zz1,p_mem_1];a=size(tzz1);ttzz1=sortrows(tzz1,a(2));
@@ -123,13 +124,13 @@ for np=1:1000
         c_ln1=corr(data_ln_1',data_ln_2');
         c_ln2=corr(data_ln_2',data_ln_1');
         c_mem1=corr(data_mem_1',data_mem_2');
-        c_mem2=corr(data_mem_2',data_mem_1');  
+        c_mem2=corr(data_mem_2',data_mem_1');
         %%get the tril of the correlation matrix as the representational
         %%space for each rep
         tc_ln1=c_ln1(triu(c_ln1)==0);
         tc_ln2=c_ln2(triu(c_ln2)==0);
         tc_mem1=c_mem1(triu(c_mem1)==0);
-        tc_mem2=c_mem2(triu(c_mem2)==0);        
+        tc_mem2=c_mem2(triu(c_mem2)==0);
         %%
         ln1_matrix=[ln1_matrix;tc_ln1'];
         ln2_matrix=[ln2_matrix;tc_ln2'];
@@ -174,23 +175,37 @@ for np=1:1000
     check_mem=[all_mem1==all_mem2];
     check_ERS12=[all_ERS12_1==all_ERS12_2];
     check_ERS21=[all_ERS21_1==all_ERS21_2];
-
+    %calculate cross subs correlation
     cc_ln=1-pdist_with_NaN([ln1_matrix;ln2_matrix],'correlation');
     cc_mem=1-pdist_with_NaN([mem1_matrix;mem2_matrix],'correlation');
     cc_ERS12=1-pdist_with_NaN([ln1_matrix;mem2_matrix],'correlation');
     cc_ERS21=1-pdist_with_NaN([ln2_matrix;mem1_matrix],'correlation');
-
+    %get within sub's or cross subs' correlation
     for sf=subs
-        cln(sf,1,np)=cc_ln(all_sub1==sf & check_sub==1 & check_ln==0);
-        cmem(sf,1,np)=cc_mem(all_sub1==sf & check_sub==1 & check_mem==0);
-        cERS12(sf,1,np)=cc_ERS12(all_sub1==sf & check_sub==1 & check_ERS12==0);
-        cERS21(sf,1,np)=cc_ERS21(all_sub1==sf & check_sub==1 & check_ERS21==0);
-
-        cln(sf,2,np)=mean(cc_ln(all_sub1==sf & check_sub==0 & check_ln==0));
-        cmem(sf,2,np)=mean(cc_mem(all_sub1==sf & check_sub==0 & check_mem==0));
-        cERS12(sf,2,np)=mean(cc_ERS12(all_sub1==sf & check_sub==0 & check_ERS12==0));
-        cERS21(sf,2,np)=mean(cc_ERS21(all_sub1==sf & check_sub==0 & check_ERS21==0));
-    end
+        ws_ln=cc_ln(all_sub1==sf & check_sub==1 & check_ln==0);
+        ws_mem=cc_mem(all_sub1==sf & check_sub==1 & check_mem==0);
+        ws_ERS12=cc_ERS12(all_sub1==sf & check_sub==1 & check_ERS12==0);
+        ws_ERS21=cc_ERS21(all_sub1==sf & check_sub==1 & check_ERS21==0);
+        bs_ln=cc_ln(all_sub1==sf & check_sub==0 & check_ln==0);
+        bs_mem=cc_mem(all_sub1==sf & check_sub==0 & check_mem==0);
+        bs_ERS12=cc_ERS12(all_sub1==sf & check_sub==0 & check_ERS12==0);
+        bs_ERS21=cc_ERS21(all_sub1==sf & check_sub==0 & check_ERS21==0);
+        %withi sub
+        cln(sf,1,np)=ws_ln;
+        cmem(sf,1,np)=ws_mem;
+        cERS12(sf,1,np)=ws_ERS12;
+        cERS21(sf,1,np)=ws_ERS21;
+        %cross subs
+        cln(sf,2,np)=mean(bs_ln);
+        cmem(sf,2,np)=mean(bs_mem);
+        cERS12(sf,2,np)=mean(bs_ERS12);
+        cERS21(sf,2,np)=mean(bs_ERS21);
+        %% rank
+        Nrank_ln(sf,np)=sum(bs_ln<ws_ln);
+        Nrank_mem(sf,np)=sum(bs_mem<ws_mem);
+        Nrank_ERS12(sf,np)=sum(bs_ERS12<ws_ERS12);
+        Nrank_ERS21(sf,np)=sum(bs_ERS21<ws_ERS21);
+    end %end subs
 end %end perm
     ln=mean(cln,3);mem=mean(cmem,3);
     ERS12=mean(cERS12,3);ERS21=mean(cERS21,3);
@@ -198,8 +213,21 @@ end %end perm
     mem_z=0.5*(log(1+mem)-log(1-mem));
     ERS12_z=0.5*(log(1+ERS12)-log(1-ERS12));
     ERS21_z=0.5*(log(1+ERS21)-log(1-ERS21));
+    aln_z=0.5*(log(1+cln)-log(1-cln));
+    amem_z=0.5*(log(1+cmem)-log(1-cmem));
+    aERS12_z=0.5*(log(1+cERS12)-log(1-cERS12));
+    aERS21_z=0.5*(log(1+cERS21)-log(1-cERS21));
     eval(sprintf('save %s/ln_%s.txt ln_z -ascii -tabs', resultdir,roi_name{roi}));
     eval(sprintf('save %s/mem_%s.txt mem_z -ascii -tabs', resultdir,roi_name{roi}));
     eval(sprintf('save %s/ERS12_%s.txt ERS12_z -ascii -tabs', resultdir,roi_name{roi}));
     eval(sprintf('save %s/ERS21_%s.txt ERS21_z -ascii -tabs', resultdir,roi_name{roi}));
+    eval(sprintf('save %s/rank_ln_%s.txt Nrank_ln -ascii -tabs', resultdir,roi_name{roi}));
+    eval(sprintf('save %s/rank_mem_%s.txt Nrank_mem -ascii -tabs', resultdir,roi_name{roi}));
+    eval(sprintf('save %s/rank_ERS12_%s.txt Nrank_ERS12 -ascii -tabs', resultdir,roi_name{roi}));
+    eval(sprintf('save %s/rank_ERS21_%s.txt Nrank_ERS21 -ascii -tabs', resultdir,roi_name{roi}));
+
+    eval(sprintf('save %s/aln_%s.mat aln_z', resultdir,roi_name{roi}));
+    eval(sprintf('save %s/amem_%s.mat amem_z', resultdir,roi_name{roi}));
+    eval(sprintf('save %s/aERS12_%s.mat aERS12_z', resultdir,roi_name{roi}));
+    eval(sprintf('save %s/aERS21_%s.mat aERS21_z', resultdir,roi_name{roi}));
 end %function
