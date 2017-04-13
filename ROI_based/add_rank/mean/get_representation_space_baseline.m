@@ -6,7 +6,7 @@ addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
 labeldir=[basedir,'/behav/label'];
-resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/new_bl2',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/mean',basedir);
 
 %data structure
 Mtrial=1; % trial number
@@ -33,11 +33,11 @@ Mphase=17;
 TN=96;%96 trials in encoding and retrieval, respectively;
 subs=setdiff(1:21,2);
 nsub=length(subs);
-%roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
-%    'tRVVC','RANG','RSMG','RIFG','RMFG','RSFG',...
-%    'mPFC','PCC'...
-%    'CA1','DG','subiculum','PRC','ERC'};
-roi_name={'fmPFC','fPMC'};
+roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
+    'tRVVC','RANG','RSMG','RIFG','RMFG','RSFG',...
+    'fmPFC','fPMC'...
+    'CA1','DG','subiculum','PRC','ERC'};
+%roi_name={'fmPFC','fPMC'};
 nroi=length(roi_name);
 roi=r;
 rng('shuffle');
@@ -169,7 +169,7 @@ for np=1:1000
         cERS21(s,1,np)=corr(s_ln2_matrix',s_mem1_matrix');
         cERS21(s,2,np)=corr(s_ln2_matrix',m_mem1_matrix');
     end %end sub
-end %end perm                   
+end %end perm
     ln=mean(cln,3);mem=mean(cmem,3);
     ERS12=mean(cERS12,3);ERS21=mean(cERS21,3);
     ln_z=0.5*(log(1+ln)-log(1-ln));
