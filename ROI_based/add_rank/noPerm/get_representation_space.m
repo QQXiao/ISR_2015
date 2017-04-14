@@ -99,8 +99,6 @@ roi=r;
         tamem_1=ttzz1;tamem_2=ttzz2;
         data_ln_1=taln_1(:,[1:end-1]);
         data_ln_2=taln_2(:,[1:end-1]);
-        tamem_1=sortrows(ttzz1,a(2));
-        tamem_2=sortrows(ttzz2,a(2));
         data_mem_1=tamem_1(:,[1:end-1]);
         data_mem_2=tamem_2(:,[1:end-1]);
         %%calculate the correlation between two presentations' matrix
