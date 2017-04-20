@@ -40,14 +40,16 @@ roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
 %roi_name={'fmPFC','fPMC'};
 nroi=length(roi_name);
 roi=r;
-for np=1:1000
+for np=1:1000 %permutation for 1000 times
     ln1_matrix=[];mem1_matrix=[];
     ln2_matrix=[];mem2_matrix=[];
     for s=subs;
         load(sprintf('%s/encoding_sub%02d.mat',labeldir,s));
         load(sprintf('%s/test_sub%02d.mat',labeldir,s));
+        %get original sequece for pID
         m_ln=subln(:,MpID);
         m_mem=submem(:,MpID);
+        %sort data matrix according to set and pID
         list_ln=sortrows(subln,[Mset MpID]);
         list_ln(:,Msub)=s;
         list_ln(:,Mphase)=1;
@@ -98,26 +100,26 @@ for np=1:1000
         %%mix data from two repetitions
         nt=a(1);
         c=unique(randperm(nt,nt/2));
-        c_ln11=ttyy1(ismember([1:nt],c),:);
-        c_ln12=ttyy1(~ismember([1:nt],c),:);
-        c_ln21=ttyy2(~ismember([1:nt],c),:);
-        c_ln22=ttyy2(ismember([1:nt],c),:);
-        aln_1=[c_ln11;c_ln21];
+        ln11=ttyy1(ismember([1:nt],c),:);
+        ln12=ttyy1(~ismember([1:nt],c),:);
+        ln21=ttyy2(~ismember([1:nt],c),:);
+        ln22=ttyy2(ismember([1:nt],c),:);
+        aln_1=[ln11;ln21];
         taln_1=sortrows(aln_1,a(2));
         data_ln_1=taln_1(:,[1:end-1]);
-        aln_2=[c_ln12;c_ln22];
+        aln_2=[ln12;ln22];
         taln_2=sortrows(aln_2,a(2));
         data_ln_2=taln_2(:,[1:end-1]);
         %%apply the mixation to memory data
         c=unique(randperm(nt,nt/2));
-        c_mem11=ttzz1(ismember([1:nt],c),:);
-        c_mem12=ttzz1(~ismember([1:nt],c),:);
-        c_mem21=ttzz2(~ismember([1:nt],c),:);
-        c_mem22=ttzz2(ismember([1:nt],c),:);
-        amem_1=[c_mem11;c_mem21];
+        mem11=ttzz1(ismember([1:nt],c),:);
+        mem12=ttzz1(~ismember([1:nt],c),:);
+        mem21=ttzz2(~ismember([1:nt],c),:);
+        mem22=ttzz2(ismember([1:nt],c),:);
+        amem_1=[mem11;mem21];
         tamem_1=sortrows(amem_1,a(2));
         data_mem_1=tamem_1(:,[1:end-1]);
-        amem_2=[c_mem12;c_mem22];
+        amem_2=[mem12;mem22];
         tamem_2=sortrows(amem_2,a(2));
         data_mem_2=tamem_2(:,[1:end-1]);
         %%calculate the correlation between two presentations' matrix
