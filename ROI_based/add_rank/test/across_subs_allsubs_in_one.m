@@ -1,8 +1,8 @@
 function allroi()
 basedir='/seastor/helenhelen/ISR_2015';
 labeldir=[basedir,'/behavior/label'];
-datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test',basedir);
-resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test',basedir);
+datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test2',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test2',basedir);
 
 addpath /seastor/helenhelen/scripts/NIFTI
 roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...

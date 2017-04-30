@@ -6,7 +6,7 @@ addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
 labeldir=[basedir,'/behav/label'];
-resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test2',basedir);
 
 %data structure
 Mtrial=1; % trial number
