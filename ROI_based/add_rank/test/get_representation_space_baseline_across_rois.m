@@ -1,4 +1,4 @@
-function get_representation_space_baseline_across_rois(r)
+function get_representation_space_baseline_across_rois(r1,r2)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -17,8 +17,9 @@ roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
     'CA1','DG','subiculum','PRC','ERC'};
 %roi_name={'fmPFC','fPMC'};
 nroi=length(roi_name);
-roi=r;
-%%load representational space    
+roi1=r1;
+roi2=r2;
+%%load representational space
 load(sprintf('%s/BL_all_ln1_%s.mat', datadir,roi_name{roi1}));
 all_ln1_roi1=all_ln1_data;
 load(sprintf('%s/BL_all_ln2_%s.mat', datadir,roi_name{roi1}));
@@ -72,7 +73,7 @@ check_sub=[all_sub1==all_sub2];
 check_ln=[all_ln1==all_ln2];
 check_mem=[all_mem1==all_mem2];
 check_ERS12=[all_ERS12_1==all_ERS12_2];
-check_ERS21=[all_ERS21_1==all_ERS21_2];  
+check_ERS21=[all_ERS21_1==all_ERS21_2];
 
 for np=1:1000
     ln1_roi1=[];ln1_roi2=[];
@@ -88,7 +89,7 @@ for np=1:1000
     ln2_roi2=all_ln2_roi2{np};
     mem1_roi2=all_mem1_roi2{np};
     mem2_roi2=all_mem2_roi2{np};
-    %calculate cross subs cross roi correlation 
+    %calculate cross subs cross roi correlation
     cc_ln1=1-pdist_with_NaN([ln1_roi1;ln2_roi2],'correlation');
     cc_ln2=1-pdist_with_NaN([ln2_roi1;ln1_roi2],'correlation');
     cc_ln=(cc_ln1+cc_ln2)/2;
