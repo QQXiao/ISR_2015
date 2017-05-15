@@ -1,4 +1,4 @@
-function Get_RepresentationSpace(r)
+function Cal_Similarity_RepresentationSpace(r)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -39,40 +39,10 @@ subs=setdiff(1:21,2);
 nsub=length(subs);
 roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
     'tRVVC','RANG','RSMG','RIFG','RMFG','RSFG',...
-    'fmPFC','fPMC'...
-    'CA1','DG','subiculum','PRC','ERC'};
+    'fmPFC','fPMC'};
+    %'CA1','DG','subiculum','PRC','ERC'};
 roi=r;
 
-%data structure
-Mtrial=1; % trial number
-MpID=2;  % material id_pic
-MwID=3;  % material id_word
-Mcat1=4; % 1=structure,2=nature
-Mcat2=5; % 1=structure-foreign,2=structure-local,3=nature-water,4=nature-land
-
-Mres=6; %% 1=structure-foreign,2=structure-local,3=nature-water,4=nature-land
-MRT=7; % reaction time;
-
-Monset=8; % designed onset time
-MAonset=9; % actually onset time
-Mrun=10;
-Mset=11;
-MAonset_r=12; % actually onset time for response 1;category;
-Mscore=13;%right or wrong for identity
-%%added information
-Mposit=14;
-Mmem=15;
-Msub=16;
-Mphase=17;
-%%%%%%%%%
-TN=96;
-subs=setdiff(1:21,2);
-nsub=length(subs);
-roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
-    'tRVVC','RANG','RSMG','RIFG','RMFG','RSFG',...
-    'fmPFC','fPMC'...
-    'CA1','DG','subiculum','PRC','ERC'};
-roi=r;
 %%%%%%%%%
 rs_ln1_matrix=[];rs_mem1_matrix=[];rs_ln2_matrix=[];rs_mem2_matrix=[];
 all_subs_data_ln1=[]; all_subs_data_ln2=[]; all_subs_data_mem1=[]; all_subs_data_mem2=[];
