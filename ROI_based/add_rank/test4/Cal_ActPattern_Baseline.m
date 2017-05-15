@@ -41,8 +41,8 @@ s=subs;
 load(sprintf('%s/encoding_sub%02d.mat',labeldir,s));
 load(sprintf('%s/test_sub%02d.mat',labeldir,s));
 for nn=1:TN
-    p=list_ln(nn,MpID);w=list_ln(nn,MwID);
-    list_ln(nn,Mmem)=list_mem(list_mem(:,MpID)==p & list_mem(:,MwID)==w,Mmem);
+    p=subln(nn,MpID);w=subln(nn,MwID);
+    subln(nn,Mmem)=submem(submem(:,MpID)==p & submem(:,MwID)==w,Mmem);
 end
 %get original sequece for pID
 m_ln=subln(:,MpID);
