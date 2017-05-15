@@ -4,9 +4,44 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
-datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
-resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1',basedir);
-resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method2',basedir);
+%datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
+%resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1',basedir);
+%resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method2',basedir);
+
+datadir=sprintf('%s/ROI_based/subs_within_between/std_space/data_two_sets',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/std_space/method1',basedir);
+resultdir2=sprintf('%s/ROI_based/subs_within_between/std_space/method2',basedir);
+
+%data structure
+Mtrial=1; % trial number
+MpID=2;  % material id_pic
+MwID=3;  % material id_word
+Mcat1=4; % 1=structure,2=nature
+Mcat2=5; % 1=structure-foreign,2=structure-local,3=nature-water,4=nature-land
+
+Mres=6; %% 1=structure-foreign,2=structure-local,3=nature-water,4=nature-land
+MRT=7; % reaction time;
+
+Monset=8; % designed onset time
+MAonset=9; % actually onset time
+Mrun=10;
+Mset=11;
+MAonset_r=12; % actually onset time for response 1;category;
+Mscore=13;%right or wrong for identity
+%%added information
+Mposit=14;
+Mmem=15;
+Msub=16;
+Mphase=17;
+%%%%%%%%%
+TN=96;
+subs=setdiff(1:21,2);
+nsub=length(subs);
+roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
+    'tRVVC','RANG','RSMG','RIFG','RMFG','RSFG',...
+    'fmPFC','fPMC'...
+    'CA1','DG','subiculum','PRC','ERC'};
+roi=r;
 
 %data structure
 Mtrial=1; % trial number
@@ -47,10 +82,10 @@ for s=subs;
     load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi}));
     %get data for all subjects for methods2: calculated mean activation across subjects as
     %the activation pattern for between subjects
-    all_subs_data_ln1{s}=mean_data_ln1;
-    all_subs_data_ln2{s}=mean_data_ln2;
-    all_subs_data_mem1{s}=mean_data_mem1;
-    all_subs_data_mem2{s}=mean_data_mem2;
+    all_subs_data_ln1(:,:,s)=mean_data_ln1;
+    all_subs_data_ln2(:,:,s)=mean_data_ln2;
+    all_subs_data_mem1(:,:,s)=mean_data_mem1;
+    all_subs_data_mem2(:,:,s)=mean_data_mem2;
     %calculate the correlation between data from two sets
     c_ln1=corr(mean_data_ln1',mean_data_ln2');
     c_ln2=corr(mean_data_ln2',mean_data_ln1');
@@ -161,13 +196,13 @@ clear c_ln1 c_ln2 c_mem1 c_mem2
 for s=subs;
     ap_ln1=[]; bp_ln1=[]; ap_ln2=[]; bp_ln2=[];
     ap_mem1=[]; bp_mem1=[]; ap_mem2=[]; bp_mem2=[];
-    ap_ln1=all_subs_data_ln1{s};
-    bp_ln1=mean(all_subs_data_ln1{~ismember(subs,s)},3);
-    ap_ln2=all_subs_data_ln2{s};
+    ap_ln1=all_subs_data_ln1(:,:,s);
+    bp_ln1=mean(all_subs_data_ln1(:,:,~ismember(subs,s)),3);
+    ap_ln2=all_subs_data_ln2(:,:,s);
     bp_ln2=mean(all_subs_data_ln2(:,:,~ismember(subs,s)),3);
-    ap_mem1=all_subs_data_mem1{s};
+    ap_mem1=all_subs_data_mem1(:,:,s);
     bp_mem1=mean(all_subs_data_mem1(:,:,~ismember(subs,s)),3);
-    ap_mem2=all_subs_data_mem2{s};
+    ap_mem2=all_subs_data_mem2(:,:,s);
     bp_mem2=mean(all_subs_data_mem2(:,:,~ismember(subs,s)),3);
     %calculate the correlation between data from two sets
     c_ln1=corr(ap_ln1',ap_ln2');

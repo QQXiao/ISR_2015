@@ -4,9 +4,11 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
-datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
+%datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
+%resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
+datadir=sprintf('%s/ROI_based/std_space/glm/raw',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/std_space/data_two_sets',basedir);
 labeldir=[basedir,'/behav/label'];
-resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
 
 %data structure
 Mtrial=1; % trial number
@@ -37,7 +39,7 @@ roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
     'CA1','DG','subiculum','PRC','ERC'};
 roi=r;
 s=subs;
-    
+
 load(sprintf('%s/encoding_sub%02d.mat',labeldir,s));
 load(sprintf('%s/test_sub%02d.mat',labeldir,s));
 %get original sequece for pID
@@ -126,5 +128,5 @@ mean_data_ln1=mean(all_data_ln1,3);
 mean_data_ln2=mean(all_data_ln2,3);
 mean_data_mem1=mean(all_data_mem1,3);
 mean_data_mem2=mean(all_data_mem2,3);
-eval(sprintf('save %s/sub%02d_%s.mat mean_data_ln1 mean_data_ln2 mean_data_mem1 mean_data_mem2', resultdir,s,roi_name{roi}));        
+eval(sprintf('save %s/sub%02d_%s.mat mean_data_ln1 mean_data_ln2 mean_data_mem1 mean_data_mem2', resultdir,s,roi_name{roi}));
 end %function
