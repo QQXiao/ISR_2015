@@ -4,13 +4,9 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
-%datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
-%resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1',basedir);
-%resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method2',basedir);
-
-datadir=sprintf('%s/ROI_based/subs_within_between/std_space/data_two_sets',basedir);
-resultdir=sprintf('%s/ROI_based/subs_within_between/std_space/method1',basedir);
-resultdir2=sprintf('%s/ROI_based/subs_within_between/std_space/method2',basedir);
+datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1',basedir);
+resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method2',basedir);
 
 %data structure
 Mtrial=1; % trial number
@@ -39,9 +35,8 @@ subs=setdiff(1:21,2);
 nsub=length(subs);
 roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
     'tRVVC','RANG','RSMG','RIFG','RMFG','RSFG',...
-    'fmPFC','fPMC'};
-    %'CA1','DG','subiculum','PRC','ERC'};
-
+    'fmPFC','fPMC',...
+    'CA1','DG','subiculum','PRC','ERC'};
 roi=r;
 %%%%%%%%%
 for np=1:1000;
@@ -150,50 +145,6 @@ all_subs_data_ln1=[]; all_subs_data_ln2=[]; all_subs_data_mem1=[]; all_subs_data
         Nrank_ERS12(sf,np)=sum(bs_ERS12<ws_ERS12);
         Nrank_ERS21(sf,np)=sum(bs_ERS21<ws_ERS21);
     end %end subs
-    %%%%%%%%%%%%%%%
-    %% Method two: calculated mean activation across all other subjects as the activation pattern for between subjects
-    clear rs_ln1 rs_ln2 rs_mem1 rs_mem2
-    clear c_ln1 c_ln2 c_mem1 c_mem2
-    for s=subs;
-        ap_ln1=[]; bp_ln1=[]; ap_ln2=[]; bp_ln2=[];
-        ap_mem1=[]; bp_mem1=[]; ap_mem2=[]; bp_mem2=[];
-        ap_ln1=all_subs_data_ln1(:,:,s);
-        bp_ln1=mean(all_subs_data_ln1(:,:,~ismember(subs,s)),3);
-        ap_ln2=all_subs_data_ln2(:,:,s);
-        bp_ln2=mean(all_subs_data_ln2(:,:,~ismember(subs,s)),3);
-        ap_mem1=all_subs_data_mem1(:,:,s);
-        bp_mem1=mean(all_subs_data_mem1(:,:,~ismember(subs,s)),3);
-        ap_mem2=all_subs_data_mem2(:,:,s);
-        bp_mem2=mean(all_subs_data_mem2(:,:,~ismember(subs,s)),3);
-        %calculate the correlation between data from two sets
-        c_ln1=corr(ap_ln1',ap_ln2');
-        c_ln2=corr(ap_ln2',ap_ln1');
-        c_mem1=corr(ap_mem1',ap_mem2');
-        c_mem2=corr(ap_mem2',ap_mem1');
-        cb_ln1=corr(bp_ln1',bp_ln2');
-        cb_ln2=corr(bp_ln2',bp_ln1');
-        cb_mem1=corr(bp_mem1',bp_mem2');
-        cb_mem2=corr(bp_mem2',bp_mem1');
-        %get the tril of the correlation matrix as the representational
-        %%space for each set
-        rs_ln1=c_ln1(triu(c_ln1)==0);
-        rs_ln2=c_ln2(triu(c_ln2)==0);
-        rs_mem1=c_mem1(triu(c_mem1)==0);
-        rs_mem2=c_mem2(triu(c_mem2)==0);
-        brs_ln1=cb_ln1(triu(c_ln1)==0);
-        brs_ln2=cb_ln2(triu(c_ln2)==0);
-        brs_mem1=cb_mem1(triu(c_mem1)==0);
-        brs_mem2=cb_mem2(triu(c_mem2)==0);
-        %
-        m2_cln(s,1,np)=corr(rs_ln1,rs_ln2);
-        m2_cln(s,2,np)=(corr(rs_ln1,brs_ln2)+corr(rs_ln2,brs_ln1))/2;
-        m2_cmem(s,1,np)=corr(rs_mem1,rs_mem2);
-        m2_cmem(s,2,np)=(corr(rs_mem1,brs_mem2)+corr(rs_mem2,brs_mem1))/2;
-        m2_cERS12(s,1,np)=corr(rs_ln1,rs_mem2);
-        m2_cERS12(s,2,np)=(corr(rs_ln1,brs_mem2)+corr(rs_ln2,brs_mem1))/2;
-        m2_cERS21(s,1,np)=corr(rs_ln2,rs_mem1);
-        m2_cERS21(s,2,np)=(corr(rs_ln2,brs_mem1)+corr(rs_ln1,brs_mem2))/2;
-    end %end subs    
 end % end permutation
 m1_ln_z=0.5*(log(1+m1_cln)-log(1-m1_cln));
 m1_mem_z=0.5*(log(1+m1_cmem)-log(1-m1_cmem));
@@ -207,13 +158,4 @@ eval(sprintf('save %s/BL_rank_ln_%s.mat Nrank_ln', resultdir,roi_name{roi}));
 eval(sprintf('save %s/BL_rank_mem_%s.mat Nrank_mem', resultdir,roi_name{roi}));
 eval(sprintf('save %s/BL_rank_ERS12_%s.mat Nrank_ERS12', resultdir,roi_name{roi}));
 eval(sprintf('save %s/BL_rank_ERS21_%s.mat Nrank_ERS21', resultdir,roi_name{roi}));
-
-m2_ln_z=0.5*(log(1+m2_cln)-log(1-m2_cln));
-m2_mem_z=0.5*(log(1+m2_cmem)-log(1-m2_cmem));
-m2_ERS12_z=0.5*(log(1+cERS12)-log(1-m2_cERS12));
-m2_ERS21_z=0.5*(log(1+cERS21)-log(1-m2_cERS21));
-eval(sprintf('save %s/BL_ln_%s.mat m2_ln_z', resultdir2,roi_name{roi}));
-eval(sprintf('save %s/BL_mem_%s.mat m2_mem_z', resultdir2,roi_name{roi}));
-eval(sprintf('save %s/BL_ERS12_%s.mat m2_ERS12_z', resultdir2,roi_name{roi}));
-eval(sprintf('save %s/BL_ERS21_%s.mat m2_ERS21_z', resultdir2,roi_name{roi}));
 end %function

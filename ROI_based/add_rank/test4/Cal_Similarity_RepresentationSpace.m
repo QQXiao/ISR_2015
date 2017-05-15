@@ -4,13 +4,9 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
-%datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
-%resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1',basedir);
-%resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method2',basedir);
-
-datadir=sprintf('%s/ROI_based/subs_within_between/std_space/data_two_sets',basedir);
-resultdir=sprintf('%s/ROI_based/subs_within_between/std_space/method1',basedir);
-resultdir2=sprintf('%s/ROI_based/subs_within_between/std_space/method2',basedir);
+datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1',basedir);
+resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method2',basedir);
 
 %data structure
 Mtrial=1; % trial number
@@ -39,8 +35,8 @@ subs=setdiff(1:21,2);
 nsub=length(subs);
 roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
     'tRVVC','RANG','RSMG','RIFG','RMFG','RSFG',...
-    'fmPFC','fPMC'};
-    %'CA1','DG','subiculum','PRC','ERC'};
+    'fmPFC','fPMC',...
+    'CA1','DG','subiculum','PRC','ERC'};
 roi=r;
 
 %%%%%%%%%
@@ -157,58 +153,4 @@ eval(sprintf('save %s/rank_ln_%s.txt Nrank_ln -ascii -tabs', resultdir,roi_name{
 eval(sprintf('save %s/rank_mem_%s.txt Nrank_mem -ascii -tabs', resultdir,roi_name{roi}));
 eval(sprintf('save %s/rank_ERS12_%s.txt Nrank_ERS12 -ascii -tabs', resultdir,roi_name{roi}));
 eval(sprintf('save %s/rank_ERS21_%s.txt Nrank_ERS21 -ascii -tabs', resultdir,roi_name{roi}));
-
-clear cln cmem cERS12 cERS21 ln_z mem_z ERS12_z ERS21_z
-clear rs_ln1 rs_ln2 rs_mem1 rs_mem2
-clear c_ln1 c_ln2 c_mem1 c_mem2
-%%%%%%%%%%%%%%%
-%% Method two: calculated mean activation across all other subjects as the activation pattern for between subjects
-for s=subs;
-    ap_ln1=[]; bp_ln1=[]; ap_ln2=[]; bp_ln2=[];
-    ap_mem1=[]; bp_mem1=[]; ap_mem2=[]; bp_mem2=[];
-    ap_ln1=all_subs_data_ln1(:,:,s);
-    bp_ln1=mean(all_subs_data_ln1(:,:,~ismember(subs,s)),3);
-    ap_ln2=all_subs_data_ln2(:,:,s);
-    bp_ln2=mean(all_subs_data_ln2(:,:,~ismember(subs,s)),3);
-    ap_mem1=all_subs_data_mem1(:,:,s);
-    bp_mem1=mean(all_subs_data_mem1(:,:,~ismember(subs,s)),3);
-    ap_mem2=all_subs_data_mem2(:,:,s);
-    bp_mem2=mean(all_subs_data_mem2(:,:,~ismember(subs,s)),3);
-    %calculate the correlation between data from two sets
-    c_ln1=corr(ap_ln1',ap_ln2');
-    c_ln2=corr(ap_ln2',ap_ln1');
-    c_mem1=corr(ap_mem1',ap_mem2');
-    c_mem2=corr(ap_mem2',ap_mem1');
-    cb_ln1=corr(bp_ln1',bp_ln2');
-    cb_ln2=corr(bp_ln2',bp_ln1');
-    cb_mem1=corr(bp_mem1',bp_mem2');
-    cb_mem2=corr(bp_mem2',bp_mem1');
-    %get the tril of the correlation matrix as the representational
-    %%space for each set
-    rs_ln1=c_ln1(triu(c_ln1)==0);
-    rs_ln2=c_ln2(triu(c_ln2)==0);
-    rs_mem1=c_mem1(triu(c_mem1)==0);
-    rs_mem2=c_mem2(triu(c_mem2)==0);
-    brs_ln1=cb_ln1(triu(c_ln1)==0);
-    brs_ln2=cb_ln2(triu(c_ln2)==0);
-    brs_mem1=cb_mem1(triu(c_mem1)==0);
-    brs_mem2=cb_mem2(triu(c_mem2)==0);
-    %
-    cln(s,1)=corr(rs_ln1,rs_ln2);
-    cln(s,2)=(corr(rs_ln1,brs_ln2)+corr(rs_ln2,brs_ln1))/2;
-    cmem(s,1)=corr(rs_mem1,rs_mem2);
-    cmem(s,2)=(corr(rs_mem1,brs_mem2)+corr(rs_mem2,brs_mem1))/2;
-    cERS12(s,1)=corr(rs_ln1,rs_mem2);
-    cERS12(s,2)=(corr(rs_ln1,brs_mem2)+corr(rs_ln2,brs_mem1))/2;
-    cERS21(s,1)=corr(rs_ln2,rs_mem1);
-    cERS21(s,2)=(corr(rs_ln2,brs_mem1)+corr(rs_ln1,brs_mem2))/2;
-end %end subs
-ln_z=0.5*(log(1+cln)-log(1-cln));
-mem_z=0.5*(log(1+cmem)-log(1-cmem));
-ERS12_z=0.5*(log(1+cERS12)-log(1-cERS12));
-ERS21_z=0.5*(log(1+cERS21)-log(1-cERS21));
-eval(sprintf('save %s/ln_%s.txt ln_z -ascii -tabs', resultdir2,roi_name{roi}));
-eval(sprintf('save %s/mem_%s.txt mem_z -ascii -tabs', resultdir2,roi_name{roi}));
-eval(sprintf('save %s/ERS12_%s.txt ERS12_z -ascii -tabs', resultdir2,roi_name{roi}));
-eval(sprintf('save %s/ERS21_%s.txt ERS21_z -ascii -tabs', resultdir2,roi_name{roi}));
 end %function

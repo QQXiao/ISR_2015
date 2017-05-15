@@ -4,10 +4,8 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
-%datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
-%resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
-datadir=sprintf('%s/ROI_based/std_space/glm/raw',basedir);
-resultdir=sprintf('%s/ROI_based/subs_within_between/std_space/data_two_sets',basedir);
+datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
 labeldir=[basedir,'/behav/label'];
 
 %data structure
@@ -35,8 +33,8 @@ Mphase=17;
 TN=96;
 roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
     'tRVVC','RANG','RSMG','RIFG','RMFG','RSFG',...
-    'fmPFC','fPMC'};
-    %'CA1','DG','subiculum','PRC','ERC'};
+    'fmPFC','fPMC',...
+    'CA1','DG','subiculum','PRC','ERC'};
 %roi_name={'LSFG','RSFG'};
 roi=r;
 s=subs;
