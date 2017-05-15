@@ -44,13 +44,13 @@ all_subs_data_ln1=[]; all_subs_data_ln2=[]; all_subs_data_mem1=[]; all_subs_data
 for s=subs;
     rs_ln1=[]; rs_ln2=[]; rs_mem1=[]; rs_mem2=[];
     %load data
-    load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi));
+    load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi}));
     %get data for all subjects for methods2: calculated mean activation across subjects as
     %the activation pattern for between subjects
-    all_subs_data_ln1(:,:,s)=mean_data_ln1;
-    all_subs_data_ln2(:,:,s)=mean_data_ln2;
-    all_subs_data_mem1(:,:,s)=mean_data_mem1;
-    all_subs_data_mem2(:,:,s)=mean_data_mem2;
+    all_subs_data_ln1{s}=mean_data_ln1;
+    all_subs_data_ln2{s}=mean_data_ln2;
+    all_subs_data_mem1{s}=mean_data_mem1;
+    all_subs_data_mem2{s}=mean_data_mem2;
     %calculate the correlation between data from two sets
     c_ln1=corr(mean_data_ln1',mean_data_ln2');
     c_ln2=corr(mean_data_ln2',mean_data_ln1');
@@ -70,7 +70,7 @@ for s=subs;
 end %end sub
 clear mean_data_ln1 mean_data_ln2 mean_data_mem1 mean_data_mem2
 %%%%%%%%%%%%%%%
-%% Method one: calculated similarity for each subject and each other subject 
+%% Method one: calculated similarity for each subject and each other subject
 allsub=[subs subs];nasub=length(allsub);
 %1=set1; 2=set2
 allln=[ones(1,nsub) 2*ones(1,nsub)];
@@ -153,7 +153,7 @@ eval(sprintf('save %s/rank_mem_%s.txt Nrank_mem -ascii -tabs', resultdir,roi_nam
 eval(sprintf('save %s/rank_ERS12_%s.txt Nrank_ERS12 -ascii -tabs', resultdir,roi_name{roi}));
 eval(sprintf('save %s/rank_ERS21_%s.txt Nrank_ERS21 -ascii -tabs', resultdir,roi_name{roi}));
 
-clear cln cmem cERS12 cERS21 ln_z mem_z ERS12_z ERS21_z 
+clear cln cmem cERS12 cERS21 ln_z mem_z ERS12_z ERS21_z
 clear rs_ln1 rs_ln2 rs_mem1 rs_mem2
 clear c_ln1 c_ln2 c_mem1 c_mem2
 %%%%%%%%%%%%%%%
@@ -161,13 +161,13 @@ clear c_ln1 c_ln2 c_mem1 c_mem2
 for s=subs;
     ap_ln1=[]; bp_ln1=[]; ap_ln2=[]; bp_ln2=[];
     ap_mem1=[]; bp_mem1=[]; ap_mem2=[]; bp_mem2=[];
-    ap_ln1=all_subs_data_ln1(:,:,s);
-    bp_ln1=mean(all_subs_data_ln1(:,:,~ismember(subs,s)),3);
-    ap_ln2=all_subs_data_ln2(:,:,s);
+    ap_ln1=all_subs_data_ln1{s};
+    bp_ln1=mean(all_subs_data_ln1{~ismember(subs,s)},3);
+    ap_ln2=all_subs_data_ln2{s};
     bp_ln2=mean(all_subs_data_ln2(:,:,~ismember(subs,s)),3);
-    ap_mem1=all_subs_data_mem1(:,:,s);
+    ap_mem1=all_subs_data_mem1{s};
     bp_mem1=mean(all_subs_data_mem1(:,:,~ismember(subs,s)),3);
-    ap_mem2=all_subs_data_mem2(:,:,s);
+    ap_mem2=all_subs_data_mem2{s};
     bp_mem2=mean(all_subs_data_mem2(:,:,~ismember(subs,s)),3);
     %calculate the correlation between data from two sets
     c_ln1=corr(ap_ln1',ap_ln2');
