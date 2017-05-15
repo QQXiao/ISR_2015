@@ -1,10 +1,9 @@
 #!sh/bin/
 basedir=/seastor/helenhelen/ISR_2015
-datadir=$basedir/data_singletrial/glm/all
-resultdir=$basedir/data_singletrial/glm/all_std
-affinedir=$basedir/data_singletrial/transform/e2t
-templatefile=/opt/fmritools/fsl/data/standard/MNI152_T1_2mm_brain.nii.gz
-
+datadir=$basedir/data_singletrial/glm/all_std
+resultdir=$basedir/ROI_based/std_space/glm/raw
+mkdir -p $resultdir
+roidir=/seastor/helenhelen/roi/ISR/single
 for m in 1 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21
 do
     if [ ${m} -lt 10 ];
@@ -17,5 +16,9 @@ do
     fi
     echo $SUB
 datafile=$datadir/${sub}.nii.gz
-fsl_sub WarpTimeSeriesImageMultiTransform 4 ${datafile} ${resultdir}/${sub}.nii.gz -R $templatefile $affinedir/${sub}_Affine.txt
+    for roi in $roidir/*.nii.gz
+    do
+        roi_prefix=`basename $roi | sed -e "s/.nii.gz//"`
+        fsl_sub -q verylong.q fslmeants -i $datadir/${sub}.nii.gz --showall -m $maskdir/${roi_prefix} -o $resultdir/${sub}_${roi_prefix}.txt
+    done
 done
