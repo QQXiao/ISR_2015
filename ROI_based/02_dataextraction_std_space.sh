@@ -19,6 +19,7 @@ datafile=$datadir/${sub}.nii.gz
     for roi in $roidir/*.nii.gz
     do
         roi_prefix=`basename $roi | sed -e "s/.nii.gz//"`
-        fsl_sub -q verylong.q fslmeants -i $datadir/${sub}.nii.gz --showall -m $maskdir/${roi_prefix} -o $resultdir/${sub}_${roi_prefix}.txt
+        fsl_sub -q verylong.q fslmeants -i $datadir/${sub}.nii.gz --showall -m $roidir/${roi_prefix} -o $resultdir/${sub}_${roi_prefix}.txt
+        #fslmeants -i $datadir/${sub}.nii.gz --showall -m $roidir/${roi_prefix} -o $resultdir/${sub}_${roi_prefix}.txt
     done
 done

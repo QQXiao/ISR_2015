@@ -17,5 +17,5 @@ do
     fi
     echo $SUB
 datafile=$datadir/${sub}.nii.gz
-fsl_sub WarpTimeSeriesImageMultiTransform 4 ${datafile} ${resultdir}/${sub}.nii.gz -R $templatefile $affinedir/${sub}_Affine.txt
+fsl_sub -q verylong.q WarpTimeSeriesImageMultiTransform 4 ${datafile} ${resultdir}/${sub}.nii.gz -R $templatefile $affinedir/${sub}_Affine.txt
 done
