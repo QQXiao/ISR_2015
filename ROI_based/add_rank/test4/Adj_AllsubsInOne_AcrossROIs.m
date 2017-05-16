@@ -1,8 +1,7 @@
-function allroi()
+function Adj_AllsubsInOne_AcrossROIs()
 basedir='/seastor/helenhelen/ISR_2015';
-labeldir=[basedir,'/behavior/label'];
-datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test3/crossRoi',basedir);
-resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test3/crossRoi',basedir);
+datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1/AcrossROIs',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1/AcrossROIs',basedir);
 
 addpath /seastor/helenhelen/scripts/NIFTI
 
@@ -34,12 +33,12 @@ for r1=1:length(roi_name1)
         aln_z=[aln_z;tln_z];
     end
 end
-        file_name=sprintf('%s/24roi_ERS12.txt',resultdir);
-        eval(sprintf('save %s aERS12_z -ascii',file_name));
-        file_name=sprintf('%s/24roi_ERS21.txt',resultdir);
-        eval(sprintf('save %s aERS21_z -ascii',file_name));
-        file_name=sprintf('%s/24roi_mem.txt',resultdir);
-        eval(sprintf('save %s amem_z -ascii',file_name));
-        file_name=sprintf('%s/24roi_ln.txt',resultdir);
-        eval(sprintf('save %s aln_z -ascii',file_name));
+file_name=sprintf('%s/24roi_ERS12.txt',resultdir);
+eval(sprintf('save %s aERS12_z -ascii',file_name));
+file_name=sprintf('%s/24roi_ERS21.txt',resultdir);
+eval(sprintf('save %s aERS21_z -ascii',file_name));
+file_name=sprintf('%s/24roi_mem.txt',resultdir);
+eval(sprintf('save %s amem_z -ascii',file_name));
+file_name=sprintf('%s/24roi_ln.txt',resultdir);
+eval(sprintf('save %s aln_z -ascii',file_name));
 end%end function
