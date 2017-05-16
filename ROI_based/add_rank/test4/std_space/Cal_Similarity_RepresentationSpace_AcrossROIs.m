@@ -1,4 +1,4 @@
-function Cal_RepresentationSpace_AcrossROIs(r1,r2)
+function Cal_Similarity_RepresentationSpace_AcrossROIs(r1,r2)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI

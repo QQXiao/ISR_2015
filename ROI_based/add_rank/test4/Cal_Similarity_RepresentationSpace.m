@@ -4,7 +4,7 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
-datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
+datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/RS',basedir);
 resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1',basedir);
 resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method2',basedir);
 
@@ -41,29 +41,23 @@ roi=r;
 
 %%%%%%%%%
 rs_ln1_matrix=[];rs_mem1_matrix=[];rs_ln2_matrix=[];rs_mem2_matrix=[];
-all_subs_data_ln1=[]; all_subs_data_ln2=[]; all_subs_data_mem1=[]; all_subs_data_mem2=[];
+all_subs_rs_ln1=[]; all_subs_rs_ln2=[]; all_subs_rs_mem1=[]; all_subs_rs_mem2=[];
 for s=subs;
-    rs_ln1=[]; rs_ln2=[]; rs_mem1=[]; rs_mem2=[];
     %load data
     load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi}));
-    %calculate the correlation between data from two sets
-    c_ln1=corr(mean_data_ln1',mean_data_ln2');
-    c_ln2=corr(mean_data_ln2',mean_data_ln1');
-    c_mem1=corr(mean_data_mem1',mean_data_mem2');
-    c_mem2=corr(mean_data_mem2',mean_data_mem1');
-    %get the tril of the correlation matrix as the representational
-    %%space for each set
-    rs_ln1=c_ln1(triu(c_ln1)==0);
-    rs_ln2=c_ln2(triu(c_ln2)==0);
-    rs_mem1=c_mem1(triu(c_mem1)==0);
-    rs_mem2=c_mem2(triu(c_mem2)==0);
     %representation space matrix for all subjects
-    rs_ln1_matrix=[rs_ln1_matrix;rs_ln1'];
-    rs_ln2_matrix=[rs_ln2_matrix;rs_ln2'];
-    rs_mem1_matrix=[rs_mem1_matrix;rs_mem1'];
-    rs_mem2_matrix=[rs_mem2_matrix;rs_mem2'];
+    rs_ln1_matrix=[rs_ln1_matrix;mean_rs_ln1'];
+    rs_ln2_matrix=[rs_ln2_matrix;mean_rs_ln2'];
+    rs_mem1_matrix=[rs_mem1_matrix;mean_rs_mem1'];
+    rs_mem2_matrix=[rs_mem2_matrix;mean_rs_mem2'];
+    %get representation space for all subjects for methods2: calculated mean activation across subjects as
+    %the activation pattern for between subjects
+    all_subs_rs_ln1(:,:,s)=mean_rs_ln1;
+    all_subs_rs_ln2(:,:,s)=mean_rs_ln2;
+    all_subs_rs_mem1(:,:,s)=mean_rs_mem1;
+    all_subs_rs_mem2(:,:,s)=mean_rs_mem2;
 end %end sub
-clear mean_data_ln1 mean_data_ln2 mean_data_mem1 mean_data_mem2
+clear mean_rs_ln1 mean_rs_ln2 mean_rs_mem1 mean_rs_mem2
 %%%%%%%%%%%%%%%
 %% Method one: calculated similarity for each subject and each other subject
 allsub=[subs subs];nasub=length(allsub);
@@ -159,4 +153,39 @@ eval(sprintf('save %s/rank_mem_%s.txt Nrank_mem -ascii -tabs', resultdir,roi_nam
 eval(sprintf('save %s/rank_ERS12_%s.txt Nrank_ERS12 -ascii -tabs', resultdir,roi_name{roi}));
 eval(sprintf('save %s/rank_ERS21_%s.txt Nrank_ERS21 -ascii -tabs', resultdir,roi_name{roi}));
 eval(sprintf('save %s/ps_%s.mat ps_ln_z ps_mem_z ps_ERS12_z ps_ERS21_z', resultdir,roi_name{roi}));
+
+clear cln cmem cERS12 cERS21 ln_z mem_z ERS12_z ERS21_z
+clear rs_ln1 rs_ln2 rs_mem1 rs_mem2
+clear c_ln1 c_ln2 c_mem1 c_mem2
+%%%%%%%%%%%%%%%
+%% Method two: calculated mean activation across all other subjects as the activation pattern for between subjects
+for s=subs;
+    rs_ln1=[]; bs_ln1=[]; rs_ln2=[]; bs_ln2=[];
+    rs_mem1=[]; bs_mem1=[]; rs_mem2=[]; bs_mem2=[];
+    rs_ln1=all_subs_rs_ln1(:,:,s);
+    bs_ln1=mean(all_subs_rs_ln1(:,:,~ismember(subs,s)),3);
+    rs_ln2=all_subs_rs_ln2(:,:,s);
+    bs_ln2=mean(all_subs_rs_ln2(:,:,~ismember(subs,s)),3);
+    rs_mem1=all_subs_rs_mem1(:,:,s);
+    bs_mem1=mean(all_subs_rs_mem1(:,:,~ismember(subs,s)),3);
+    rs_mem2=all_subs_rs_mem2(:,:,s);
+    bs_mem2=mean(all_subs_rs_mem2(:,:,~ismember(subs,s)),3);
+    %
+    cln(s,1)=corr(rs_ln1,rs_ln2);
+    cln(s,2)=(corr(rs_ln1,bs_ln2)+corr(rs_ln2,bs_ln1))/2;
+    cmem(s,1)=corr(rs_mem1,rs_mem2);
+    cmem(s,2)=(corr(rs_mem1,bs_mem2)+corr(rs_mem2,bs_mem1))/2;
+    cERS12(s,1)=corr(rs_ln1,rs_mem2);
+    cERS12(s,2)=corr(rs_ln1,bs_mem2);
+    cERS21(s,1)=corr(rs_ln2,rs_mem1);
+    cERS21(s,2)=corr(rs_ln2,bs_mem1);
+end %end subs
+ln_z=0.5*(log(1+cln)-log(1-cln));
+mem_z=0.5*(log(1+cmem)-log(1-cmem));
+ERS12_z=0.5*(log(1+cERS12)-log(1-cERS12));
+ERS21_z=0.5*(log(1+cERS21)-log(1-cERS21));
+eval(sprintf('save %s/ln_%s.txt ln_z -ascii -tabs', resultdir2,roi_name{roi}));
+eval(sprintf('save %s/mem_%s.txt mem_z -ascii -tabs', resultdir2,roi_name{roi}));
+eval(sprintf('save %s/ERS12_%s.txt ERS12_z -ascii -tabs', resultdir2,roi_name{roi}));
+eval(sprintf('save %s/ERS21_%s.txt ERS21_z -ascii -tabs', resultdir2,roi_name{roi}));
 end %function

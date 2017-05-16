@@ -4,7 +4,7 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
-datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
+datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/RS',basedir);
 resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1',basedir);
 resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method2',basedir);
 
@@ -39,35 +39,31 @@ roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
     'CA1','DG','subiculum','PRC','ERC'};
 roi=r;
 %%%%%%%%%
-for np=1:1000;
-rs_ln1_matrix=[];rs_mem1_matrix=[];rs_ln2_matrix=[];rs_mem2_matrix=[];
-all_subs_data_ln1=[]; all_subs_data_ln2=[]; all_subs_data_mem1=[]; all_subs_data_mem2=[];
+for np=1:1000
+    all_sub_rs_ln1_matrix=[];all_sub_rs_ln2_matrix=[];
+    all_sub_rs_mem1_matrix=[];all_sub_rs_mem2_matrix=[];
+    all_subs_rs_ln1=[]; all_subs_rs_ln2=[]; all_subs_rs_mem1=[]; all_subs_rs_mem2=[];
     for s=subs;
-        rs_ln1=[]; rs_ln2=[]; rs_mem1=[]; rs_mem2=[];
+        rs_ln1=[];rs_ln2=[];rs_mem1=[];rs_mem2=[];
         %load data
         load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi}));
-        data_ln1=all_data_ln1(:,:,np);
-        data_ln2=all_data_ln2(:,:,np);
-        data_mem1=all_data_mem1(:,:,np);
-        data_mem2=all_data_mem2(:,:,np);
-        %calculate the correlation between data from two sets
-        c_ln1=corr(data_ln1',data_ln2');
-        c_ln2=corr(data_ln2',data_ln1');
-        c_mem1=corr(data_mem1',data_mem2');
-        c_mem2=corr(data_mem2',data_mem1');
-        %get the tril of the correlation matrix as the representational
-        %%space for each set
-        rs_ln1=c_ln1(triu(c_ln1)==0);
-        rs_ln2=c_ln2(triu(c_ln2)==0);
-        rs_mem1=c_mem1(triu(c_mem1)==0);
-        rs_mem2=c_mem2(triu(c_mem2)==0);
+        rs_ln1=rs_ln1_matrix(:,:,np);
+        rs_ln2=rs_ln1_matrix(:,:,np);
+        rs_mem1=rs_ln1_matrix(:,:,np);
+        rs_mem2=rs_ln1_matrix(:,:,np);
         %representation space matrix for all subjects
-        rs_ln1_matrix=[rs_ln1_matrix;rs_ln1'];
-        rs_ln2_matrix=[rs_ln2_matrix;rs_ln2'];
-        rs_mem1_matrix=[rs_mem1_matrix;rs_mem1'];
-        rs_mem2_matrix=[rs_mem2_matrix;rs_mem2'];
+        all_sub_rs_ln1_matrix=[all_sub_rs_ln1_matrix;rs_ln1'];
+        all_sub_rs_ln2_matrix=[all_sub_rs_ln2_matrix;rs_ln2'];
+        all_sub_rs_mem1_matrix=[all_sub_rs_mem1_matrix;rs_mem1'];
+        all_sub_rs_mem2_matrix=[all_sub_rs_mem2_matrix;rs_mem2'];
+        %get representation space for all subjects for methods2: calculated mean activation across subjects as
+        %the activation pattern for between subjects
+        all_subs_rs_ln1(:,:,s)=rs_ln1;
+        all_subs_rs_ln2(:,:,s)=rs_ln2;
+        all_subs_rs_mem1(:,:,s)=rs_mem1;
+        all_subs_rs_mem2(:,:,s)=rs_mem2;
     end %end sub
-    clear all_data_ln1 all_data_ln2 all_data_mem1 all_data_mem2
+    clear rs_ln1_matrix rs_ln2_matrix rs_mem1_matrix rs_mem_matrix
     %%%%%%%%%%%%%%%
     %% Method one: calculated similarity for each subject and each other subject
     allsub=[subs subs];nasub=length(allsub);
@@ -109,10 +105,10 @@ all_subs_data_ln1=[]; all_subs_data_ln2=[]; all_subs_data_mem1=[]; all_subs_data
     check_ERS12=[all_ERS12_1==all_ERS12_2];
     check_ERS21=[all_ERS21_1==all_ERS21_2];
     %calculate cross subs correlation
-    cc_ln=1-pdist_with_NaN([rs_ln1_matrix;rs_ln2_matrix],'correlation');
-    cc_mem=1-pdist_with_NaN([rs_mem1_matrix;rs_mem2_matrix],'correlation');
-    cc_ERS12=1-pdist_with_NaN([rs_ln1_matrix;rs_mem2_matrix],'correlation');
-    cc_ERS21=1-pdist_with_NaN([rs_ln2_matrix;rs_mem1_matrix],'correlation');
+    cc_ln=1-pdist_with_NaN([all_sub_rs_ln1_matrix;all_sub_rs_ln2_matrix],'correlation');
+    cc_mem=1-pdist_with_NaN([all_sub_rs_mem1_matrix;all_sub_rs_mem2_matrix],'correlation');
+    cc_ERS12=1-pdist_with_NaN([all_sub_rs_ln1_matrix;all_sub_rs_mem2_matrix],'correlation');
+    cc_ERS21=1-pdist_with_NaN([all_sub_rs_ln2_matrix;all_sub_rs_mem1_matrix],'correlation');
     %get within sub's or cross subs' correlation
     for sf=subs
         ws_ln=cc_ln(all_sub1==sf & check_sub==1 & check_ln==0);
@@ -124,22 +120,45 @@ all_subs_data_ln1=[]; all_subs_data_ln2=[]; all_subs_data_mem1=[]; all_subs_data
         bs_ERS12=cc_ERS12(all_sub1==sf & check_sub==0 & check_ERS12==0);
         bs_ERS21=cc_ERS21(all_sub1==sf & check_sub==0 & check_ERS21==0);
         %withi sub
-        m1_cln{sf,1,np}=ws_ln;
-        m1_cmem{sf,1,np}=ws_mem;
-        m1_cERS12{sf,1,np}=ws_ERS12;
-        m1_cERS21{sf,1,np}=ws_ERS21;
+        m1_cln(sf,1,np)=ws_ln;
+        m1_cmem(sf,1,np)=ws_mem;
+        m1_cERS12(sf,1,np)=ws_ERS12;
+        m1_cERS21(sf,1,np)=ws_ERS21;
         %cross subs
-        m1_cln{sf,2,np}=bs_ln;
-        m1_cmem{sf,2,np}=bs_mem;
-        m1_cERS12{sf,2,np}=bs_ERS12;
-        m1_cERS21{sf,2,np}=bs_ERS21;
+        m1_cln(sf,2,np)=bs_ln;
+        m1_cmem(sf,2,np)=bs_mem;
+        m1_cERS12(sf,2,np)=bs_ERS12;
+        m1_cERS21(sf,2,np)=bs_ERS21;
         %% rank
         Nrank_ln(sf,np)=sum(bs_ln<ws_ln);
         Nrank_mem(sf,np)=sum(bs_mem<ws_mem);
         Nrank_ERS12(sf,np)=sum(bs_ERS12<ws_ERS12);
         Nrank_ERS21(sf,np)=sum(bs_ERS21<ws_ERS21);
     end %end subs
-end % end permutation
+    %%%%%%%%%%%%%%%
+    %% Method two: calculated mean activation across all other subjects as the activation pattern for between subjects
+    for s=subs;
+        rs_ln1=[]; bs_ln1=[]; rs_ln2=[]; bs_ln2=[];
+        rs_mem1=[]; bs_mem1=[]; rs_mem2=[]; bs_mem2=[];
+        rs_ln1=all_subs_rs_ln1(:,:,s);
+        bs_ln1=mean(all_subs_rs_ln1(:,:,~ismember(subs,s)),3);
+        rs_ln2=all_subs_rs_ln2(:,:,s);
+        bs_ln2=mean(all_subs_rs_ln2(:,:,~ismember(subs,s)),3);
+        rs_mem1=all_subs_rs_mem1(:,:,s);
+        bs_mem1=mean(all_subs_rs_mem1(:,:,~ismember(subs,s)),3);
+        rs_mem2=all_subs_rs_mem2(:,:,s);
+        bs_mem2=mean(all_subs_rs_mem2(:,:,~ismember(subs,s)),3);
+        %
+        m2_cln(sf,1,np)=corr(rs_ln1,rs_ln2);
+        m2_cln(sf,2,np)=(corr(rs_ln1,bs_ln2)+corr(rs_ln2,bs_ln1))/2;
+        m2_cmem(sf,1,np)=corr(rs_mem1,rs_mem2);
+        m2_cmem(sf,2,np)=(corr(rs_mem1,bs_mem2)+corr(rs_mem2,bs_mem1))/2;
+        m2_cERS12(sf,1,np)=corr(rs_ln1,rs_mem2);
+        m2_cERS12(sf,2,np)=corr(rs_ln1,bs_mem2);
+        m2_cERS21(sf,1,np)=corr(rs_ln2,rs_mem1);
+        m2_cERS21(sf,2,np)=corr(rs_ln2,bs_mem1); 
+    end
+end %end permutation
 m1_ln_z=0.5*(log(1+m1_cln)-log(1-m1_cln));
 m1_mem_z=0.5*(log(1+m1_cmem)-log(1-m1_cmem));
 m1_ERS12_z=0.5*(log(1+m1_cERS12)-log(1-m1_cERS12));
@@ -152,4 +171,12 @@ eval(sprintf('save %s/BL_rank_ln_%s.mat Nrank_ln', resultdir,roi_name{roi}));
 eval(sprintf('save %s/BL_rank_mem_%s.mat Nrank_mem', resultdir,roi_name{roi}));
 eval(sprintf('save %s/BL_rank_ERS12_%s.mat Nrank_ERS12', resultdir,roi_name{roi}));
 eval(sprintf('save %s/BL_rank_ERS21_%s.mat Nrank_ERS21', resultdir,roi_name{roi}));
+m2_ln_z=0.5*(log(1+m2_cln)-log(1-m2_cln));
+m2_mem_z=0.5*(log(1+m2_cmem)-log(1-m2_cmem));
+m2_ERS12_z=0.5*(log(1+m2_cERS12)-log(1-m2_cERS12));
+m2_ERS21_z=0.5*(log(1+m2_cERS21)-log(1-m2_cERS21));
+eval(sprintf('save %s/BL_ln_%s.mat m2_ln_z', resultdir2,roi_name{roi}));
+eval(sprintf('save %s/BL_mem_%s.mat m2_mem_z', resultdir2,roi_name{roi}));
+eval(sprintf('save %s/BL_ERS12_%s.mat m2_ERS12_z', resultdir2,roi_name{roi}));
+eval(sprintf('save %s/BL_ERS21_%s.mat m2_ERS21_z', resultdir2,roi_name{roi}));
 end %function

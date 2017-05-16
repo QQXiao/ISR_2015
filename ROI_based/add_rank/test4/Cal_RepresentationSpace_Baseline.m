@@ -1,11 +1,11 @@
-function Cal_ActPattern_Baseline(r,subs)
+function Cal_RepresentationSpace_Baseline(r,subs)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
-resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/RS',basedir);
 labeldir=[basedir,'/behav/label'];
 
 %data structure
@@ -47,8 +47,10 @@ end
 %get original sequece for pID
 m_ln=subln(:,MpID);
 m_mem=submem(:,MpID);
+rs_ln1_matrix=[];rs_mem1_matrix=[];rs_ln2_matrix=[];rs_mem2_matrix=[];
 %shuffling PID;
 for np=1:1000 %permutation for 1000 times
+    rs_ln1=[]; rs_ln2=[]; rs_mem1=[]; rs_mem2=[];
     t_m_ln=m_ln(randperm(TN),:);
     t_m_mem=m_mem(randperm(TN),:);
     while t_m_ln==m_ln | t_m_mem==m_mem;
@@ -127,11 +129,23 @@ for np=1:1000 %permutation for 1000 times
     data_mem_1=tamem_1(:,[1:end-1]);
     amem_2=[mem12;mem22];
     tamem_2=sortrows(amem_2,a(2));
-    data_mem_2=tamem_2(:,[1:end-1]);
-    all_data_ln1(:,:,np)=data_ln_1;
-    all_data_ln2(:,:,np)=data_ln_2;
-    all_data_mem1(:,:,np)=data_mem_1;
-    all_data_mem2(:,:,np)=data_mem_2;
+    data_mem_2=tamem_2(:,[1:end-1]);   
+    %calculate the correlation between data from two sets
+    c_ln1=corr(data_ln_1',data_ln_2');
+    c_ln2=corr(data_ln_2',data_ln_1');
+    c_mem1=corr(data_mem_1',data_mem_2');
+    c_mem2=corr(data_mem_2',data_mem_1');
+    %get the tril of the correlation matrix as the representational
+    %%space for each set
+    rs_ln1=c_ln1(triu(c_ln1)==0);
+    rs_ln2=c_ln2(triu(c_ln2)==0);
+    rs_mem1=c_mem1(triu(c_mem1)==0);
+    rs_mem2=c_mem2(triu(c_mem2)==0);
+    %representation space matrix for all permutation
+    rs_ln1_matrix=[rs_ln1_matrix;rs_ln1'];
+    rs_ln2_matrix=[rs_ln2_matrix;rs_ln2'];
+    rs_mem1_matrix=[rs_mem1_matrix;rs_mem1'];
+    rs_mem2_matrix=[rs_mem2_matrix;rs_mem2'];   
 end % end permutation
-eval(sprintf('save %s/BL_sub%02d_%s.mat all_data_ln1 all_data_ln2 all_data_mem1 all_data_mem2', resultdir,s,roi_name{roi}));
+eval(sprintf('save %s/BL_sub%02d_%s.mat rs_ln1_matrix rs_ln2_matrix rs_mem1_matrix rs_mem2_matrix', resultdir,s,roi_name{roi}));
 end %function
