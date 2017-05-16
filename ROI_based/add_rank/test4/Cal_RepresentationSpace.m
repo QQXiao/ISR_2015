@@ -6,6 +6,7 @@ addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
 resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/RS',basedir);
+resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
 labeldir=[basedir,'/behav/label'];
 
 %data structure
@@ -126,10 +127,10 @@ for np=1:1000 %permutation for 1000 times
     all_data_mem1(:,:,np)=data_mem_1;
     all_data_mem2(:,:,np)=data_mem_2;
     %calculate the correlation between data from two sets
-    c_ln1=corr(mean_data_ln1',mean_data_ln2');
-    c_ln2=corr(mean_data_ln2',mean_data_ln1');
-    c_mem1=corr(mean_data_mem1',mean_data_mem2');
-    c_mem2=corr(mean_data_mem2',mean_data_mem1');
+    c_ln1=corr(data_ln_1',data_ln_2');
+    c_ln2=corr(data_ln_2',data_ln_1');
+    c_mem1=corr(data_mem_1',data_mem_2');
+    c_mem2=corr(data_mem_2',data_mem_1');
     %get the tril of the correlation matrix as the representational
     %%space for each set
     rs_ln1=c_ln1(triu(c_ln1)==0);
@@ -147,4 +148,5 @@ mean_rs_ln2=mean(rs_ln2_matrix,1);
 mean_rs_mem1=mean(rs_mem1_matrix,1);
 mean_rs_mem2=mean(rs_mem2_matrix,1);
 eval(sprintf('save %s/sub%02d_%s.mat mean_rs_ln1 mean_rs_ln2 mean_rs_mem1 mean_rs_mem2', resultdir,s,roi_name{roi}));
+eval(sprintf('save %s/sub%02d_%s.mat all_data_ln1 all_data_ln2 all_data_mem1 all_data_mem2', resultdir2,s,roi_name{roi}));
 end %function
