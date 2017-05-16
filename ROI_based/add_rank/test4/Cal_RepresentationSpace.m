@@ -1,11 +1,11 @@
-function Cal_ActPattern(r,subs)
+function Cal_RepresentationSpace(r,subs)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
-resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/RS',basedir);
 labeldir=[basedir,'/behav/label'];
 
 %data structure
@@ -92,7 +92,10 @@ ttyy1(memp_ln1==0,:)=NaN;
 ttyy2(memp_ln2==0,:)=NaN;
 ttzz1(memp_mem1==0,:)=NaN;
 ttzz2(memp_mem2==0,:)=NaN;
+
+rs_ln1_matrix=[];rs_mem1_matrix=[];rs_ln2_matrix=[];rs_mem2_matrix=[];
 for np=1:1000 %permutation for 1000 times
+    rs_ln1=[]; rs_ln2=[]; rs_mem1=[]; rs_mem2=[];
     %%mix data from two repetitions
     nt=a(1);
     c=unique(randperm(nt,nt/2));
@@ -122,10 +125,26 @@ for np=1:1000 %permutation for 1000 times
     all_data_ln2(:,:,np)=data_ln_2;
     all_data_mem1(:,:,np)=data_mem_1;
     all_data_mem2(:,:,np)=data_mem_2;
+    %calculate the correlation between data from two sets
+    c_ln1=corr(mean_data_ln1',mean_data_ln2');
+    c_ln2=corr(mean_data_ln2',mean_data_ln1');
+    c_mem1=corr(mean_data_mem1',mean_data_mem2');
+    c_mem2=corr(mean_data_mem2',mean_data_mem1');
+    %get the tril of the correlation matrix as the representational
+    %%space for each set
+    rs_ln1=c_ln1(triu(c_ln1)==0);
+    rs_ln2=c_ln2(triu(c_ln2)==0);
+    rs_mem1=c_mem1(triu(c_mem1)==0);
+    rs_mem2=c_mem2(triu(c_mem2)==0);
+    %representation space matrix for all permutation
+    rs_ln1_matrix=[rs_ln1_matrix;rs_ln1'];
+    rs_ln2_matrix=[rs_ln2_matrix;rs_ln2'];
+    rs_mem1_matrix=[rs_mem1_matrix;rs_mem1'];
+    rs_mem2_matrix=[rs_mem2_matrix;rs_mem2'];
 end % end permutation
-mean_data_ln1=mean(all_data_ln1,3);
-mean_data_ln2=mean(all_data_ln2,3);
-mean_data_mem1=mean(all_data_mem1,3);
-mean_data_mem2=mean(all_data_mem2,3);
-eval(sprintf('save %s/sub%02d_%s.mat mean_data_ln1 mean_data_ln2 mean_data_mem1 mean_data_mem2', resultdir,s,roi_name{roi}));
+mean_rs_ln1=mean(rs_ln1_matrix,1);
+mean_rs_ln2=mean(rs_ln2_matrix,1);
+mean_rs_mem1=mean(rs_mem1_matrix,1);
+mean_rs_mem2=mean(rs_mem2_matrix,1);
+eval(sprintf('save %s/sub%02d_%s.mat mean_rs_ln1 mean_rs_ln2 mean_rs_mem1 mean_rs_mem2', resultdir,s,roi_name{roi}));
 end %function
