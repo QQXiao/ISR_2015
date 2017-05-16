@@ -120,11 +120,22 @@ for sf=subs
     Nrank_mem(sf)=sum(bs_mem<ws_mem);
     Nrank_ERS12(sf)=sum(bs_ERS12<ws_ERS12);
     Nrank_ERS21(sf)=sum(bs_ERS21<ws_ERS21);
+    %% all subs
+    for sff=subs
+        ps_ln(sf,sff)=cc_ln(all_sub1==sf & all_sub2==sff & check_ln==0);
+        ps_mem(sf,sff)=cc_mem(all_sub1==sf & all_sub2==sff & check_ln==0);
+        ps_ERS12(sf,sff)=cc_ERS12(all_sub1==sf & all_sub2==sff & check_ln==0);
+        ps_ERS21(sf,sff)=cc_ERS12(all_sub1==sf & all_sub2==sff & check_ln==0);
+    end
 end %end subs
 ln_z=0.5*(log(1+cln)-log(1-cln));
 mem_z=0.5*(log(1+cmem)-log(1-cmem));
 ERS12_z=0.5*(log(1+cERS12)-log(1-cERS12));
 ERS21_z=0.5*(log(1+cERS21)-log(1-cERS21));
+ps_ln_z=0.5*(log(1+ps_ln)-log(1-ps_ln));
+ps_mem_z=0.5*(log(1+ps_mem)-log(1-ps_mem));
+ps_ERS12_z=0.5*(log(1+ps_ERS12)-log(1-ps_ERS12));
+ps_ERS21_z=0.5*(log(1+ps_ERS21)-log(1-ps_ERS21));
 eval(sprintf('save %s/ln_%s_%s.txt ln_z -ascii -tabs', resultdir,roi_name{roi1},roi_name{roi2}));
 eval(sprintf('save %s/mem_%s_%s.txt mem_z -ascii -tabs', resultdir,roi_name{roi1},roi_name{roi2}));
 eval(sprintf('save %s/ERS12_%s_%s.txt ERS12_z -ascii -tabs', resultdir,roi_name{roi1},roi_name{roi2}));
@@ -133,6 +144,7 @@ eval(sprintf('save %s/rank_ln_%s_%s.txt Nrank_ln -ascii -tabs', resultdir,roi_na
 eval(sprintf('save %s/rank_mem_%s_%s.txt Nrank_mem -ascii -tabs', resultdir,roi_name{roi1},roi_name{roi2}));
 eval(sprintf('save %s/rank_ERS12_%s_%s.txt Nrank_ERS12 -ascii -tabs', resultdir,roi_name{roi1},roi_name{roi2}));
 eval(sprintf('save %s/rank_ERS21_%s_%s.txt Nrank_ERS21 -ascii -tabs', resultdir,roi_name{roi1},roi_name{roi2}));
+eval(sprintf('save %s/ps_%s.mat ps_ln_z ps_mem_z ps_ERS12_z ps_ERS21_z', resultdir,roi_name{roi}));
 end %function
     
         

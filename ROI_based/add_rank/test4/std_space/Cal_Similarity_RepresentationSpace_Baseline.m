@@ -135,15 +135,15 @@ all_subs_data_ln1=[]; all_subs_data_ln2=[]; all_subs_data_mem1=[]; all_subs_data
         bs_ERS12=cc_ERS12(all_sub1==sf & check_sub==0 & check_ERS12==0);
         bs_ERS21=cc_ERS21(all_sub1==sf & check_sub==0 & check_ERS21==0);
         %withi sub
-        m1_cln(sf,1,np)=ws_ln;
-        m1_cmem(sf,1,np)=ws_mem;
-        m1_cERS12(sf,1,np)=ws_ERS12;
-        m1_cERS21(sf,1,np)=ws_ERS21;
+        m1_cln{sf,1,np}=ws_ln;
+        m1_cmem{sf,1,np}=ws_mem;
+        m1_cERS12{sf,1,np}=ws_ERS12;
+        m1_cERS21{sf,1,np}=ws_ERS21;
         %cross subs
-        m1_cln(sf,2,np)=mean(bs_ln);
-        m1_cmem(sf,2,np)=mean(bs_mem);
-        m1_cERS12(sf,2,np)=mean(bs_ERS12);
-        m1_cERS21(sf,2,np)=mean(bs_ERS21);
+        m1_cln{sf,2,np}=bs_ln;
+        m1_cmem{sf,2,np}=bs_mem;
+        m1_cERS12{sf,2,np}=bs_ERS12;
+        m1_cERS21{sf,2,np}=bs_ERS21;
         %% rank
         Nrank_ln(sf,np)=sum(bs_ln<ws_ln);
         Nrank_mem(sf,np)=sum(bs_mem<ws_mem);
