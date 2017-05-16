@@ -50,12 +50,6 @@ all_subs_data_ln1=[]; all_subs_data_ln2=[]; all_subs_data_mem1=[]; all_subs_data
         data_ln2=all_data_ln2(:,:,np);
         data_mem1=all_data_mem1(:,:,np);
         data_mem2=all_data_mem2(:,:,np);
-        %get data for all subjects for methods2: calculated mean activation across subjects as
-        %the activation pattern for between subjects
-        all_subs_data_ln1(:,:,s)=data_ln1;
-        all_subs_data_ln2(:,:,s)=data_ln2;
-        all_subs_data_mem1(:,:,s)=data_mem1;
-        all_subs_data_mem2(:,:,s)=data_mem2;
         %calculate the correlation between data from two sets
         c_ln1=corr(data_ln1',data_ln2');
         c_ln2=corr(data_ln2',data_ln1');

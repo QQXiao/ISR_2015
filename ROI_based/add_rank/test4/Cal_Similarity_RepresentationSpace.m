@@ -46,12 +46,6 @@ for s=subs;
     rs_ln1=[]; rs_ln2=[]; rs_mem1=[]; rs_mem2=[];
     %load data
     load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi}));
-    %get data for all subjects for methods2: calculated mean activation across subjects as
-    %the activation pattern for between subjects
-    all_subs_data_ln1(:,:,s)=mean_data_ln1;
-    all_subs_data_ln2(:,:,s)=mean_data_ln2;
-    all_subs_data_mem1(:,:,s)=mean_data_mem1;
-    all_subs_data_mem2(:,:,s)=mean_data_mem2;
     %calculate the correlation between data from two sets
     c_ln1=corr(mean_data_ln1',mean_data_ln2');
     c_ln2=corr(mean_data_ln2',mean_data_ln1');
@@ -146,7 +140,7 @@ for sf=subs
         ps_mem(sf,sff)=cc_mem(all_sub1==sf & all_sub2==sff & check_ln==0);
         ps_ERS12(sf,sff)=cc_ERS12(all_sub1==sf & all_sub2==sff & check_ln==0);
         ps_ERS21(sf,sff)=cc_ERS12(all_sub1==sf & all_sub2==sff & check_ln==0);
-    end    
+    end
 end %end subs
 ln_z=0.5*(log(1+cln)-log(1-cln));
 mem_z=0.5*(log(1+cmem)-log(1-cmem));
