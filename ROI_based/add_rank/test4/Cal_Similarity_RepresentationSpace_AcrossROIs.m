@@ -19,25 +19,26 @@ roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
 nroi=length(roi_name);
 roi1=r1;
 roi2=r2;
-rs_ln1_matrix=[];rs_mem1_matrix=[];rs_ln2_matrix=[];rs_mem2_matrix=[];
+rs_ln1_matrix_roi1=[];rs_mem1_matrix_roi1=[];rs_ln2_matrix_roi1=[];rs_mem2_matrix_roi1=[];
+rs_ln1_matrix_roi2=[];rs_mem1_matrix_roi2=[];rs_ln2_matrix_roi2=[];rs_mem2_matrix_roi2=[];
 all_subs_rs_ln1=[]; all_subs_rs_ln2=[]; all_subs_rs_mem1=[]; all_subs_rs_mem2=[];
 for s=subs;
     %%load representational space data from ROI1
     load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi1}));
     %get representation space for all subjects for methods2: calculated mean activation across subjects as
     %the activation pattern for between subjects
-    rs_ln1_matrix_roi1=[rs_ln1_matrix;mean_rs_ln1];
-    rs_ln2_matrix_roi1=[rs_ln2_matrix;mean_rs_ln2];
-    rs_mem1_matrix_roi1=[rs_mem1_matrix;mean_rs_mem1];
-    rs_mem2_matrix_roi1=[rs_mem2_matrix;mean_rs_mem2];
+    rs_ln1_matrix_roi1=[rs_ln1_matrix_roi1;mean_rs_ln1];
+    rs_ln2_matrix_roi1=[rs_ln2_matrix_roi1;mean_rs_ln2];
+    rs_mem1_matrix_roi1=[rs_mem1_matrix_roi1;mean_rs_mem1];
+    rs_mem2_matrix_roi1=[rs_mem2_matrix_roi1;mean_rs_mem2];
     %%load representational space data from ROI2
     load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi1}));
     %get representation space for all subjects for methods2: calculated mean activation across subjects as
     %the activation pattern for between subjects
-    rs_ln1_matrix_roi2=[rs_ln1_matrix;mean_rs_ln1];
-    rs_ln2_matrix_roi2=[rs_ln2_matrix;mean_rs_ln2];
-    rs_mem1_matrix_roi2=[rs_mem1_matrix;mean_rs_mem1];
-    rs_mem2_matrix_roi2=[rs_mem2_matrix;mean_rs_mem2];
+    rs_ln1_matrix_roi2=[rs_ln1_matrix_roi2;mean_rs_ln1];
+    rs_ln2_matrix_roi2=[rs_ln2_matrix_roi2;mean_rs_ln2];
+    rs_mem1_matrix_roi2=[rs_mem1_matrix_roi2;mean_rs_mem1];
+    rs_mem2_matrix_roi2=[rs_mem2_matrix_roi2;mean_rs_mem2];
 end %end subs
 clear mean_rs_ln1 mean_rs_ln2 mean_rs_mem1 mean_rs_mem2
 %%set sublist
@@ -100,27 +101,27 @@ for sf=subs
     bs_ERS12=cc_ERS12(all_sub1==sf & check_sub==0 & check_ERS12==0 & check_roi==0);
     bs_ERS21=cc_ERS21(all_sub1==sf & check_sub==0 & check_ERS21==0 & check_roi==0);
     %withi sub
-    cln(sf,1)=ws_ln;
-    cmem(sf,1)=ws_mem;
-    cERS12(sf,1)=ws_ERS12;
-    cERS21(sf,1)=ws_ERS21;
+    cln(sf,1)=mean(ws_ln);
+    cmem(sf,1)=mean(ws_mem);
+    cERS12(sf,1)=mean(ws_ERS12);
+    cERS21(sf,1)=mean(ws_ERS21);
     %cross subs
     cln(sf,2)=mean(bs_ln);
     cmem(sf,2)=mean(bs_mem);
     cERS12(sf,2)=mean(bs_ERS12);
     cERS21(sf,2)=mean(bs_ERS21);
-    %% rank
-    Nrank_ln(sf)=sum(bs_ln<ws_ln);
-    Nrank_mem(sf)=sum(bs_mem<ws_mem);
-    Nrank_ERS12(sf)=sum(bs_ERS12<ws_ERS12);
-    Nrank_ERS21(sf)=sum(bs_ERS21<ws_ERS21);
     %% all subs
     for sff=subs
-        ps_ln(sf,sff)=cc_ln(all_sub1==sf & all_sub2==sff & check_ln==0);
-        ps_mem(sf,sff)=cc_mem(all_sub1==sf & all_sub2==sff & check_ln==0);
-        ps_ERS12(sf,sff)=cc_ERS12(all_sub1==sf & all_sub2==sff & check_ln==0);
-        ps_ERS21(sf,sff)=cc_ERS12(all_sub1==sf & all_sub2==sff & check_ln==0);
+        ps_ln(sf,sff)=mean(cc_ln(all_sub1==sf & all_sub2==sff & check_ln==0));
+        ps_mem(sf,sff)=mean(cc_mem(all_sub1==sf & all_sub2==sff & check_ln==0));
+        ps_ERS12(sf,sff)=mean(cc_ERS12(all_sub1==sf & all_sub2==sff & check_ln==0));
+        ps_ERS21(sf,sff)=mean(cc_ERS12(all_sub1==sf & all_sub2==sff & check_ln==0));
     end
+    %% rank
+    Nrank_ln(sf)=sum(ps_ln(sf,~ismember(subs,sf))<ps_ln(sf,sf));
+    Nrank_mem(sf)=sum(ps_mem(sf,~ismember(subs,sf))<ps_mem(sf,sf));
+    Nrank_ERS12(sf)=sum(ps_ERS12(sf,~ismember(subs,sf))<ps_ERS12(sf,sf));
+    Nrank_ERS21(sf)=sum(ps_ERS21(sf,~ismember(subs,sf))<ps_ERS21(sf,sf));
 end %end subs
 ln_z=0.5*(log(1+cln)-log(1-cln));
 mem_z=0.5*(log(1+cmem)-log(1-cmem));
