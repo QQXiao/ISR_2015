@@ -139,7 +139,7 @@ eval(sprintf('save %s/rank_ln_%s_%s.txt Nrank_ln -ascii -tabs', resultdir,roi_na
 eval(sprintf('save %s/rank_mem_%s_%s.txt Nrank_mem -ascii -tabs', resultdir,roi_name{roi1},roi_name{roi2}));
 eval(sprintf('save %s/rank_ERS12_%s_%s.txt Nrank_ERS12 -ascii -tabs', resultdir,roi_name{roi1},roi_name{roi2}));
 eval(sprintf('save %s/rank_ERS21_%s_%s.txt Nrank_ERS21 -ascii -tabs', resultdir,roi_name{roi1},roi_name{roi2}));
-eval(sprintf('save %s/ps_%s.mat ps_ln_z ps_mem_z ps_ERS12_z ps_ERS21_z', resultdir,roi_name{roi1},roi_name{roi2}));
+eval(sprintf('save %s/ps_%s_%s.mat ps_ln_z ps_mem_z ps_ERS12_z ps_ERS21_z', resultdir,roi_name{roi1},roi_name{roi2}));
 end %function
 
 
