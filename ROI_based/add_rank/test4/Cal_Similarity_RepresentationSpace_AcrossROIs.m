@@ -4,7 +4,7 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
-datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
+datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/RS',basedir);
 resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1/AcrossROIs',basedir);
 resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method2/AcrossROIs',basedir);
 %%%%%%%%%
