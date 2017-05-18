@@ -46,10 +46,10 @@ for s=subs;
     %load data
     load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi}));
     %representation space matrix for all subjects
-    rs_ln1_matrix=[rs_ln1_matrix;mean_rs_ln1'];
-    rs_ln2_matrix=[rs_ln2_matrix;mean_rs_ln2'];
-    rs_mem1_matrix=[rs_mem1_matrix;mean_rs_mem1'];
-    rs_mem2_matrix=[rs_mem2_matrix;mean_rs_mem2'];
+    rs_ln1_matrix=[rs_ln1_matrix;mean_rs_ln1];
+    rs_ln2_matrix=[rs_ln2_matrix;mean_rs_ln2];
+    rs_mem1_matrix=[rs_mem1_matrix;mean_rs_mem1];
+    rs_mem2_matrix=[rs_mem2_matrix;mean_rs_mem2];
     %get representation space for all subjects for methods2: calculated mean activation across subjects as
     %the activation pattern for between subjects
     all_subs_rs_ln1(:,:,s)=mean_rs_ln1;
@@ -171,14 +171,14 @@ for s=subs;
     rs_mem2=all_subs_rs_mem2(:,:,s);
     bs_mem2=mean(all_subs_rs_mem2(:,:,~ismember(subs,s)),3);
     %
-    cln(s,1)=corr(rs_ln1,rs_ln2);
-    cln(s,2)=(corr(rs_ln1,bs_ln2)+corr(rs_ln2,bs_ln1))/2;
-    cmem(s,1)=corr(rs_mem1,rs_mem2);
-    cmem(s,2)=(corr(rs_mem1,bs_mem2)+corr(rs_mem2,bs_mem1))/2;
-    cERS12(s,1)=corr(rs_ln1,rs_mem2);
-    cERS12(s,2)=corr(rs_ln1,bs_mem2);
-    cERS21(s,1)=corr(rs_ln2,rs_mem1);
-    cERS21(s,2)=corr(rs_ln2,bs_mem1);
+    cln(s,1)=corr(rs_ln1',rs_ln2');
+    cln(s,2)=(corr(rs_ln1',bs_ln2')+corr(rs_ln2',bs_ln1'))/2;
+    cmem(s,1)=corr(rs_mem1',rs_mem2');
+    cmem(s,2)=(corr(rs_mem1',bs_mem2')+corr(rs_mem2',bs_mem1'))/2;
+    cERS12(s,1)=corr(rs_ln1',rs_mem2');
+    cERS12(s,2)=corr(rs_ln1',bs_mem2');
+    cERS21(s,1)=corr(rs_ln2',rs_mem1');
+    cERS21(s,2)=corr(rs_ln2',bs_mem1');
 end %end subs
 ln_z=0.5*(log(1+cln)-log(1-cln));
 mem_z=0.5*(log(1+cmem)-log(1-cmem));

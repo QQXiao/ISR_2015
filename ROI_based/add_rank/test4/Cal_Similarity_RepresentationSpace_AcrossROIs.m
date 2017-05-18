@@ -26,18 +26,18 @@ for s=subs;
     load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi1}));
     %get representation space for all subjects for methods2: calculated mean activation across subjects as
     %the activation pattern for between subjects
-    rs_ln1_matrix_roi1=[rs_ln1_matrix;mean_rs_ln1'];
-    rs_ln2_matrix_roi1=[rs_ln2_matrix;mean_rs_ln2'];
-    rs_mem1_matrix_roi1=[rs_mem1_matrix;mean_rs_mem1'];
-    rs_mem2_matrix_roi1=[rs_mem2_matrix;mean_rs_mem2'];
+    rs_ln1_matrix_roi1=[rs_ln1_matrix;mean_rs_ln1];
+    rs_ln2_matrix_roi1=[rs_ln2_matrix;mean_rs_ln2];
+    rs_mem1_matrix_roi1=[rs_mem1_matrix;mean_rs_mem1];
+    rs_mem2_matrix_roi1=[rs_mem2_matrix;mean_rs_mem2];
     %%load representational space data from ROI2
     load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi1}));
     %get representation space for all subjects for methods2: calculated mean activation across subjects as
     %the activation pattern for between subjects
-    rs_ln1_matrix_roi2=[rs_ln1_matrix;mean_rs_ln1'];
-    rs_ln2_matrix_roi2=[rs_ln2_matrix;mean_rs_ln2'];
-    rs_mem1_matrix_roi2=[rs_mem1_matrix;mean_rs_mem1'];
-    rs_mem2_matrix_roi2=[rs_mem2_matrix;mean_rs_mem2'];
+    rs_ln1_matrix_roi2=[rs_ln1_matrix;mean_rs_ln1];
+    rs_ln2_matrix_roi2=[rs_ln2_matrix;mean_rs_ln2];
+    rs_mem1_matrix_roi2=[rs_mem1_matrix;mean_rs_mem1];
+    rs_mem2_matrix_roi2=[rs_mem2_matrix;mean_rs_mem2];
 end %end subs
 clear mean_rs_ln1 mean_rs_ln2 mean_rs_mem1 mean_rs_mem2
 %%set sublist

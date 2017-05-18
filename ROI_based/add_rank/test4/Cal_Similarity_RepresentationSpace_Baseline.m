@@ -52,10 +52,10 @@ for np=1:1000
         rs_mem1=rs_ln1_matrix(:,:,np);
         rs_mem2=rs_ln1_matrix(:,:,np);
         %representation space matrix for all subjects
-        all_sub_rs_ln1_matrix=[all_sub_rs_ln1_matrix;rs_ln1'];
-        all_sub_rs_ln2_matrix=[all_sub_rs_ln2_matrix;rs_ln2'];
-        all_sub_rs_mem1_matrix=[all_sub_rs_mem1_matrix;rs_mem1'];
-        all_sub_rs_mem2_matrix=[all_sub_rs_mem2_matrix;rs_mem2'];
+        all_sub_rs_ln1_matrix=[all_sub_rs_ln1_matrix;rs_ln1];
+        all_sub_rs_ln2_matrix=[all_sub_rs_ln2_matrix;rs_ln2];
+        all_sub_rs_mem1_matrix=[all_sub_rs_mem1_matrix;rs_mem1];
+        all_sub_rs_mem2_matrix=[all_sub_rs_mem2_matrix;rs_mem2];
         %get representation space for all subjects for methods2: calculated mean activation across subjects as
         %the activation pattern for between subjects
         all_subs_rs_ln1(:,:,s)=rs_ln1;
@@ -149,14 +149,14 @@ for np=1:1000
         rs_mem2=all_subs_rs_mem2(:,:,s);
         bs_mem2=mean(all_subs_rs_mem2(:,:,~ismember(subs,s)),3);
         %
-        m2_cln(sf,1,np)=corr(rs_ln1,rs_ln2);
-        m2_cln(sf,2,np)=(corr(rs_ln1,bs_ln2)+corr(rs_ln2,bs_ln1))/2;
-        m2_cmem(sf,1,np)=corr(rs_mem1,rs_mem2);
-        m2_cmem(sf,2,np)=(corr(rs_mem1,bs_mem2)+corr(rs_mem2,bs_mem1))/2;
-        m2_cERS12(sf,1,np)=corr(rs_ln1,rs_mem2);
-        m2_cERS12(sf,2,np)=corr(rs_ln1,bs_mem2);
-        m2_cERS21(sf,1,np)=corr(rs_ln2,rs_mem1);
-        m2_cERS21(sf,2,np)=corr(rs_ln2,bs_mem1); 
+        m2_cln(sf,1,np)=corr(rs_ln1',rs_ln2');
+        m2_cln(sf,2,np)=(corr(rs_ln1',bs_ln2')+corr(rs_ln2',bs_ln1'))/2;
+        m2_cmem(sf,1,np)=corr(rs_mem1',rs_mem2');
+        m2_cmem(sf,2,np)=(corr(rs_mem1',bs_mem2')+corr(rs_mem2',bs_mem1'))/2;
+        m2_cERS12(sf,1,np)=corr(rs_ln1',rs_mem2');
+        m2_cERS12(sf,2,np)=corr(rs_ln1',bs_mem2');
+        m2_cERS21(sf,1,np)=corr(rs_ln2',rs_mem1');
+        m2_cERS21(sf,2,np)=corr(rs_ln2',bs_mem1'); 
     end
 end %end permutation
 m1_ln_z=0.5*(log(1+m1_cln)-log(1-m1_cln));
