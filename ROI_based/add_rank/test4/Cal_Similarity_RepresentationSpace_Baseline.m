@@ -46,11 +46,11 @@ for np=1:1000
     for s=subs;
         rs_ln1=[];rs_ln2=[];rs_mem1=[];rs_mem2=[];
         %load data
-        load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi}));
-        rs_ln1=rs_ln1_matrix(:,:,np);
-        rs_ln2=rs_ln1_matrix(:,:,np);
-        rs_mem1=rs_ln1_matrix(:,:,np);
-        rs_mem2=rs_ln1_matrix(:,:,np);
+        load(sprintf('%s/BL_sub%02d_%s.mat',datadir,s,roi_name{roi}));
+        rs_ln1=rs_ln1_matrix(np,:);
+        rs_ln2=rs_ln2_matrix(np,:);
+        rs_mem1=rs_mem1_matrix(np,:);
+        rs_mem2=rs_mem2_matrix(np,:);
         %representation space matrix for all subjects
         all_sub_rs_ln1_matrix=[all_sub_rs_ln1_matrix;rs_ln1];
         all_sub_rs_ln2_matrix=[all_sub_rs_ln2_matrix;rs_ln2];
@@ -120,15 +120,15 @@ for np=1:1000
         bs_ERS12=cc_ERS12(all_sub1==sf & check_sub==0 & check_ERS12==0);
         bs_ERS21=cc_ERS21(all_sub1==sf & check_sub==0 & check_ERS21==0);
         %withi sub
-        m1_cln(sf,1,np)=ws_ln;
-        m1_cmem(sf,1,np)=ws_mem;
-        m1_cERS12(sf,1,np)=ws_ERS12;
-        m1_cERS21(sf,1,np)=ws_ERS21;
+        m1_cln{sf,1,np}=ws_ln;
+        m1_cmem{sf,1,np}=ws_mem;
+        m1_cERS12{sf,1,np}=ws_ERS12;
+        m1_cERS21{sf,1,np}=ws_ERS21;
         %cross subs
-        m1_cln(sf,2,np)=bs_ln;
-        m1_cmem(sf,2,np)=bs_mem;
-        m1_cERS12(sf,2,np)=bs_ERS12;
-        m1_cERS21(sf,2,np)=bs_ERS21;
+        m1_cln{sf,2,np}=bs_ln;
+        m1_cmem{sf,2,np}=bs_mem;
+        m1_cERS12{sf,2,np}=bs_ERS12;
+        m1_cERS21{sf,2,np}=bs_ERS21;
         %% rank
         Nrank_ln(sf,np)=sum(bs_ln<ws_ln);
         Nrank_mem(sf,np)=sum(bs_mem<ws_mem);
