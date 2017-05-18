@@ -50,6 +50,7 @@ allERS21=[2*ones(1,nsub) 1*ones(1,nsub) 2*ones(1,nsub) 1*ones(1,nsub)];
 allroi=[ones(1,2*nsub) 2*ones(1,2*nsub)];
 all_sub1=[];all_sub2=[];
 all_ln1=[];all_ln2=[];
+all_roi1=[];all_roi2=[];
 all_mem1=[];all_mem2=[];
 all_ERS12_1=[];all_ERS12_2=[];
 all_ERS21_1=[];all_ERS21_2=[];
