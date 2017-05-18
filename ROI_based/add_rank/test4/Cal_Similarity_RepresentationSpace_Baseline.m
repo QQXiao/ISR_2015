@@ -159,24 +159,24 @@ for np=1:1000
         m2_cERS21(sf,2,np)=corr(rs_ln2',bs_mem1'); 
     end
 end %end permutation
-m1_ln_z=0.5*(log(1+m1_cln)-log(1-m1_cln));
-m1_mem_z=0.5*(log(1+m1_cmem)-log(1-m1_cmem));
-m1_ERS12_z=0.5*(log(1+m1_cERS12)-log(1-m1_cERS12));
-m1_ERS21_z=0.5*(log(1+m1_cERS21)-log(1-m1_cERS21));
-eval(sprintf('save %s/BL_ln_%s.mat m1_ln_z', resultdir,roi_name{roi}));
-eval(sprintf('save %s/BL_mem_%s.mat m1_mem_z', resultdir,roi_name{roi}));
-eval(sprintf('save %s/BL_ERS12_%s.mat m1_ERS12_z', resultdir,roi_name{roi}));
-eval(sprintf('save %s/BL_ERS21_%s.mat m1_ERS21_z', resultdir,roi_name{roi}));
+% m1_ln_z=0.5*(log(1+m1_cln)-log(1-m1_cln));
+% m1_mem_z=0.5*(log(1+m1_cmem)-log(1-m1_cmem));
+% m1_ERS12_z=0.5*(log(1+m1_cERS12)-log(1-m1_cERS12));
+% m1_ERS21_z=0.5*(log(1+m1_cERS21)-log(1-m1_cERS21));
+eval(sprintf('save %s/BL_ln_%s.mat m1_ln', resultdir,roi_name{roi}));
+eval(sprintf('save %s/BL_mem_%s.mat m1_mem', resultdir,roi_name{roi}));
+eval(sprintf('save %s/BL_ERS12_%s.mat m1_ERS12', resultdir,roi_name{roi}));
+eval(sprintf('save %s/BL_ERS21_%s.mat m1_ERS21', resultdir,roi_name{roi}));
 eval(sprintf('save %s/BL_rank_ln_%s.mat Nrank_ln', resultdir,roi_name{roi}));
 eval(sprintf('save %s/BL_rank_mem_%s.mat Nrank_mem', resultdir,roi_name{roi}));
 eval(sprintf('save %s/BL_rank_ERS12_%s.mat Nrank_ERS12', resultdir,roi_name{roi}));
 eval(sprintf('save %s/BL_rank_ERS21_%s.mat Nrank_ERS21', resultdir,roi_name{roi}));
-m2_ln_z=0.5*(log(1+m2_cln)-log(1-m2_cln));
-m2_mem_z=0.5*(log(1+m2_cmem)-log(1-m2_cmem));
-m2_ERS12_z=0.5*(log(1+m2_cERS12)-log(1-m2_cERS12));
-m2_ERS21_z=0.5*(log(1+m2_cERS21)-log(1-m2_cERS21));
-eval(sprintf('save %s/BL_ln_%s.mat m2_ln_z', resultdir2,roi_name{roi}));
-eval(sprintf('save %s/BL_mem_%s.mat m2_mem_z', resultdir2,roi_name{roi}));
-eval(sprintf('save %s/BL_ERS12_%s.mat m2_ERS12_z', resultdir2,roi_name{roi}));
-eval(sprintf('save %s/BL_ERS21_%s.mat m2_ERS21_z', resultdir2,roi_name{roi}));
+% m2_ln_z=0.5*(log(1+m2_cln)-log(1-m2_cln));
+% m2_mem_z=0.5*(log(1+m2_cmem)-log(1-m2_cmem));
+% m2_ERS12_z=0.5*(log(1+m2_cERS12)-log(1-m2_cERS12));
+% m2_ERS21_z=0.5*(log(1+m2_cERS21)-log(1-m2_cERS21));
+eval(sprintf('save %s/BL_ln_%s.mat m2_ln', resultdir2,roi_name{roi}));
+eval(sprintf('save %s/BL_mem_%s.mat m2_mem', resultdir2,roi_name{roi}));
+eval(sprintf('save %s/BL_ERS12_%s.mat m2_ERS12', resultdir2,roi_name{roi}));
+eval(sprintf('save %s/BL_ERS21_%s.mat m2_ERS21', resultdir2,roi_name{roi}));
 end %function
