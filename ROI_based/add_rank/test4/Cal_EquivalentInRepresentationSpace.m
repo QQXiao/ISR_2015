@@ -3,7 +3,7 @@ function Cal_EquivalentInRepresentationSpace(r,subs)
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
-datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/RS',basedir);
+datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
 resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4',basedir);
 
 % basedir='/Users/xiaoqian/Documents/experiment/ISR_2015_results';
