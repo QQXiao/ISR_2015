@@ -10,7 +10,7 @@ resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4',basedir);
 % addpath /Users/xiaoqian/Documents/experiment/ISR_2015_results/scripts/bnuserver
 % addpath /Users/xiaoqian/Documents/scripts/NIFTI
 % datadir='/Users/xiaoqian/Documents/experiment/ISR_2015_results/data/tmap/across_subs/test4/data_two_sets';
-subs=setdiff(1:21,2);
+%subs=setdiff(1:21,2);
 nsub=length(subs);
 roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
     'tRVVC','RANG','RSMG','RIFG','RMFG','RSFG',...
