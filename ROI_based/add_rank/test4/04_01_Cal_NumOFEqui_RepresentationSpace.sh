@@ -5,4 +5,5 @@ do
     do
         fsl_sub -m abe -M water.read@gmail.com -q verylong.q matlab -nodesktop -nosplash -r "Cal_EquivalentInRepresentationSpace($r,$subs);quit;"
     done
+    sleep 200
  done
