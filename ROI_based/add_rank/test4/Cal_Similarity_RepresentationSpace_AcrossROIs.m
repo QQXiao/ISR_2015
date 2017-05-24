@@ -64,8 +64,8 @@ for ss=2:nasub;
     all_ln2=[all_ln2 allln(ss:nasub)];
     all_mem1=[all_mem1 allmem(ss-1)*ones(1,nasub-ss+1)];
     all_mem2=[all_mem2 allmem(ss:nasub)];
-    all_ERS1=[all_ERS1 allERS1(ss-1)*ones(1,nasub-ss+1)];
-    all_ERS2=[all_ERS2 allERS2(ss:nasub)];
+    all_ERS1=[all_ERS1 allERS(ss-1)*ones(1,nasub-ss+1)];
+    all_ERS2=[all_ERS2 allERS(ss:nasub)];
     all_roi1=[all_roi1 allroi(ss-1)*ones(1,nasub-ss+1)];
     all_roi2=[all_roi2 allroi(ss:nasub)];
 end
@@ -96,11 +96,11 @@ for sf=subs
     %withi sub
     cln(sf,1)=mean(ws_ln);
     cmem(sf,1)=mean(ws_mem);
-    cERS(sf,1)=mean(ws_ERS12);
+    cERS(sf,1)=mean(ws_ERS);
     %cross subs
     cln(sf,2)=mean(bs_ln);
     cmem(sf,2)=mean(bs_mem);
-    cERS(sf,2)=mean(bs_ERS12);
+    cERS(sf,2)=mean(bs_ERS);
     %% all subs
     for sff=subs
         ps_ln(sf,sff)=mean(cc_ln(all_sub1==sf & all_sub2==sff & check_ln==0));
