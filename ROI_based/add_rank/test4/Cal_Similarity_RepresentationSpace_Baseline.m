@@ -131,13 +131,13 @@ for np=1:1000
         rs_ln1=[]; bs_ln1=[]; rs_ln2=[]; bs_ln2=[];
         rs_mem1=[]; bs_mem1=[]; rs_mem2=[]; bs_mem2=[];
         rs_ln1=all_subs_rs_ln1(:,:,s);
-        bs_ln1=mean(all_subs_rs_ln1(:,:,~ismember(subs,s)),3);
+        bs_ln1=mean(all_subs_rs_ln1(:,:,setdiff(subs,s)),3);
         rs_ln2=all_subs_rs_ln2(:,:,s);
-        bs_ln2=mean(all_subs_rs_ln2(:,:,~ismember(subs,s)),3);
+        bs_ln2=mean(all_subs_rs_ln2(:,:,setdiff(subs,s)),3);
         rs_mem1=all_subs_rs_mem1(:,:,s);
-        bs_mem1=mean(all_subs_rs_mem1(:,:,~ismember(subs,s)),3);
+        bs_mem1=mean(all_subs_rs_mem1(:,:,setdiff(subs,s)),3);
         rs_mem2=all_subs_rs_mem2(:,:,s);
-        bs_mem2=mean(all_subs_rs_mem2(:,:,~ismember(subs,s)),3);
+        bs_mem2=mean(all_subs_rs_mem2(:,:,setdiff(subs,s)),3);
         %
         m2_cln(sf,1,np)=corr(rs_ln1',rs_ln2');
         m2_cln(sf,2,np)=(corr(rs_ln1',bs_ln2')+corr(rs_ln2',bs_ln1'))/2;

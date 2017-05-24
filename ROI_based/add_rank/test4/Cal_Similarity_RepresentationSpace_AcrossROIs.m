@@ -108,9 +108,9 @@ for sf=subs
         ps_ERS(sf,sff)=mean(cc_ERS(all_sub1==sf & all_sub2==sff & check_ln==0));
     end
     %% rank
-    Nrank_ln(sf)=sum(ps_ln(sf,~ismember(subs,sf))<ps_ln(sf,sf));
-    Nrank_mem(sf)=sum(ps_mem(sf,~ismember(subs,sf))<ps_mem(sf,sf));
-    Nrank_ERS(sf)=sum(ps_ERS(sf,~ismember(subs,sf))<ps_ERS(sf,sf));
+    Nrank_ln(sf)=sum(ps_ln(sf,setdiff(subs,sf))<ps_ln(sf,sf));
+    Nrank_mem(sf)=sum(ps_mem(sf,setdiff(subs,sf))<ps_mem(sf,sf));
+    Nrank_ERS(sf)=sum(ps_ERS(sf,setdiff(subs,sf))<ps_ERS(sf,sf));
 end %end subs
 ln_z=0.5*(log(1+cln)-log(1-cln));
 mem_z=0.5*(log(1+cmem)-log(1-cmem));
