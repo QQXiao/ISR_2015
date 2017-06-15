@@ -5,8 +5,8 @@ addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
-resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/RS',basedir);
-resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test/RS',basedir);
+resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test/data_two_sets',basedir);
 labeldir=[basedir,'/behav/label'];
 
 %data structure
@@ -147,6 +147,6 @@ mean_rs_ln1=mean(rs_ln1_matrix,1);
 mean_rs_ln2=mean(rs_ln2_matrix,1);
 mean_rs_mem1=mean(rs_mem1_matrix,1);
 mean_rs_mem2=mean(rs_mem2_matrix,1);
-eval(sprintf('save %s/sub%02d_%s.mat mean_rs_ln1 mean_rs_ln2 mean_rs_mem1 mean_rs_mem2', resultdir,s,roi_name{roi}));
-eval(sprintf('save %s/sub%02d_%s.mat all_data_ln1 all_data_ln2 all_data_mem1 all_data_mem2', resultdir2,s,roi_name{roi}));
+eval(sprintf('save -v7.3 %s/sub%02d_%s.mat mean_rs_ln1 mean_rs_ln2 mean_rs_mem1 mean_rs_mem2', resultdir,s,roi_name{roi}));
+eval(sprintf('save -v7.3 %s/sub%02d_%s.mat all_data_ln1 all_data_ln2 all_data_mem1 all_data_mem2', resultdir2,s,roi_name{roi}));
 end %function
