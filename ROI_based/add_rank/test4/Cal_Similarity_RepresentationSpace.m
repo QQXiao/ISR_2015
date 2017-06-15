@@ -141,13 +141,13 @@ for t=1:1000
         rs_ln1=[]; bs_ln1=[]; rs_ln2=[]; bs_ln2=[];
         rs_mem1=[]; bs_mem1=[]; rs_mem2=[]; bs_mem2=[];
         rs_ln1=rs_ln1_matrix(sn,:);
-        bs_ln1=mean(rs_ln1_matrix(setdiff(subs,sn),:),1);
+        bs_ln1=mean(rs_ln1_matrix(setdiff(1:20,sn),:),1);
         rs_ln2=rs_ln2_matrix(sn,:);
-        bs_ln2=mean(rs_ln2_matrix(setdiff(subs,sn),:),1);
+        bs_ln2=mean(rs_ln2_matrix(setdiff(1:20,sn),:),1);
         rs_mem1=rs_mem1_matrix(sn,:);
-        bs_mem1=mean(rs_mem1_matrix(setdiff(subs,sn),:),1);
+        bs_mem1=mean(rs_mem1_matrix(setdiff(1:20,sn),:),1);
         rs_mem2=rs_mem2_matrix(sn,:);
-        bs_mem2=mean(rs_mem2_matrix(setdiff(subs,sn),:),1);
+        bs_mem2=mean(rs_mem2_matrix(setdiff(1:20,sn),:),1);
         %
         cln2(s,1,t)=corr(rs_ln1',rs_ln2');
         cln2(s,2,t)=(corr(rs_ln1',bs_ln2')+corr(rs_ln2',bs_ln1'))/2;
