@@ -62,7 +62,7 @@ for ss=2:nasub;
     all_mem1=[all_mem1 allmem(ss-1)*ones(1,nasub-ss+1)];
     all_mem2=[all_mem2 allmem(ss:nasub)];
     all_ERS1=[all_ERS1 allERS(ss-1)*ones(1,nasub-ss+1)];
-    all_ERS2=[all_ERS2 allERS(ss:nasub)];  
+    all_ERS2=[all_ERS2 allERS(ss:nasub)];
 end
 %whether the correlation is for same subject or not;
 %1=same;0=different;
@@ -100,7 +100,7 @@ for t=1:1000
         rs_ln2_matrix=[rs_ln2_matrix;rs_ln2'];
         rs_mem1_matrix=[rs_mem1_matrix;rs_mem1'];
         rs_mem2_matrix=[rs_mem2_matrix;rs_mem2'];
-    end %end sub  
+    end %end sub
     %%%Method 1
     %calculate correlation for RS in two data sets
     c_rs_ln=1-pdist_with_NaN([rs_ln1_matrix;rs_ln2_matrix],'correlation');
@@ -110,7 +110,7 @@ for t=1:1000
     c_rs_ERS=(c_rs_ERS12+c_rs_ERS21)/2;
     %get within sub's or cross subs' correlation
     for sf=subs
-        ws_ln=c_rsln(all_sub1==sf & check_sub==1 & check_ln==0);
+        ws_ln=c_rs_ln(all_sub1==sf & check_sub==1 & check_ln==0);
         ws_mem=c_rs_mem(all_sub1==sf & check_sub==1 & check_mem==0);
         ws_ERS=c_rs_ERS(all_sub1==sf & check_sub==1 & check_ERS==0);
         bs_ln=c_rs_ln(all_sub1==sf & check_sub==0 & check_ln==0);
@@ -130,9 +130,9 @@ for t=1:1000
         Nrank_ERS(sf,t)=sum(bs_ERS<ws_ERS);
         %% all subs ps
         for sff=subs
-            ps_ln(sf,sff,t)=cc_ln(all_sub1==sf & all_sub2==sff & check_ln==0);
-            ps_mem(sf,sff,t)=cc_mem(all_sub1==sf & all_sub2==sff & check_ln==0);
-            ps_ERS(sf,sff,t)=cc_ERS(all_sub1==sf & all_sub2==sff & check_ln==0);
+            ps_ln(sf,sff,t)=c_rs_ln(all_sub1==sf & all_sub2==sff & check_ln==0);
+            ps_mem(sf,sff,t)=c_rs_mem(all_sub1==sf & all_sub2==sff & check_ln==0);
+            ps_ERS(sf,sff,t)=c_rs_ERS(all_sub1==sf & all_sub2==sff & check_ln==0);
         end
     end %end subs
     %%%Method 2
@@ -154,10 +154,10 @@ for t=1:1000
         cmem2(s,1,t)=corr(rs_mem1',rs_mem2');
         cmem2(s,2,t)=(corr(rs_mem1',bs_mem2')+corr(rs_mem2',bs_mem1'))/2;
         cERS2(s,1,t)=(corr(rs_ln1',rs_mem2')+corr(rs_ln2',rs_mem1'))/2;
-        cERS2(s,2,t)=(corr(rs_ln1',bs_mem2')+corr(rs_ln2',bs_mem1'))/2; 
+        cERS2(s,2,t)=(corr(rs_ln1',bs_mem2')+corr(rs_ln2',bs_mem1'))/2;
     end %end sn
 end %end t for 1000 permutation
-% get average 
+% get average
 mean_cln1=mean(cln1,3);
 mean_cmem1=mean(cmem1,3);
 mean_cERS1=mean(cERS1,3);
