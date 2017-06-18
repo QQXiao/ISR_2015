@@ -5,7 +5,7 @@ addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 
 datadir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/data_two_sets',basedir);
-resultdir=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1',basedir);
+resultdir1=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method1',basedir);
 resultdir2=sprintf('%s/ROI_based/subs_within_between/add_rank/test4/method2',basedir);
 
 %data structure
@@ -182,7 +182,7 @@ eval(sprintf('save %s/ERS_%s.txt ERS_z1 -ascii -tabs', resultdir1,roi_name{roi})
 eval(sprintf('save %s/rank_ln_%s.txt mean_Nrank_ln -ascii -tabs', resultdir1,roi_name{roi}));
 eval(sprintf('save %s/rank_mem_%s.txt mean_Nrank_mem -ascii -tabs', resultdir1,roi_name{roi}));
 eval(sprintf('save %s/rank_ERS_%s.txt mean_Nrank_ERS -ascii -tabs', resultdir1,roi_name{roi}));
-eval(sprintf('save %s/ps_%s.mat mean_ps_ln mean_ps_mem mean_ps_ERS', resultdir,roi_name{roi}));
+eval(sprintf('save %s/ps_%s.mat mean_ps_ln mean_ps_mem mean_ps_ERS', resultdir1,roi_name{roi}));
 
 eval(sprintf('save %s/ln_%s.txt ln_z2 -ascii -tabs', resultdir2,roi_name{roi}));
 eval(sprintf('save %s/mem_%s.txt mem_z2 -ascii -tabs', resultdir2,roi_name{roi}));
