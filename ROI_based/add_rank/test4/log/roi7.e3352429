@@ -1,0 +1,63 @@
+HDF5-DIAG: Error detected in HDF5 (1.8.12) thread 0:
+  #000: H5Dio.c line 179 in H5Dread(): can't read data
+    major: Dataset
+    minor: Read failed
+  #001: H5Dio.c line 547 in H5D__read(): can't read data
+    major: Dataset
+    minor: Read failed
+  #002: H5Dchunk.c line 1836 in H5D__chunk_read(): unable to read raw data chunk
+    major: Low-level I/O
+    minor: Read failed
+  #003: H5Dchunk.c line 2862 in H5D__chunk_lock(): unable to read raw data chunk
+    major: Low-level I/O
+    minor: Read failed
+  #004: H5Fio.c line 113 in H5F_block_read(): read through metadata accumulator failed
+    major: Low-level I/O
+    minor: Read failed
+  #005: H5Faccum.c line 258 in H5F_accum_read(): driver read request failed
+    major: Low-level I/O
+    minor: Read failed
+  #006: H5FDint.c line 142 in H5FD_read(): driver read request failed
+    major: Virtual File Layer
+    minor: Read failed
+  #007: H5FDsec2.c line 725 in H5FD_sec2_read(): file read failed: time = Fri Jun 30 04:54:42 2017
+, filename = '/seastor/helenhelen/ISR_2015/ROI_based/subs_within_between/add_rank/test4/data_two_sets/sub05_tRVVC.mat', file descriptor = 515, errno = 116, error message = 'Stale file handle', buf = 0x2b5dda119770, total read size = 7361, bytes this sub-read = 7361, bytes actually read = 18446744073709551615, offset = 146491807
+    major: Low-level I/O
+    minor: Read failed
+{Error using load
+Cannot read file
+/seastor/helenhelen/ISR_2015/ROI_based/subs_within_between/add_rank/test4/data_two_sets/sub05_tRVVC.mat.
+
+Error in Cal_Similarity_RepresentationSpace (line 82)
+        load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi}));
+} 
+com.mathworks.util.ShutdownRuntimeException: Java is shutting down
+	at com.mathworks.services.Prefs.nativeGetPreferencesDirectory(Native Method)
+	at com.mathworks.services.Prefs.getPropertyDirectory(Prefs.java:198)
+	at com.mathworks.services.binding.MatlabKeyBindingPreferenceUtils.resolveToPrefDir(MatlabKeyBindingPreferenceUtils.java:112)
+	at com.mathworks.services.binding.MatlabKeyBindingPreferences.getModifiedDefaultFile(MatlabKeyBindingPreferences.java:213)
+	at com.mathworks.services.binding.MatlabKeyBindingPreferences.resolveModifiedDefaultFilesFromPrefs(MatlabKeyBindingPreferences.java:116)
+	at com.mathworks.services.binding.MatlabKeyBindings.initializeFromPrefs(MatlabKeyBindings.java:717)
+	at com.mathworks.services.binding.MatlabKeyBindings.<clinit>(MatlabKeyBindings.java:590)
+	at com.mathworks.widgets.debug.DebuggerManager$ActionShell.<init>(DebuggerManager.java:194)
+	at com.mathworks.widgets.debug.DebuggerManager$ActionShell.<init>(DebuggerManager.java:190)
+	at com.mathworks.widgets.debug.DebuggerManager$DebuggerShellActions$1.<init>(DebuggerManager.java:97)
+	at com.mathworks.widgets.debug.DebuggerManager$DebuggerShellActions.<clinit>(DebuggerManager.java:97)
+	at com.mathworks.widgets.debug.DebuggerManager.getContinueAction(DebuggerManager.java:292)
+	at com.mathworks.matlabserver.worker.service.breakpoint.impl13b.DebuggerInstaller.<init>(DebuggerInstaller.java:46)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(Unknown Source)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(Unknown Source)
+	at java.lang.reflect.Constructor.newInstance(Unknown Source)
+	at java.lang.Class.newInstance(Unknown Source)
+	at com.mathworks.matlabserver.a.b.R(Unknown Source)
+	at com.mathworks.matlabserver.a.b.<init>(Unknown Source)
+	at com.mathworks.matlabserver.a.b.<init>(Unknown Source)
+	at com.mathworks.matlabserver.a.f.initialized(Unknown Source)
+	at com.mathworks.matlabserver.connectorcommon.b.b.run(Unknown Source)
+	at com.mathworks.matlabserver.connectorcommon.util.g.run(Unknown Source)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.lang.Thread.run(Unknown Source)

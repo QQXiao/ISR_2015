@@ -74,6 +74,7 @@ check_mem=[all_mem1==all_mem2];
 check_ERS=[all_ERS1==all_ERS2];
 %%%%%%%%%
 for t=1:1000
+    t
     rs_ln1_matrix=[]; rs_ln2_matrix=[]; rs_mem1_matrix=[]; rs_mem2_matrix=[];
     for s=subs;
         data_ln_1=[]; data_mem_1=[]; data_ln_2=[]; data_mem_2=[];

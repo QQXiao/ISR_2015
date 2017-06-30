@@ -1,0 +1,8 @@
+{Error using load
+Unable to read file
+'/seastor/helenhelen/ISR_2015/ROI_based/subs_within_between/add_rank/test4/data_two_sets/sub04_RANG.mat'.
+Permission denied.
+
+Error in Cal_Similarity_RepresentationSpace (line 82)
+        load(sprintf('%s/sub%02d_%s.mat',datadir,s,roi_name{roi}));
+} 
