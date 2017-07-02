@@ -157,7 +157,7 @@ for sn=1:length(subs);
     cERS(s,1)=(corr(rs_ln1',rs_mem2')+corr(rs_ln2',rs_mem1'))/2;
     cERS(s,2)=(corr(rs_ln1',bs_mem2')+corr(rs_ln2',bs_mem1'))/2;
 end %end sn
-eval(sprintf('save %s/%s_p%d.mat cln cmem cERS', resultdir1,roi_name{roi},t));
+eval(sprintf('save %s/%s_p%d.mat cln cmem cERS', resultdir2,roi_name{roi},t));
 % % get average
 % mean_cln1=mean(cln1,3);
 % mean_cmem1=mean(cmem1,3);
@@ -184,7 +184,7 @@ eval(sprintf('save %s/%s_p%d.mat cln cmem cERS', resultdir1,roi_name{roi},t));
 % eval(sprintf('save %s/rank_mem_%s.txt mean_Nrank_mem -ascii -tabs', resultdir1,roi_name{roi}));
 % eval(sprintf('save %s/rank_ERS_%s.txt mean_Nrank_ERS -ascii -tabs', resultdir1,roi_name{roi}));
 % eval(sprintf('save %s/ps_%s.mat mean_ps_ln mean_ps_mem mean_ps_ERS', resultdir1,roi_name{roi}));
-% 
+%
 % eval(sprintf('save %s/ln_%s.txt ln_z2 -ascii -tabs', resultdir2,roi_name{roi}));
 % eval(sprintf('save %s/mem_%s.txt mem_z2 -ascii -tabs', resultdir2,roi_name{roi}));
 % eval(sprintf('save %s/ERS_%s.txt ERS_z2 -ascii -tabs', resultdir2,roi_name{roi}));

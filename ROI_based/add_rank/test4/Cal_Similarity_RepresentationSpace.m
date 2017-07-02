@@ -85,6 +85,7 @@ for t=1:1000
         data_ln_2=squeeze(all_data_ln2(:,:,t));
         data_mem_1=squeeze(all_data_mem1(:,:,t));
         data_mem_2=squeeze(all_data_mem2(:,:,t));
+        clear all_data*
         %calculate the correlation between data from two sets
         c_ln1=corr(data_ln_1',data_ln_2');
         c_ln2=corr(data_ln_2',data_ln_1');
@@ -96,11 +97,13 @@ for t=1:1000
         rs_ln2=c_ln2(triu(c_ln2)==0);
         rs_mem1=c_mem1(triu(c_mem1)==0);
         rs_mem2=c_mem2(triu(c_mem2)==0);
+        clear c_*
         %representation space matrix for all subs
         rs_ln1_matrix=[rs_ln1_matrix;rs_ln1'];
         rs_ln2_matrix=[rs_ln2_matrix;rs_ln2'];
         rs_mem1_matrix=[rs_mem1_matrix;rs_mem1'];
         rs_mem2_matrix=[rs_mem2_matrix;rs_mem2'];
+        clear rs_ln? rs_mem?
     end %end sub
     %%%Method 1
     %calculate correlation for RS in two data sets
