@@ -174,13 +174,13 @@ for t=1:1000 %permutation for 1000 times
         rs_ln1_matrix=[rs_ln1_matrix;rs_ln1'];
         rs_ln2_matrix=[rs_ln2_matrix;rs_ln2'];
         rs_mem1_matrix=[rs_mem1_matrix;rs_mem1'];
-        rs_mem2_matrix=[rs_mem2_matrix;rs_mem2']; 
+        rs_mem2_matrix=[rs_mem2_matrix;rs_mem2'];
     end %end subs
-    eval(sprintf('save %s/%s.mat rs_ln1_matrix rs_ln2_matrix rs_mem1_matrix rs_mem2_matrix', resultdir,roi_name{roi}));
+    eval(sprintf('save %s/p%d_%s.mat rs_ln1_matrix rs_ln2_matrix rs_mem1_matrix rs_mem2_matrix', resultdir,t,roi_name{roi}));
     %%%%%%%%%
     % calculate similarity for representational space
     %%%%%%%%%
-    %% Method one: calculated similarity for each subject and each other subject        
+    %% Method one: calculated similarity for each subject and each other subject
     %%%%%%%%%
     %calculate correlation for RS in two data sets
     c_rs_ln=1-pdist_with_NaN([rs_ln1_matrix;rs_ln2_matrix],'correlation');
