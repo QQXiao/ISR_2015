@@ -1,4 +1,4 @@
-function Cal_Similarity_RepresentationSpace_v2(r)
+function Cal_Similarity_RepresentationSpace(r)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
@@ -264,7 +264,7 @@ for c=1:length(Cond_Name)
             end
         end
         %rank
-        eval(sprintf('Nrank_%s(sf)=sum(ps_%s(sf,sf)>ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('Nrank_%s(sf)=sum(fps_%s(sf,sf)>fps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     end
 end %end cond
 [ws_ln_m1,ws_mem_m1,ws_ERS_m1,ps_ln,ps_mem,ps_ERS,...
@@ -284,7 +284,7 @@ for c=1:length(Cond_Name)
             end
         end
         %rank
-        eval(sprintf('b_Nrank_%s(sf)=sum(ps_%s(sf,sf)>ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('b_Nrank_%s(sf)=sum(b_fps_%s(sf,sf)>b_fps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     end
 end %end cond
 %get z
