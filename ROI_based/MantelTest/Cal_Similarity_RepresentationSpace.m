@@ -61,7 +61,7 @@ check_set=[all_set1==all_set2];
 Cond_Name={'ln','mem','ERS'};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %PART1: simarity for within subjects representational similarity
-for t=1:10%1000 %permutation for 1000 times for shuffering trials in set1 and set2
+for t=1:1000 %permutation for 1000 times for shuffering trials in set1 and set2
     rs_ln1_matrix=[];rs_mem1_matrix=[];rs_ln2_matrix=[];rs_mem2_matrix=[];
     b_rs_ln1_matrix=[];b_rs_mem1_matrix=[];b_rs_ln2_matrix=[];b_rs_mem2_matrix=[];
     for ts=1:length(subs);
@@ -201,7 +201,7 @@ for t=1:10%1000 %permutation for 1000 times for shuffering trials in set1 and se
         eval(sprintf('all_c%s2(:,1,t) = ws_%s_m2;',Cond_Name{c},Cond_Name{c}));
         for sf=subs
             eval(sprintf('all_ps_%s(sf,sf,t) = ps_%s(sf,sf);',Cond_Name{c},Cond_Name{c}));
-        end 
+        end
     end %end cond
     % calculate within subject similarity for representational space for
     % baseline
@@ -216,7 +216,7 @@ for t=1:10%1000 %permutation for 1000 times for shuffering trials in set1 and se
         eval(sprintf('b_all_c%s2(:,1,t) = ws_%s_m2;',Cond_Name{c},Cond_Name{c}));
         for sf=subs
             eval(sprintf('b_all_ps_%s(sf,sf,t) = ps_%s(sf,sf);',Cond_Name{c},Cond_Name{c}));
-        end 
+        end
     end %end cond
 end %end t for 1000 permutations
 %get mean across 1000 permutations
@@ -229,7 +229,7 @@ for c=1:length(Cond_Name)
     eval(sprintf('b_fps_%s=mean(b_all_ps_%s,3);',Cond_Name{c},Cond_Name{c}));
 end
 %clear no use matrix
-clear aln_* amem_* taln_* tamem_* data_* ln1* ln2* mem1* mem2* xx txx ttyy* ttzz* tyy* tzz* yy* zz* 
+clear aln_* amem_* taln_* tamem_* data_* ln1* ln2* mem1* mem2* xx txx ttyy* ttzz* tyy* tzz* yy* zz*
 clear c_ln* c_mem* all_cln* all_cmem*  all_ps*
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %PART2: betwee subjects' similarity of representational space
@@ -302,7 +302,7 @@ for c=1:length(Cond_Name)
     eval(sprintf('save %s/b_%s_%s.txt b_%s_z1 -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
     eval(sprintf('save %s/b_rank_%s_%s.txt b_Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
     eval(sprintf('save %s/b_%s_%s.txt b_%s_z2 -ascii -tabs', resultdir2,Cond_Name{c},roi_name{roi},Cond_Name{c}));
-end    
+end
 eval(sprintf('save %s/ps_%s.mat ps_ln ps_mem ps_ERS', resultdir1,roi_name{roi}));
 eval(sprintf('save %s/b_ps_%s.mat b_ps_ln b_ps_mem b_ps_ERS', resultdir1,roi_name{roi}));
 end %function

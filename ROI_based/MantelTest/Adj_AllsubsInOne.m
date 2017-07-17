@@ -12,7 +12,7 @@ roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...
 
 subs=setdiff([1:21],2);
 s=subs';
-aERS12_z=[];aERS21_z=[];amem_z=[];aln_z=[];
+aERS_z=[];amem_z=[];aln_z=[];
 for roi=1:length(roi_name)
     tERS_z=[]; ERS_z=[]; tmem_z=[]; mem_z=[]; tln_z=[]; ln_z=[];
     ERS_z=load(sprintf('%s/ERS_%s.txt',datadir,roi_name{roi}));
