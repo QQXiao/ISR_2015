@@ -232,5 +232,5 @@ for c=1:length(Cond_Name)
     eval(sprintf('save %s/rank_%s_%s.txt Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
     eval(sprintf('save %s/%s_%s.txt %s_z2 -ascii -tabs', resultdir2,Cond_Name{c},roi_name{roi},Cond_Name{c}));
 end
-eval(sprintf('save %s/ps_%s.mat ps_ln ps_mem ps_ERS', resultdir1,roi_name{roi}));
+eval(sprintf('save %s/ps_%s.mat fps_ln fps_mem fps_ERS', resultdir1,roi_name{roi}));
 end %function
