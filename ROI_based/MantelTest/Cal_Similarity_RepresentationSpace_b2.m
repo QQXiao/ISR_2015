@@ -197,10 +197,10 @@ t
     Cal_RS_similarity(b_rs_ln1_matrix,b_rs_ln2_matrix,b_rs_mem1_matrix,b_rs_mem2_matrix,subs,Cond_Name,all_sub1,all_sub2,check_set);
     %get within sub's or cross subs' correlation
     for c=1:length(Cond_Name)
-        eval(sprintf('b_ws_c%s1{t} = ws_%s_m1;',Cond_Name{c},Cond_Name{c}));
-        eval(sprintf('b_bs_c%s1{t} = bs_%s_m1;',Cond_Name{c},Cond_Name{c}));
-        eval(sprintf('b_ws_c%s2{t} = ws_%s_m2;',Cond_Name{c},Cond_Name{c}));
-        eval(sprintf('b_bs_c%s2{t} = bs_%s_m2;',Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('b_all_c%s1(:,1,t) = ws_%s_m1;',Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('b_all_c%s1(:,2,t) = bs_%s_m1;',Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('b_all_c%s2(:,1,t)= ws_%s_m2;',Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('b_all_c%s2(:,2,t) = bs_%s_m2;',Cond_Name{c},Cond_Name{c}));
         for sf=subs
             for sff=subs
             eval(sprintf('b_all_ps_%s(sf,sff,t) = ps_%s(sf,sff);',Cond_Name{c},Cond_Name{c}));
