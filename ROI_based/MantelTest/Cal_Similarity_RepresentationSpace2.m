@@ -200,11 +200,9 @@ for t=1:1000 %permutation for 1000 times for shuffering trials in set1 and set2
         eval(sprintf('all_c%s2(:,2,t) = bs_%s_m2;',Cond_Name{c},Cond_Name{c}));
         for sf=subs
             for sff=subs
-                if sff ~= subs
                 eval(sprintf('all_ps_%s(sf,sff,t) = ps_%s(sf,sff);',Cond_Name{c},Cond_Name{c}));
-                end
             end
-        eval(sprintf('all_Nrank_%s(sf,t)=sum(fps_%s(sf,sf)>fps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('all_Nrank_%s(sf,t)=sum(all_ps_%s(sf,sf)>all_ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
         end
     end %end cond
 end %end t for 1000 permutations
