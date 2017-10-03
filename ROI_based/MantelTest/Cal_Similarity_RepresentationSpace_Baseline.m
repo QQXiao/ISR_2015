@@ -68,8 +68,8 @@ for np=1:1000 %permutation for 1000 times for baseline
         load(sprintf('%s/encoding_sub%02d.mat',labeldir,s));
         load(sprintf('%s/test_sub%02d.mat',labeldir,s));
         for nn=1:TN
-            p=list_ln(nn,MpID);w=list_ln(nn,MwID);
-            list_ln(nn,Mmem)=list_mem(list_mem(:,MpID)==p & list_mem(:,MwID)==w,Mmem);
+            p=subln(nn,MpID);w=subln(nn,MwID);
+            subln(nn,Mmem)=submem(submem(:,MpID)==p & submem(:,MwID)==w,Mmem);
         end
         %get original sequece for pID
         m_ln=subln(:,MpID);
@@ -171,10 +171,10 @@ for np=1:1000 %permutation for 1000 times for baseline
         rs_mem1_matrix=[rs_mem1_matrix;rs_mem1'];
         rs_mem2_matrix=[rs_mem2_matrix;rs_mem2'];
         %representation space matrix for all subs and all permutations
-        all_rs_ln1_matrix(ts,t,:)=rs_ln1;
-        all_rs_ln2_matrix(ts,t,:)=rs_ln2;
-        all_rs_mem1_matrix(ts,t,:)=rs_mem1;
-        all_rs_mem2_matrix(ts,t,:)=rs_mem2;
+        %all_rs_ln1_matrix(ts,t,:)=rs_ln1;
+        %all_rs_ln2_matrix(ts,t,:)=rs_ln2;
+        %all_rs_mem1_matrix(ts,t,:)=rs_mem1;
+        %all_rs_mem2_matrix(ts,t,:)=rs_mem2;
      end %end subs (ts)
 
     % calculate within subject similarity for representational space for
@@ -186,13 +186,13 @@ for np=1:1000 %permutation for 1000 times for baseline
     Cal_RS_similarity(rs_ln1_matrix,rs_ln2_matrix,rs_mem1_matrix,rs_mem2_matrix,subs,Cond_Name,all_sub1,all_sub2,check_set);
     %get within sub's or cross subs' correlation
     for c=1:length(Cond_Name)
-        eval(sprintf('b_all_c%s1(:,1,t) = ws_%s_m1;',Cond_Name{c},Cond_Name{c}));
-        eval(sprintf('b_all_c%s2(:,1,t) = ws_%s_m2;',Cond_Name{c},Cond_Name{c}));
-        eval(sprintf('b_all_c%s1(:,2,t) = bs_%s_m1;',Cond_Name{c},Cond_Name{c}));
-        eval(sprintf('b_all_c%s2(:,2,t) = bs_%s_m2;',Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('b_all_c%s1(:,1,np) = ws_%s_m1;',Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('b_all_c%s2(:,1,np) = ws_%s_m2;',Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('b_all_c%s1(:,2,np) = bs_%s_m1;',Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('b_all_c%s2(:,2,np) = bs_%s_m2;',Cond_Name{c},Cond_Name{c}));
         for sf=subs
             for sff=subs
-                eval(sprintf('b_all_ps_%s(sf,sff,t) = ps_%s(sf,sff);',Cond_Name{c},Cond_Name{c}));
+                eval(sprintf('b_all_ps_%s(sf,sff,np) = ps_%s(sf,sff);',Cond_Name{c},Cond_Name{c}));
             end
             %rank
             eval(sprintf('b_all_Nrank_%s(sf,np)=sum(b_all_ps_%s(sf,sf)>b_all_ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
@@ -204,9 +204,9 @@ for c=1:length(Cond_Name)
     eval(sprintf('b_ps_%s = mean(b_all_ps_%s,3);',Cond_Name{c},Cond_Name{c}));
     %rank
     eval(sprintf('b_Nrank_%s(sf)=sum(b_ps_%s(sf,sf)>b_ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
-    %get z   
-    eval(sprintf('b_%s_z1=0.5*(log(1+b_c%s1)-log(1-b_c%s1))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('b_%s_z2=0.5*(log(1+b_c%s2)-log(1-b_c%s2))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+    %get z
+    eval(sprintf('b_%s_z1=0.5*(log(1+b_all_c%s1)-log(1-b_all_c%s1))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+    eval(sprintf('b_%s_z2=0.5*(log(1+b_all_c%s2)-log(1-b_all_c%s2))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     eval(sprintf('b_all_ps_%s=0.5*(log(1+b_all_ps_%s)-log(1-b_all_ps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     eval(sprintf('b_ps_%s=0.5*(log(1+b_ps_%s)-log(1-b_ps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     %save the results files
