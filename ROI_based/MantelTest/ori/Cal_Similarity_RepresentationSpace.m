@@ -4,9 +4,11 @@ basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
-resultdir1=sprintf('%s/ROI_based/subs_within_between/MantelTest/noAver/method1',basedir);
+resultdir1=sprintf('%s/ROI_based/subs_within_between/MantelTest/method1',basedir);
+resultdir2=sprintf('%s/ROI_based/subs_within_between/MantelTest/method2',basedir);
 labeldir=[basedir,'/behav/label'];
 mkdir(resultdir1);
+mkdir(resultdir2);
 %data structure
 Mtrial=1; % trial number
 MpID=2;  % material id_pic
@@ -196,34 +198,79 @@ for t=1:1000 %permutation for 1000 times for shuffering trials in set1 and set2
     for c=1:length(Cond_Name)
         eval(sprintf('all_c%s1(:,1,t) = ws_%s_m1;',Cond_Name{c},Cond_Name{c}));
         eval(sprintf('all_c%s2(:,1,t) = ws_%s_m2;',Cond_Name{c},Cond_Name{c}));
-        eval(sprintf('all_c%s1(:,2,t) = bs_%s_m1;',Cond_Name{c},Cond_Name{c}));
-        eval(sprintf('all_c%s2(:,2,t) = bs_%s_m2;',Cond_Name{c},Cond_Name{c}));
         for sf=subs
             for sff=subs
-                eval(sprintf('all_ps_%s(sf,sff,t) = ps_%s(sf,sff);',Cond_Name{c},Cond_Name{c}));
+            eval(sprintf('all_ps_%s(sf,sff,t) = ps_%s(sf,sff);',Cond_Name{c},Cond_Name{c}));
             end
-        eval(sprintf('all_Nrank_%s(sf,t)=sum(all_ps_%s(sf,sf)>all_ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
         end
+    end %end cond
+    % calculate within subject similarity for representational space for
+    % baseline
+    %%%%%%%%%
+    [ws_ln_m1,ws_mem_m1,ws_ERS_m1,ps_ln,ps_mem,ps_ERS,...
+    bs_ln_m1,bs_mem_m1,bs_ERS_m1,...
+    ws_ln_m2,ws_mem_m2,ws_ERS_m2,bs_ln_m2,bs_mem_m2,bs_ERS_m2] = ...
+    Cal_RS_similarity(b_rs_ln1_matrix,b_rs_ln2_matrix,b_rs_mem1_matrix,b_rs_mem2_matrix,subs,Cond_Name,all_sub1,all_sub2,check_set);
+    get within sub's or cross subs' correlation
+    for c=1:length(Cond_Name)
+       eval(sprintf('b_all_c%s1(:,1,t) = ws_%s_m1;',Cond_Name{c},Cond_Name{c}));
+       eval(sprintf('b_all_c%s2(:,1,t) = ws_%s_m2;',Cond_Name{c},Cond_Name{c}));
+       for sf=subs
+           for sff=subs
+           eval(sprintf('b_all_ps_%s(sf,sff,t) = ps_%s(sf,sf);',Cond_Name{c},Cond_Name{c}));
+           end
+       end
     end %end cond
 end %end t for 1000 permutations
 %get mean across 1000 permutations
 for c=1:length(Cond_Name)
     eval(sprintf('c%s1=mean(all_c%s1,3);',Cond_Name{c},Cond_Name{c}));
     eval(sprintf('c%s2=mean(all_c%s2,3);',Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('fps_%s=mean(all_ps_%s,3);',Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('Nrank_%s=mean(all_Nrank_%s,2);',Cond_Name{c},Cond_Name{c}));
+    %eval(sprintf('fps_%s=mean(all_ps_%s,3);',Cond_Name{c},Cond_Name{c}));
 end
 %clear no use matrix
 clear aln_* amem_* taln_* tamem_* data_* ln1* ln2* mem1* mem2* xx txx ttyy* ttzz* tyy* tzz* yy* zz*
 clear c_ln* c_mem* all_cln* all_cmem*  all_ps*
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%PART2: betwee subjects' similarity of representational space
+% 1st get the average across 1000 times permutation of representational
+% space for each subject as the stable representational space
+mean_rs_ln1_matrix=squeeze(mean(all_rs_ln1_matrix,2));
+mean_rs_ln2_matrix=squeeze(mean(all_rs_ln2_matrix,2));
+mean_rs_mem1_matrix=squeeze(mean(all_rs_mem1_matrix,2));
+mean_rs_mem2_matrix=squeeze(mean(all_rs_mem2_matrix,2));
+%%%%%%%%%
+% 2nd calculate similarity between representational spaces
+%% Method one: calculated similarity for each subject and each other subject
+%%%%%%%%%
+[ws_ln_m1,ws_mem_m1,ws_ERS_m1,ps_ln,ps_mem,ps_ERS,...
+bs_ln_m1,bs_mem_m1,bs_ERS_m1,...
+ws_ln_m2,ws_mem_m2,ws_ERS_m2,bs_ln_m2,bs_mem_m2,bs_ERS_m2] = ...
+Cal_RS_similarity(mean_rs_ln1_matrix,mean_rs_ln2_matrix,mean_rs_mem1_matrix,mean_rs_mem2_matrix,subs,Cond_Name,all_sub1,all_sub2,check_set);
+%get within sub's or cross subs' correlation
+for c=1:length(Cond_Name)
+    eval(sprintf('c%s1(:,2) = bs_%s_m1;',Cond_Name{c},Cond_Name{c}));
+    eval(sprintf('c%s1(:,3) = ws_%s_m1;',Cond_Name{c},Cond_Name{c}));
+    eval(sprintf('c%s2(:,2) = bs_%s_m2;',Cond_Name{c},Cond_Name{c}));
+    eval(sprintf('c%s2(:,3) = ws_%s_m2;',Cond_Name{c},Cond_Name{c}));
+    for sf=subs
+        for sff=subs
+            if sff~=sf
+                eval(sprintf('fps_%s(sf,sff) = ps_%s(sf,sff);',Cond_Name{c},Cond_Name{c}));
+            end
+        end
+        %rank
+        eval(sprintf('Nrank_%s(sf)=sum(fps_%s(sf,sf)>fps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+    end
+end %end cond
 %get z
 for c=1:length(Cond_Name)
     eval(sprintf('%s_z1=0.5*(log(1+c%s1)-log(1-c%s1))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     eval(sprintf('%s_z2=0.5*(log(1+c%s2)-log(1-c%s2))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('ps_%s=0.5*(log(1+fps_%s)-log(1-fps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+    eval(sprintf('ps_%s=0.5*(log(1+all_ps_%s)-log(1-all_ps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     eval(sprintf('save %s/%s_%s.txt %s_z1 -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
     eval(sprintf('save %s/rank_%s_%s.txt Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
+    eval(sprintf('save %s/%s_%s.txt %s_z2 -ascii -tabs', resultdir2,Cond_Name{c},roi_name{roi},Cond_Name{c}));
 end
 eval(sprintf('save %s/ps_%s.mat ps_ln ps_mem ps_ERS', resultdir1,roi_name{roi}));
 end %function

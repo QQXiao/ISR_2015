@@ -1,11 +1,11 @@
-function Cal_Similarity_RepresentationSpace_baseline(r)
+function Cal_Similarity_RepresentationSpace_Baseline(r)
 %%%%%%%%%
 basedir='/seastor/helenhelen/ISR_2015';
 addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
-resultdir1=sprintf('%s/ROI_based/subs_within_between/MantelTest/baseline/method1',basedir);
-resultdir2=sprintf('%s/ROI_based/subs_within_between/MantelTest/baseline/method2',basedir);
+resultdir1=sprintf('%s/ROI_based/subs_within_between/MantelTest/noAver/baseline/method1',basedir);
+resultdir2=sprintf('%s/ROI_based/subs_within_between/MantelTest/noAver/baseline/method2',basedir);
 labeldir=[basedir,'/behav/label'];
 mkdir(resultdir1);
 mkdir(resultdir2);
@@ -61,16 +61,28 @@ check_set=[all_set1==all_set2];
 Cond_Name={'ln','mem','ERS'};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for np=1:1000 %permutation for 1000 times for baseline
-np
-    %PART1: simarity for within subjects representational similarity
-for t=1:1000 %permutation for 1000 times for shuffering trials in set1 and set2
     rs_ln1_matrix=[];rs_mem1_matrix=[];rs_ln2_matrix=[];rs_mem2_matrix=[];
     b_rs_ln1_matrix=[];b_rs_mem1_matrix=[];b_rs_ln2_matrix=[];b_rs_mem2_matrix=[];
     for ts=1:length(subs);
         s=subs(ts);
         load(sprintf('%s/encoding_sub%02d.mat',labeldir,s));
         load(sprintf('%s/test_sub%02d.mat',labeldir,s));
+        for nn=1:TN
+            p=list_ln(nn,MpID);w=list_ln(nn,MwID);
+            list_ln(nn,Mmem)=list_mem(list_mem(:,MpID)==p & list_mem(:,MwID)==w,Mmem);
+        end
         %get original sequece for pID
+        m_ln=subln(:,MpID);
+        m_mem=submem(:,MpID);
+        %shuffling PID;
+        t_m_ln=m_ln(randperm(TN),:);
+        t_m_mem=m_mem(randperm(TN),:);
+        while t_m_ln==m_ln | t_m_mem==m_mem;
+            t_m_ln=m_ln(randperm(TN),:);
+            t_m_mem=m_mem(randperm(TN),:);
+        end
+        subln(:,MpID)=t_m_ln;
+        submem(:,MpID)=t_m_mem;
         m_ln=subln(:,MpID);
         m_mem=submem(:,MpID);
         %sort data matrix according to set and pID
@@ -80,10 +92,6 @@ for t=1:1000 %permutation for 1000 times for shuffering trials in set1 and set2
         list_mem=sortrows(submem,[Mset MpID]);
         list_mem(:,Msub)=s;
         list_mem(:,Mphase)=2;
-        for nn=1:TN
-            p=list_ln(nn,MpID);w=list_ln(nn,MwID);
-            list_ln(nn,Mmem)=list_mem(list_mem(:,MpID)==p & list_mem(:,MwID)==w,Mmem);
-        end
         %get memory performance for sorted behavioral list for later git
         %rid of forgotten items.
         memp_ln1=list_ln([1:(TN/2)],Mmem);
@@ -167,28 +175,7 @@ for t=1:1000 %permutation for 1000 times for shuffering trials in set1 and set2
         all_rs_ln2_matrix(ts,t,:)=rs_ln2;
         all_rs_mem1_matrix(ts,t,:)=rs_mem1;
         all_rs_mem2_matrix(ts,t,:)=rs_mem2;
-        %for baseline
-        lenln=length(c_ln);
-        perm=randperm(lenln);
-        b_c_ln1=c_ln(perm, perm);
-        b_c_ln2=b_c_ln1';
-        b_c_mem1=c_mem(perm, perm);
-        b_c_mem2=b_c_mem1';
-        b_rs_ln1=b_c_ln1(triu(b_c_ln1)==0);
-        b_rs_ln2=b_c_ln2(triu(b_c_ln2)==0);
-        b_rs_mem1=b_c_mem1(triu(b_c_mem1)==0);
-        b_rs_mem2=b_c_mem2(triu(b_c_mem2)==0);
-        %representation space matrix for all subs
-        b_rs_ln1_matrix=[b_rs_ln1_matrix;b_rs_ln1'];
-        b_rs_ln2_matrix=[b_rs_ln2_matrix;b_rs_ln2'];
-        b_rs_mem1_matrix=[b_rs_mem1_matrix;b_rs_mem1'];
-        b_rs_mem2_matrix=[b_rs_mem2_matrix;b_rs_mem2'];
-        %representation space matrix for all subs and all permutations
-        b_all_rs_ln1_matrix(ts,t,:)=b_rs_ln1;
-        b_all_rs_ln2_matrix(ts,t,:)=b_rs_ln2;
-        b_all_rs_mem1_matrix(ts,t,:)=b_rs_mem1;
-        b_all_rs_mem2_matrix(ts,t,:)=b_rs_mem2;
-    end %end subs (ts)
+     end %end subs (ts)
 
     % calculate within subject similarity for representational space for
     % baseline
@@ -196,67 +183,38 @@ for t=1:1000 %permutation for 1000 times for shuffering trials in set1 and set2
     [ws_ln_m1,ws_mem_m1,ws_ERS_m1,ps_ln,ps_mem,ps_ERS,...
     bs_ln_m1,bs_mem_m1,bs_ERS_m1,...
     ws_ln_m2,ws_mem_m2,ws_ERS_m2,bs_ln_m2,bs_mem_m2,bs_ERS_m2] = ...
-    Cal_RS_similarity(b_rs_ln1_matrix,b_rs_ln2_matrix,b_rs_mem1_matrix,b_rs_mem2_matrix,subs,Cond_Name,all_sub1,all_sub2,check_set);
+    Cal_RS_similarity(rs_ln1_matrix,rs_ln2_matrix,rs_mem1_matrix,rs_mem2_matrix,subs,Cond_Name,all_sub1,all_sub2,check_set);
     %get within sub's or cross subs' correlation
     for c=1:length(Cond_Name)
         eval(sprintf('b_all_c%s1(:,1,t) = ws_%s_m1;',Cond_Name{c},Cond_Name{c}));
         eval(sprintf('b_all_c%s2(:,1,t) = ws_%s_m2;',Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('b_all_c%s1(:,2,t) = bs_%s_m1;',Cond_Name{c},Cond_Name{c}));
+        eval(sprintf('b_all_c%s2(:,2,t) = bs_%s_m2;',Cond_Name{c},Cond_Name{c}));
         for sf=subs
-            eval(sprintf('b_all_ps_%s(sf,sf,t) = ps_%s(sf,sf);',Cond_Name{c},Cond_Name{c}));
+            for sff=subs
+                eval(sprintf('b_all_ps_%s(sf,sff,t) = ps_%s(sf,sff);',Cond_Name{c},Cond_Name{c}));
+            end
+            %rank
+            eval(sprintf('b_all_Nrank_%s(sf,np)=sum(b_all_ps_%s(sf,sf)>b_all_ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
         end
     end %end cond
-end %end t for 1000 permutations
-%get mean across 1000 permutations
-for c=1:length(Cond_Name)
-    eval(sprintf('b_c%s1(:,1,np)=mean(b_all_c%s1,3);',Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('b_c%s2(:,1,np)=mean(b_all_c%s2,3);',Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('b_fps_%s(:,:,np)=mean(b_all_ps_%s,3);',Cond_Name{c},Cond_Name{c}));
-end
-%clear no use matrix
-clear aln_* amem_* taln_* tamem_* data_* ln1* ln2* mem1* mem2* xx txx ttyy* ttzz* tyy* tzz* yy* zz*
-clear c_ln* c_mem* all_cln* all_cmem*  all_ps*
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%PART2: betwee subjects' similarity of representational space
-% 1st get the average across 1000 times permutation of representational
-% space for each subject as the stable representational space
-b_mean_rs_ln1_matrix=squeeze(mean(b_all_rs_ln1_matrix,2));
-b_mean_rs_ln2_matrix=squeeze(mean(b_all_rs_ln2_matrix,2));
-b_mean_rs_mem1_matrix=squeeze(mean(b_all_rs_mem1_matrix,2));
-b_mean_rs_mem2_matrix=squeeze(mean(b_all_rs_mem2_matrix,2));
-%%%%%%%%%
-% 2nd calculate similarity between representational spaces
-%% Method one: calculated similarity for each subject and each other subject
-%%%%%%%%%
-[ws_ln_m1,ws_mem_m1,ws_ERS_m1,ps_ln,ps_mem,ps_ERS,...
-bs_ln_m1,bs_mem_m1,bs_ERS_m1,...
-ws_ln_m2,ws_mem_m2,ws_ERS_m2,bs_ln_m2,bs_mem_m2,bs_ERS_m2] = ...
-Cal_RS_similarity(b_mean_rs_ln1_matrix,b_mean_rs_ln2_matrix,b_mean_rs_mem1_matrix,b_mean_rs_mem2_matrix,subs,Cond_Name,all_sub1,all_sub2,check_set);
-%get within sub's or cross subs' correlation for baseline
-for c=1:length(Cond_Name)
-    eval(sprintf('b_c%s1(:,2,np) = bs_%s_m1;',Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('b_c%s1(:,3,np) = ws_%s_m1;',Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('b_c%s2(:,2,np) = bs_%s_m2;',Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('b_c%s2(:,3,np) = ws_%s_m2;',Cond_Name{c},Cond_Name{c}));
-    for sf=subs
-        for sff=subs
-            if sff~=sf
-                eval(sprintf('b_fps_%s(sf,sff) = ps_%s(sf,sff);',Cond_Name{c},Cond_Name{c}));
-            end
-        end
-        %rank
-        eval(sprintf('b_Nrank_%s(sf,np)=sum(b_fps_%s(sf,sf)>b_fps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
-    end
-end %end cond
 end %end np
-%get z
 for c=1:length(Cond_Name)
-    %for baseline
+    %average across 1000 permutation
+    eval(sprintf('b_ps_%s = mean(b_all_ps_%s,3);',Cond_Name{c},Cond_Name{c}));
+    %rank
+    eval(sprintf('b_Nrank_%s(sf)=sum(b_ps_%s(sf,sf)>b_ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+    %get z   
     eval(sprintf('b_%s_z1=0.5*(log(1+b_c%s1)-log(1-b_c%s1))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     eval(sprintf('b_%s_z2=0.5*(log(1+b_c%s2)-log(1-b_c%s2))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('b_ps_%s=0.5*(log(1+b_fps_%s)-log(1-b_fps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+    eval(sprintf('b_all_ps_%s=0.5*(log(1+b_all_ps_%s)-log(1-b_all_ps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+    eval(sprintf('b_ps_%s=0.5*(log(1+b_ps_%s)-log(1-b_ps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+    %save the results files
     eval(sprintf('save -v7.3 %s/b_%s_%s.txt b_%s_z1 -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
-    eval(sprintf('save -v7.3 %s/b_rank_%s_%s.txt b_Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
     eval(sprintf('save -v7.3 %s/b_%s_%s.txt b_%s_z2 -ascii -tabs', resultdir2,Cond_Name{c},roi_name{roi},Cond_Name{c}));
+    eval(sprintf('save -v7.3 %s/b_rank_%s_%s.txt b_Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
+    eval(sprintf('save -v7.3 %s/b_all_rank_%s_%s.txt b_all_Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
 end
 eval(sprintf('save -v7.3 %s/b_ps_%s.mat b_ps_ln b_ps_mem b_ps_ERS', resultdir1,roi_name{roi}));
+eval(sprintf('save -v7.3 %s/b_all_ps_%s.mat b_all_ps_ln b_all_ps_mem b_all_ps_ERS', resultdir1,roi_name{roi}));
 end %function
