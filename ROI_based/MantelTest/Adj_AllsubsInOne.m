@@ -1,7 +1,7 @@
 function Adj_AllsubsInOne()
 basedir='/seastor/helenhelen/ISR_2015';
-datadir=sprintf('%s/ROI_based/subs_within_between/MantelTest/method1',basedir);
-resultdir=sprintf('%s/ROI_based/subs_within_between/MantelTest/method1',basedir);
+datadir=sprintf('%s/ROI_based/subs_within_between/MantelTest/noAver/method1',basedir);
+resultdir=sprintf('%s/ROI_based/subs_within_between/MantelTest/noAver/method1',basedir);
 
 addpath /seastor/helenhelen/scripts/NIFTI
 roi_name={'tLVVC','LANG','LSMG','LIFG','LMFG','LSFG',...

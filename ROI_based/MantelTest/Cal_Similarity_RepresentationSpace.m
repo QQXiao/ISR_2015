@@ -5,8 +5,10 @@ addpath /seastor/helenhelen/scripts/NIFTI
 addpath /home/helenhelen/DQ/project/gitrepo/ISR_2015/behav
 datadir=sprintf('%s/ROI_based/ref_space/glm/raw',basedir);
 resultdir1=sprintf('%s/ROI_based/subs_within_between/MantelTest/noAver/method1',basedir);
+resultdir2=sprintf('%s/ROI_based/subs_within_between/MantelTest/noAver/method2',basedir);
 labeldir=[basedir,'/behav/label'];
 mkdir(resultdir1);
+mkdir(resultdir2);
 %data structure
 Mtrial=1; % trial number
 MpID=2;  % material id_pic
@@ -163,27 +165,6 @@ for t=1:1000 %permutation for 1000 times for shuffering trials in set1 and set2
         all_rs_ln2_matrix(ts,t,:)=rs_ln2;
         all_rs_mem1_matrix(ts,t,:)=rs_mem1;
         all_rs_mem2_matrix(ts,t,:)=rs_mem2;
-        %for baseline
-        lenln=length(c_ln);
-        perm=randperm(lenln);
-        b_c_ln1=c_ln(perm, perm);
-        b_c_ln2=b_c_ln1';
-        b_c_mem1=c_mem(perm, perm);
-        b_c_mem2=b_c_mem1';
-        b_rs_ln1=b_c_ln1(triu(b_c_ln1)==0);
-        b_rs_ln2=b_c_ln2(triu(b_c_ln2)==0);
-        b_rs_mem1=b_c_mem1(triu(b_c_mem1)==0);
-        b_rs_mem2=b_c_mem2(triu(b_c_mem2)==0);
-        %representation space matrix for all subs
-        b_rs_ln1_matrix=[b_rs_ln1_matrix;b_rs_ln1'];
-        b_rs_ln2_matrix=[b_rs_ln2_matrix;b_rs_ln2'];
-        b_rs_mem1_matrix=[b_rs_mem1_matrix;b_rs_mem1'];
-        b_rs_mem2_matrix=[b_rs_mem2_matrix;b_rs_mem2'];
-        %representation space matrix for all subs and all permutations
-        b_all_rs_ln1_matrix(ts,t,:)=b_rs_ln1;
-        b_all_rs_ln2_matrix(ts,t,:)=b_rs_ln2;
-        b_all_rs_mem1_matrix(ts,t,:)=b_rs_mem1;
-        b_all_rs_mem2_matrix(ts,t,:)=b_rs_mem2;
     end %end subs (ts)
     %%%%%%%%%
     % calculate within subject similarity for representational space
@@ -215,15 +196,19 @@ for c=1:length(Cond_Name)
 end
 %clear no use matrix
 clear aln_* amem_* taln_* tamem_* data_* ln1* ln2* mem1* mem2* xx txx ttyy* ttzz* tyy* tzz* yy* zz*
-clear c_ln* c_mem* all_cln* all_cmem*  all_ps*
+clear c_ln* c_mem* all_cln* all_cmem*
 
 %get z
 for c=1:length(Cond_Name)
     eval(sprintf('%s_z1=0.5*(log(1+c%s1)-log(1-c%s1))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     eval(sprintf('%s_z2=0.5*(log(1+c%s2)-log(1-c%s2))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     eval(sprintf('ps_%s=0.5*(log(1+fps_%s)-log(1-fps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+    eval(sprintf('all_ps_%s=0.5*(log(1+all_ps_%s)-log(1-all_ps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     eval(sprintf('save %s/%s_%s.txt %s_z1 -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
+    eval(sprintf('save %s/%s_%s.txt %s_z2 -ascii -tabs', resultdir2,Cond_Name{c},roi_name{roi},Cond_Name{c}));
     eval(sprintf('save %s/rank_%s_%s.txt Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
+    eval(sprintf('save %s/all_rank_%s_%s.txt all_Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
 end
 eval(sprintf('save %s/ps_%s.mat ps_ln ps_mem ps_ERS', resultdir1,roi_name{roi}));
+eval(sprintf('save %s/all_ps_%s.mat all_ps_ln all_ps_mem all_ps_ERS', resultdir1,roi_name{roi}));
 end %function
