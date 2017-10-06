@@ -200,15 +200,14 @@ for np=1:1000 %permutation for 1000 times for baseline
     end %end cond
 end %end np
 for c=1:length(Cond_Name)
-    %average across 1000 permutation
-    eval(sprintf('b_ps_%s = mean(b_all_ps_%s,3);',Cond_Name{c},Cond_Name{c}));
-    %rank
-    eval(sprintf('b_Nrank_%s(sf)=sum(b_ps_%s(sf,sf)>b_ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     %get z
     eval(sprintf('b_%s_z1=0.5*(log(1+b_all_c%s1)-log(1-b_all_c%s1))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     eval(sprintf('b_%s_z2=0.5*(log(1+b_all_c%s2)-log(1-b_all_c%s2))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('b_all_ps_%s=0.5*(log(1+b_all_ps_%s)-log(1-b_all_ps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
-    eval(sprintf('b_ps_%s=0.5*(log(1+b_ps_%s)-log(1-b_ps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+    eval(sprintf('all_ps_%s=0.5*(log(1+b_all_ps_%s)-log(1-b_all_ps_%s))',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
+    %average across 1000 permutation
+    eval(sprintf('b_ps_%s = mean(all_ps_%s,3);',Cond_Name{c},Cond_Name{c}));
+    %rank
+    eval(sprintf('b_Nrank_%s(sf)=sum(b_ps_%s(sf,sf)>b_ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     %save the results files
     eval(sprintf('save -v7.3 %s/b_%s_%s.txt b_%s_z1 -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
     eval(sprintf('save -v7.3 %s/b_%s_%s.txt b_%s_z2 -ascii -tabs', resultdir2,Cond_Name{c},roi_name{roi},Cond_Name{c}));
@@ -216,5 +215,5 @@ for c=1:length(Cond_Name)
     eval(sprintf('save -v7.3 %s/b_all_rank_%s_%s.txt b_all_Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
 end
 eval(sprintf('save -v7.3 %s/b_ps_%s.mat b_ps_ln b_ps_mem b_ps_ERS', resultdir1,roi_name{roi}));
-eval(sprintf('save -v7.3 %s/b_all_ps_%s.mat b_all_ps_ln b_all_ps_mem b_all_ps_ERS', resultdir1,roi_name{roi}));
+eval(sprintf('save -v7.3 %s/b_all_ps_%s.mat all_ps_ln all_ps_mem all_ps_ERS', resultdir1,roi_name{roi}));
 end %function
