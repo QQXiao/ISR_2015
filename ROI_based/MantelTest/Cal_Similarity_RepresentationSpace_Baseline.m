@@ -209,8 +209,8 @@ for c=1:length(Cond_Name)
     %rank
     eval(sprintf('b_Nrank_%s(sf)=sum(b_ps_%s(sf,sf)>b_ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
     %save the results files
-    eval(sprintf('save -v7.3 %s/b_%s_%s.txt b_%s_z1 -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
-    eval(sprintf('save -v7.3 %s/b_%s_%s.txt b_%s_z2 -ascii -tabs', resultdir2,Cond_Name{c},roi_name{roi},Cond_Name{c}));
+    eval(sprintf('save -v7.3 %s/b_%s_%s.mat b_%s_z1', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
+    eval(sprintf('save -v7.3 %s/b_%s_%s.mat b_%s_z2', resultdir2,Cond_Name{c},roi_name{roi},Cond_Name{c}));
     eval(sprintf('save -v7.3 %s/b_rank_%s_%s.txt b_Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
     eval(sprintf('save -v7.3 %s/b_all_rank_%s_%s.txt b_all_Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
 end
