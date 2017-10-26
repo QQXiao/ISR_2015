@@ -144,17 +144,24 @@ for t=1:1000 %permutation for 1000 times for shuffering trials in set1 and set2
         amem_2=[mem12;mem22];
         tamem_2=sortrows(amem_2,a(2));
         data_mem_2=tamem_2(:,[1:end-1]);
-        %calculate the correlation between data from two sets
-        c_ln=corr(data_ln_1',data_ln_2');
-        c_ln2=c_ln';
-        c_mem=corr(data_mem_1',data_mem_2');
-        c_mem2=c_mem';
-        %get the tril of the correlation matrix as the representational
-        %%space for each set
-        rs_ln1=c_ln(triu(c_ln)==0);
-        rs_ln2=c_ln2(triu(c_ln2)==0);
-        rs_mem1=c_mem(triu(c_mem)==0);
-        rs_mem2=c_mem2(triu(c_mem2)==0);
+        %%calculate the correlation between data from two sets as the
+        %%representational space
+%         c_ln=corr(data_ln_1',data_ln_2');
+%         c_ln2=c_ln';
+%         c_mem=corr(data_mem_1',data_mem_2');
+%         c_mem2=c_mem';
+%         %get the tril of the correlation matrix as the representational
+%         %%space for each set
+%         rs_ln1=c_ln(triu(c_ln)==0);
+%         rs_ln2=c_ln2(triu(c_ln2)==0);
+%         rs_mem1=c_mem(triu(c_mem)==0);
+%         rs_mem2=c_mem2(triu(c_mem2)==0);
+        %new version since 10-26-2017, calculate similarity within each
+        %data set as the representational space
+        rs_ln1=1-pdist(data_ln1,'correlation');
+        rs_ln2=1-pdist(data_ln2,'correlation');
+        rs_mem1=1-pdist(data_mem1,'correlation');
+        rs_mem2=1-pdist(data_mem2,'correlation');
         %representation space matrix for all subs
         rs_ln1_matrix=[rs_ln1_matrix;rs_ln1'];
         rs_ln2_matrix=[rs_ln2_matrix;rs_ln2'];
@@ -182,8 +189,8 @@ for t=1:1000 %permutation for 1000 times for shuffering trials in set1 and set2
         for sf=subs
             for sff=subs
                 eval(sprintf('all_ps_%s(sf,sff,t) = ps_%s(sf,sff);',Cond_Name{c},Cond_Name{c}));
+                eval(sprintf('all_Nrank_%s(sf,t)=sum(ps_%s(sf,sf)>ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
             end
-        eval(sprintf('all_Nrank_%s(sf,t)=sum(all_ps_%s(sf,sf)>all_ps_%s(sf,setdiff(subs,[2 sf])));',Cond_Name{c},Cond_Name{c},Cond_Name{c}));
         end
     end %end cond
 end %end t for 1000 permutations
@@ -207,7 +214,7 @@ for c=1:length(Cond_Name)
     eval(sprintf('save %s/%s_%s.txt %s_z1 -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
     eval(sprintf('save %s/%s_%s.txt %s_z2 -ascii -tabs', resultdir2,Cond_Name{c},roi_name{roi},Cond_Name{c}));
     eval(sprintf('save %s/rank_%s_%s.txt Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
-    eval(sprintf('save %s/all_rank_%s_%s.txt all_Nrank_%s -ascii -tabs', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
+    eval(sprintf('save %s/all_rank_%s_%s.mat all_Nrank_%s', resultdir1,Cond_Name{c},roi_name{roi},Cond_Name{c}));
 end
 eval(sprintf('save %s/ps_%s.mat ps_ln ps_mem ps_ERS', resultdir1,roi_name{roi}));
 eval(sprintf('save %s/all_ps_%s.mat all_ps_ln all_ps_mem all_ps_ERS', resultdir1,roi_name{roi}));
